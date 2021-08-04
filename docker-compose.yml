@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+
+  # TODO: Add DB, frontend/backend services here
+
+  docs:
+    build:
+      context: .
+      dockerfile: docker/mkdocs/Dockerfile
+    container_name: c3200_docs
+    restart: unless-stopped
+    ports:
+      - 8001:8000
+    volumes:
+      - ./mkdocs:/mkdocs
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+
