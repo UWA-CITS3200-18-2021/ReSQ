@@ -1,8 +1,56 @@
 version: "3.3"
 
 services:
+  db:
+    image: mongo
+    container_name: c3200_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      # - ./mongo/data:/data/db  - use this for windows
+      - ~/docker/c3200/mongo/data/db:/data/db # use this for mac and linux
+    ports:
+      - 27018:27017 # Host:Container
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
 
-  # TODO: Add DB, frontend/backend services here
+  db_admin:
+    image: mongo-express
+    container_name: c3200_mongo_admin
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: db # matching container service name
+      ME_CONFIG_MONGODB_PORT: 27017 # matching container port
+    ports:
+      - "27001:8081"
+    links:
+      - db
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: c3200_app
+    restart: unless-stopped
+    ports:
+      - 8002:8080 # meteor app
+      - 8003:8081 # meteor mongo
+    environment:
+      MONGO_URL: mongodb://admin:admin@db:27017
+      METEOR_ALLOW_SUPERUSER: 1 # allow meteor to use superuser
+    links:
+      - db
+    volumes:
+      # File syncing
+      - ./app:/app_code
+      # Barrier for OS node modules specific
+      - /app_code/node_modules
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
 
   docs:
     build:
