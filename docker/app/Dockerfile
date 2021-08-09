@@ -17,7 +17,7 @@ ENV LANGUAGE en_US.UTF-8
 
 # Install Meteor
 # The version here has to match the version specified in `/app/.meteor/release`
-RUN curl "https://install.meteor.com/?release=1.4.1" | sh
+RUN curl "https://install.meteor.com/?release=1.2.1" | sh
 RUN meteor reset
 
 # ========================================
@@ -25,4 +25,4 @@ RUN meteor reset
 # ========================================
 
 # CMD commands get executed at container runtime!
-CMD ["meteor","run","--port","8080","--no-release-check"]
+CMD ["meteor","run","--port","8080"]
