@@ -1,0 +1,22 @@
+<div>
+	<h2>Log in</h2>
+	<form method="POST">
+		<div>
+			<input
+				type="text"
+				name="username"
+				id="username"
+				value="{{request.form.username}}"
+				required=""
+				autocomplete="off"
+			/>
+			<label for="username">Username</label>
+		</div>
+		<div>
+			<input type="Password" name="password" id="password" value="{{request.form.password}}" required="" />
+			<label for="password">Password</label>
+		</div>
+		<input type="submit" name="" value="Login" />
+	</form>
+	<br />
+</div>

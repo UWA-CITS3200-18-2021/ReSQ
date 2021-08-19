@@ -1,0 +1,150 @@
+{% extends "base.html" %}{% block title %}ReSQ{% endblock %}{% block navbar %}
+<div class="sidebar-wrapper">
+	<ul class="nav">
+		<li class="nav-item active">
+			<a class="nav-link" href="{{ url_for('routes.home')}}">
+				<i class="material-icons">list</i>
+				<p>Queue</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ url_for('routes.data')}}">
+				<i class="material-icons">insights</i>
+				<p>Data Analytics</p>
+			</a>
+		</li>
+		<!-- your sidebar here -->
+	</ul>
+</div>
+{% endblock %} {% block header %}
+<a class="navbar-brand" href="javascript:;">STUDYSmarter and Librarian Queues</a>{% endblock %} {% block
+content %}
+<div class="row queues">
+	<div class="card queue">
+		<div class="card-header card-header-info" data-color="green">
+			STUDYSmarter Queue<span class="material-icons float-right"> lightbulb </span>
+		</div>
+		<div class="card-body">
+			<table class="table" id="SSQueueTable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Student Number</th>
+						<th>Unit Code</th>
+						<th class="text-right">Enquiry Type</th>
+						<th class="text-right">Wait Time</th>
+						<th class="text-right">Remove</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<div class="card queue">
+		<div class="card-header card-header-info">
+			Librarian Queue<span class="material-icons float-right"> menu_book </span>
+		</div>
+		<div class="card-body">
+			<table class="table" id="libQueueTable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Student Number</th>
+						<th>Unit Code</th>
+						<th class="text-right">Enquiry Type</th>
+						<th class="text-right">Wait Time</th>
+						<th class="text-right">Remove</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="addToQueue">
+	<div class="card col-md-3 addToQueue-content">
+		<h3 class="card-header card-header-info">Add to Queue</h3>
+		<div class="card-body">
+			<span class="close" onclick="hideAddToQueue()">&times;</span>
+			<form autocomplete="off" id="addToQueueForm">
+				<label for="studentName">Student Name</label>
+				<input type="text" id="studentName" class="form-control" required />
+				<label for="studentNumber">Student Number</label>
+				<input type="number" id="studentNumber" class="form-control" required />
+				<label for="unitCode">Unit Code</label>
+				<input type="text" id="unitCode" class="form-control" required />
+				<div class="form-group-lg">
+					<label for="team">Team</label>
+					<select id="team" class="form-control">
+						<option selected>STUDYSmarter</option>
+						<option>Librarians</option>
+					</select>
+				</div>
+				<div class="form-group-lg">
+					<label for="enquiryType">Enquiry Type</label>
+					<select id="enquiryType" class="form-control">
+						<option selected>Essay</option>
+						<option>Grammar</option>
+						<option>Lab Report</option>
+						<option>Assignment</option>
+						<option>Literature Research</option>
+						<option>Research Proposal</option>
+						<option>Thesis/Paper</option>
+						<option>IELTS</option>
+						<option>Oral Presentation</option>
+						<option>Referencing</option>
+						<option>Finding Sources</option>
+						<option>Endnote</option>
+						<option>Other</option>
+					</select>
+				</div>
+				<br />
+				<button type="submit" class="btn btn-primary" id="addToQueueSubmit">Add</button>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="card col-md-10 currentSessions">
+		<div class="card-header card-header-info">
+			Current Sessions<span class="material-icons float-right"> group </span>
+		</div>
+		<div class="card-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Team</th>
+						<th>Name</th>
+						<th>Student Number</th>
+						<th>Unit Code</th>
+						<th class="text-right">Enquiry Type</th>
+						<th class="text-right">Session Time</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<div class="card-body">
+			<button onclick="showAddToQueue()" type="button" class="btn btn-lg btn-round test">Add to Queue</button>
+			<div class="addTeam card">
+				<h4 class="card-header card-header-info">STUDYSmarter Team Available</h4>
+				<div class="row card-body text-center">
+					<span class="material-icons dec" id="SSDec">remove_circle_outline</span>
+					<div id="SSCount">1</div>
+					<span class="material-icons inc" id="SSInc">add_circle_outline</span>
+				</div>
+			</div>
+			<div class="addTeam card text-center">
+				<h4 class="card-header card-header-info">Librarians Available</h4>
+				<div class="row card-body text-center">
+					<span class="material-icons dec" id="libDec">remove_circle_outline</span>
+					<div id="libCount">1</div>
+					<span class="material-icons inc" id="libInc">add_circle_outline</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
