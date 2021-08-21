@@ -2,8 +2,6 @@ version: "3.3"
 
 services:
 
-  # TODO: Add DB, frontend/backend services here
-
   db:
     container_name: resq_postgres
     image: postgres:12.4-alpine
