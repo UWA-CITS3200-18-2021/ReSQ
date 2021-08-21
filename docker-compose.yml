@@ -32,7 +32,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./src:/app_code
+      - ./app:/app_code
     stdin_open: true # docker run -i
     tty: true        # docker run -t
 
@@ -40,7 +40,7 @@ services:
     build:
       context: .
       dockerfile: docker/mkdocs/Dockerfile
-    container_name: c3200_docs
+    container_name: resq_docs
     restart: unless-stopped
     ports:
       - 8001:8000
