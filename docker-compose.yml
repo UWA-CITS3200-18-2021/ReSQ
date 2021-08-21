@@ -4,6 +4,38 @@ services:
 
   # TODO: Add DB, frontend/backend services here
 
+  db:
+    container_name: resq_postgres
+    image: postgres:12.4-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: Australia/Perth
+    volumes:
+      - ~/docker/cits3200/resq/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: resq_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src:/app_code
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
   docs:
     build:
       context: .
@@ -16,4 +48,23 @@ services:
       - ./mkdocs:/mkdocs
     stdin_open: true # docker run -i
     tty: true # docker run -t
+
+    # Database Admin/UI
+  pgadmin:
+    container_name: resq_pgadmin
+    build:
+      context: ./docker/pgadmin/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 8002:80
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    logging:
+      driver: none  # Disable logging to console due to amount of logging noise it generates in docker-compose logs
+
 
