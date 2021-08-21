@@ -1,6 +1,3 @@
-from app import create_app
-
-app = create_app()
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# This is the entrypoint of Flask
+# As the entrypoint, any imports of this is accessible by the global context of Flask in the command line
+from app import app, db
