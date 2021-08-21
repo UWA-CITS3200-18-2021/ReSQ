@@ -13,7 +13,7 @@ services:
     environment:
       TZ: Australia/Perth
     volumes:
-      - ~/docker/cits3200/resq/postgres:/var/lib/postgresql/data
+      - ./data/resq/postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
     stdin_open: true # docker run -i
@@ -30,7 +30,7 @@ services:
     depends_on:
       - db
     ports:
-      - 8000:8000
+      - 5000:5000
     volumes:
       - ./app:/app_code
     stdin_open: true # docker run -i

@@ -1,3 +1,6 @@
+# Project Specific Gitignores
+./data
+
 # Environment Variables
 .env
 
