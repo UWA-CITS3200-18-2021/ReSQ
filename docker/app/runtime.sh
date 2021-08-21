@@ -63,9 +63,9 @@ flask db upgrade
 # Run inbuilt FLASK server if ENV is DEVELOPMENT
 # =========================================
 if [ "${APP_ENV^^}" = "PRODUCTION" ]; then
-    # Run Flask development server
+    # Run Flask development server (TODO: Change this for actual production)
     printf "\n" && echo "Running Flask Production Server" | boxes -d shell -p a1l2
-    flask run
+    flask run --host=0.0.0.0
     exit
 fi
 
@@ -82,7 +82,7 @@ pip install -r requirements.txt
 # Run Flask development server
 printf "\n" && echo "Running Flask Development Server" | boxes -d shell -p a1l2
 export FLASK_DEBUG=1
-flask run
+flask run --host=0.0.0.0
 exit
 
 
