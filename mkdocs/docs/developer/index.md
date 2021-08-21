@@ -25,6 +25,16 @@ This one command will build all the containers. Most notably this will create th
     docker-compose up --build
     ```
 
+### Services that are running
+There are a couple of services that are running
+
+| Services                 | URL                                            |
+| :----------------------- | :--------------------------------------------- |
+| PostgreSQL Database      | [http://localhost:5432](http://localhost:5432) |
+| PgAdmin (PostgreSQL GUI) | [http://localhost:8002](http://localhost:8002) |
+| ReSQ Flask App           | [http://localhost:5000](http://localhost:5000) |
+| MkDocs Documentation     | [http://localhost:8001](http://localhost:8001) |
+
 ### Going inside the container / Remote Code Execution
 Most likely you will be developing inside this container such as doing pip installation and other commands. You can do remote code execution to the container using the following command
 ```bash
