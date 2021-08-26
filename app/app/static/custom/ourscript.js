@@ -60,6 +60,11 @@ $('#addToQueueForm').submit(function (e) {
 function deleteRow(x) {
 	$(x).parents('tr').remove();
 }
+/*
+*
+* OUR CUSTOM JAVASCRIPT SHOULD BE ADDED HERE
+*
+*/
 
 window.onclick = function (event) {
 	if (event.target == document.getElementById('addToQueue')) {
@@ -87,7 +92,7 @@ function setTime(id) {
 }
 
 function pad(val) {
-	var valString = val + '';
+	const valString = `${val}`
 	if (valString.length < 2) {
 		return '0' + valString;
 	} else {
@@ -95,23 +100,23 @@ function pad(val) {
 	}
 }
 
-$('#SSDec').click(function () {
-	if (parseInt(document.getElementById('SSCount').innerHTML) > 0) {
-		document.getElementById('SSCount').innerHTML -= 1;
+$('#studySmarterAvailableDec').click(function () {
+	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
+		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
 	}
 });
-$('#SSInc').click(function () {
-	let curr = parseInt(document.getElementById('SSCount').innerHTML);
+$('#studySmarterAvailableInc').click(function () {
+	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
 	let next = curr + 1;
-	document.getElementById('SSCount').innerHTML = next;
+	document.getElementById('studySmarterAvailableCount').innerHTML = next;
 });
-$('#libDec').click(function () {
-	if (parseInt(document.getElementById('libCount').innerHTML) > 0) {
-		document.getElementById('libCount').innerHTML -= 1;
+$('#librariansAvailableDec').click(function () {
+	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
+		document.getElementById('librariansAvailableCount').innerHTML -= 1;
 	}
 });
-$('#libInc').click(function () {
-	let curr = parseInt(document.getElementById('libCount').innerHTML);
+$('#librariansAvailableInc').click(function () {
+	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
 	let next = curr + 1;
-	document.getElementById('libCount').innerHTML = next;
+	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
