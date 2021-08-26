@@ -48,7 +48,10 @@ $('#addToQueueForm').submit(function (e) {
 			id +
 			'">00</label>' +
 			'</td>' +
-			'<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>' +
+			'<td class="td-actions text-right">\
+			<button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">how_to_reg</i></button>\
+			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button>\
+			</td>' +
 			'</tr>'
 	);
 	hideAddToQueue();
