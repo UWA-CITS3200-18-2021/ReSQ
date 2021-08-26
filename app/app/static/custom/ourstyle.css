@@ -1,0 +1,138 @@
+/*
+*
+* OUR CUSTOM CSS SHOULD BE ADDED HERE
+*
+*/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.yellowTime {
+  background-color: rgb(255, 248, 38, 0.4);
+  border-radius: 25px;
+}
+
+.orangeTime {
+  background-color: rgba(244, 130, 8, 0.4);
+  border-radius: 25px;
+}
+
+.redTime {
+  background-color: rgb(230, 12, 12, 0.4);
+  border-radius: 25px;
+}
+
+.resqLogo {
+  font-weight: bold;
+  font-size: 200%;
+  color: rgb(77, 77, 77);
+}
+
+.queue {
+  width: 49%;
+}
+
+.queues {
+  height: 60vmin;
+  column-gap: 2%;
+}
+
+.currentSessions {
+  height: 45vmin;
+}
+
+#addToQueue {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  z-index: 100;
+}
+
+/* Modal Content */
+.addToQueue-content {
+  margin: auto;
+  padding: 20px;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #7e7e7e;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.addTeam {
+  margin-top: 30px;
+}
+
+.addTeam .material-icons {
+  cursor: pointer;
+}
+
+.addTeam .row {
+  column-gap: 5%;
+  font-size: 25px;
+  min-height: 60px;
+}
+
+.addTeam .row .dec {
+  position: absolute;
+  left: 18%;
+}
+
+.addTeam .row .inc {
+  position: absolute;
+  right: 18%;
+}
+
+#librariansAvailableCount {
+  position: absolute;
+  left: 46%;
+}
+
+#studySmarterAvailableCount {
+  position: absolute;
+  left: 46%;
+}
+
+.test {
+  background-color: rgba(74, 74, 74, 0.4);
+  border: 30px;
+  margin-bottom: 30px;
+}
+.test:hover {
+  background-color: rgb(8, 244, 228);
+}
+
+.material-icons {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
