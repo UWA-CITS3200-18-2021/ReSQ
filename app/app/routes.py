@@ -3,11 +3,10 @@ from flask_login import login_required, current_user
 
 from app.models import  User
 
-
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
-#login_required
+#@login_required
 def home():
     if current_user.is_authenticated:
         user = User.query.filter_by(id = current_user.id).first()
@@ -15,7 +14,7 @@ def home():
     return render_template('home.html', user=current_user)
 
 @routes.route('/analytics')
-#login_required
+#@login_required
 def data():
     if current_user.is_authenticated:
         user = User.query.filter_by(id = current_user.id).first()

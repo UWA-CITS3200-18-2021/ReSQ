@@ -1,3 +1,9 @@
+/*
+*
+* OUR CUSTOM JAVASCRIPT SHOULD BE ADDED HERE
+*
+*/
+
 var timers = [];
 var timerIntervals = [];
 
@@ -26,30 +32,16 @@ $('#addToQueueForm').submit(function (e) {
 	}
 
 	table.append(
-		'<tr id="' +
-			id +
-			'" class="initialTime">' +
-			'<td>' +
-			name +
-			'</td>' +
-			'<td>' +
-			id +
-			'</td>' +
-			'<td>' +
-			unit +
-			'</td>' +
-			'<td class="text-right">' +
-			enquiry +
-			'</td>' +
-			'<td class="text-right">' +
-			'<label id="minutes' +
-			id +
-			'">00</label><label id="colon">:</label><label id="seconds' +
-			id +
-			'">00</label>' +
-			'</td>' +
-			'<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>' +
-			'</tr>'
+		`<tr id="${id}" class="initialTime">
+		<td>${name}</td>
+		<td>${id}</td>
+		<td>${unit}</td>
+		<td class="text-right">${enquiry}</td>
+		<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
+		<td class="td-actions text-right">
+		<button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
+		</tr>`
 	);
 	hideAddToQueue();
 	timers[id] = 0;
@@ -87,31 +79,31 @@ function setTime(id) {
 }
 
 function pad(val) {
-	var valString = val + '';
+	const valString = `${val}`
 	if (valString.length < 2) {
-		return '0' + valString;
+		return `0${valString}`;
 	} else {
 		return valString;
 	}
 }
 
-$('#SSDec').click(function () {
-	if (parseInt(document.getElementById('SSCount').innerHTML) > 0) {
-		document.getElementById('SSCount').innerHTML -= 1;
+$('#studySmarterAvailableDecrement').click(function () {
+	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
+		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
 	}
 });
-$('#SSInc').click(function () {
-	let curr = parseInt(document.getElementById('SSCount').innerHTML);
+$('#studySmarterAvailableIncrement').click(function () {
+	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
 	let next = curr + 1;
-	document.getElementById('SSCount').innerHTML = next;
+	document.getElementById('studySmarterAvailableCount').innerHTML = next;
 });
-$('#libDec').click(function () {
-	if (parseInt(document.getElementById('libCount').innerHTML) > 0) {
-		document.getElementById('libCount').innerHTML -= 1;
+$('#librariansAvailableDecrement').click(function () {
+	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
+		document.getElementById('librariansAvailableCount').innerHTML -= 1;
 	}
 });
-$('#libInc').click(function () {
-	let curr = parseInt(document.getElementById('libCount').innerHTML);
+$('#librariansAvailableIncrement').click(function () {
+	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
 	let next = curr + 1;
-	document.getElementById('libCount').innerHTML = next;
+	document.getElementById('librariansAvailableCount').innerHTML = next;
 });

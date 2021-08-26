@@ -10,12 +10,6 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def admin_login():
-    if current_user.is_authenticated:
-        user = User.query.filter_by(id = current_user.id).first()
-        theme = user.selected_theme()
-    else:
-        theme = "Blue"
-
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -31,7 +25,7 @@ def admin_login():
         else:
             flash("User does not exist", category="error")
 
-    return render_template('login.html', user=current_user, theme=theme)
+    return render_template('login.html', user=current_user)
 
 @auth.route('/logout')
 @login_required
