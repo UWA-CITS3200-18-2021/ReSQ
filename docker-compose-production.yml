@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+
+  db:
+    container_name: resq_postgres
+    image: postgres:12.4-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: Australia/Perth
+    volumes:
+      - ./data/resq/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: resq_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 10023:5000
+    volumes:
+      - ./app:/app_code
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+
