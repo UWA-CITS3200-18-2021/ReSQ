@@ -19,6 +19,49 @@
 {% endblock %} {% block header %}
 <a class="navbar-brand" href="javascript:;">STUDYSmarter and Librarian Queues</a>{% endblock %} {% block
 content %}
+<div class="row">
+	<div class="card col-md-10 currentSessions">
+		<div class="card-header card-header-info">
+			Current Sessions<span class="material-icons float-right"> group </span>
+		</div>
+		<div class="card-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Team</th>
+						<th>Name</th>
+						<th>Student Number</th>
+						<th>Unit Code</th>
+						<th class="text-right">Enquiry Type</th>
+						<th class="text-right">Session Time</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<div class="card-body">
+			<button onclick="showAddToQueue()" type="button" class="btn btn-lg btn-round test">Add to Queue</button>
+			<div class="addTeam card">
+				<h4 class="card-header card-header-info">STUDYSmarter Team Available</h4>
+				<div class="row card-body text-center">
+					<span class="material-icons dec" id="studySmarterAvailableDecrement">remove_circle_outline</span>
+					<div id="studySmarterAvailableCount">1</div>
+					<span class="material-icons inc" id="studySmarterAvailableIncrement">add_circle_outline</span>
+				</div>
+			</div>
+			<div class="addTeam card text-center">
+				<h4 class="card-header card-header-info">Librarians Available</h4>
+				<div class="row card-body text-center">
+					<span class="material-icons dec" id="librariansAvailableDecrement">remove_circle_outline</span>
+					<div id="librariansAvailableCount">1</div>
+					<span class="material-icons inc" id="librariansAvailableIncrement">add_circle_outline</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="row queues">
 	<div class="card queue">
 		<div class="card-header card-header-info" data-color="green">
@@ -101,49 +144,6 @@ content %}
 				<br />
 				<button type="submit" class="btn btn-primary" id="addToQueueSubmit">Add</button>
 			</form>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="card col-md-10 currentSessions">
-		<div class="card-header card-header-info">
-			Current Sessions<span class="material-icons float-right"> group </span>
-		</div>
-		<div class="card-body">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Team</th>
-						<th>Name</th>
-						<th>Student Number</th>
-						<th>Unit Code</th>
-						<th class="text-right">Enquiry Type</th>
-						<th class="text-right">Session Time</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-		</div>
-	</div>
-	<div class="col-md-2">
-		<div class="card-body">
-			<button onclick="showAddToQueue()" type="button" class="btn btn-lg btn-round test">Add to Queue</button>
-			<div class="addTeam card">
-				<h4 class="card-header card-header-info">STUDYSmarter Team Available</h4>
-				<div class="row card-body text-center">
-					<span class="material-icons dec" id="studySmarterAvailableDecrement">remove_circle_outline</span>
-					<div id="studySmarterAvailableCount">1</div>
-					<span class="material-icons inc" id="studySmarterAvailableIncrement">add_circle_outline</span>
-				</div>
-			</div>
-			<div class="addTeam card text-center">
-				<h4 class="card-header card-header-info">Librarians Available</h4>
-				<div class="row card-body text-center">
-					<span class="material-icons dec" id="librariansAvailableDecrement">remove_circle_outline</span>
-					<div id="librariansAvailableCount">1</div>
-					<span class="material-icons inc" id="librariansAvailableIncrement">add_circle_outline</span>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
