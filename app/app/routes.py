@@ -29,7 +29,7 @@ def data():
 
 
 # Database query routes
-@routes.route('/add_to_queue', methods=["POST"])
+@routes.route('/add_to_queue', methods=["GET"])
 def add_to_queue():
     new = Queue(studentName = request.headers['studentName'], 
                         studentNumber = request.headers['studentNumber'], 
@@ -40,7 +40,7 @@ def add_to_queue():
     
     db.session.add(new)
     db.session.commit()
-    return ''
+    return str(new.id)
 
 @routes.route('/update_queue', methods=['POST'])
 def update_queue():

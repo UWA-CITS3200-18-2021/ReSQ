@@ -19,6 +19,7 @@ function hideAddToQueue() {
 $('#addToQueueForm').submit(function (e) {
 	e.preventDefault();
 
+	let queue_id;
 	let name = document.getElementById('studentName').value;
 	let id = document.getElementById('studentNumber').value;
 	let unit = document.getElementById('unitCode').value;
@@ -30,9 +31,9 @@ $('#addToQueueForm').submit(function (e) {
 	} else {
 		var table = $('#libQueueTable tbody');
 	}
-
+	
 	fetch("add_to_queue", {
-        method: "POST",
+        method: "GET",
         headers: {
             studentName: name,
             studentNumber: id,
@@ -40,10 +41,10 @@ $('#addToQueueForm').submit(function (e) {
             enquiry: enquiry,
             queue: team
         }
-    })
-	
+    }).then(response => response.text())
+	.then(data => {queue_id = parseInt(data);
 	table.append(
-		`<tr id="${id}" class="initialTime">
+		`<tr id="${queue_id}" class="initialTime">
 		<td>${name}</td>
 		<td>${id}</td>
 		<td>${unit}</td>
@@ -54,6 +55,8 @@ $('#addToQueueForm').submit(function (e) {
 		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
 		</tr>`
 	);
+	});
+
 	hideAddToQueue();
 	timers[id] = 0;
 	console.log(timers[id]);
