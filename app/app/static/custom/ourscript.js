@@ -31,6 +31,17 @@ $('#addToQueueForm').submit(function (e) {
 		var table = $('#libQueueTable tbody');
 	}
 
+	fetch("add_to_queue", {
+        method: "POST",
+        headers: {
+            studentName: name,
+            studentNumber: id,
+            unitCode: unit,
+            enquiry: enquiry,
+            queue: team
+        }
+    })
+	
 	table.append(
 		`<tr id="${id}" class="initialTime">
 		<td>${name}</td>
