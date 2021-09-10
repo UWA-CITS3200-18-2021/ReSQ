@@ -1,4 +1,5 @@
 from app import db, login_manager
+from app.globals import enquiryType, queueType
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime
 from sqlalchemy.orm import validates
@@ -26,27 +27,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 # Setup of ENUM types
-enquiryType = ( 'Essay',
-                'Grammer',
-                'Lab Report',
-                'Assignment',
-                'Literature Research',
-                'Resaerch Proposal',
-                'Thesis/Paper',
-                'IELTS',
-                'Oral Presentation',
-                'Referencing',
-                'Finding Sources',
-                'Endnote',
-                'Other')
-
 enquiryEnum = Enum(*enquiryType, name="enquiryType")
-
-queueType = (   'STUDYSmarter',
-                'Librarians',
-                'In Session'
-                'Completed')
-
 queueEnum = Enum(*queueType, name="queueType")
 
 class Queue(db.Model):
