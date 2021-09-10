@@ -30,7 +30,9 @@ def data():
     return render_template('data.html', user=current_user)
 
 
-# Database query routes
+## Database query routes
+#
+# Add a new enquiry to the queue
 @routes.route('/add_to_queue', methods=["GET"])
 def add_to_queue():
     new = Queue(studentName = request.headers['studentName'], 
