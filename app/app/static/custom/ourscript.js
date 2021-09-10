@@ -64,11 +64,10 @@ $('#addToQueueForm').submit(function (e) {
 });
 
 function deleteRow(x, id) {
-	fetch("update_queue", {
+	fetch("remove_from_queue", {
 		method: "POST",
 		headers: {
 			queue_id: id,
-			destination: 'Ended'
 		}
 	})
 	$(x).parents('tr').remove();

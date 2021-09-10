@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0c1278985fdd
+Revision ID: 6467a4d1f7f1
 Revises: 17c916eaf732
-Create Date: 2021-09-10 07:02:21.754505
+Create Date: 2021-09-10 07:57:46.160164
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0c1278985fdd'
+revision = '6467a4d1f7f1'
 down_revision = '17c916eaf732'
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('studentNumber', sa.Integer(), nullable=False),
     sa.Column('unitCode', sa.String(length=8), nullable=False),
     sa.Column('enquiry', sa.Enum('Essay', 'Grammer', 'Lab Report', 'Assignment', 'Literature Research', 'Resaerch Proposal', 'Thesis/Paper', 'IELTS', 'Oral Presentation', 'Referencing', 'Finding Sources', 'Endnote', 'Other', name='enquiryType'), nullable=False),
-    sa.Column('queue', sa.Enum('STUDYSmarter', 'Librarians', 'In Session', 'Ended', 'Completed', name='queueType'), nullable=False),
+    sa.Column('queue', sa.Enum('STUDYSmarter', 'Librarians', name='queueType'), nullable=False),
     sa.Column('enterQueueTime', sa.DateTime(), nullable=False),
     sa.Column('changeSessionTime', sa.DateTime(), nullable=True),
     sa.Column('exitSessionTime', sa.DateTime(), nullable=True),

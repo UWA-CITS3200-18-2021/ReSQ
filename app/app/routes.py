@@ -8,7 +8,7 @@ from app import db
 from app.globals import isChangeValid, queueType
 from app.models import  Queue, User
 
-from datetime import datetime
+from datetime import date, datetime
 
 routes = Blueprint('routes', __name__)
 
@@ -46,34 +46,44 @@ def add_to_queue():
     db.session.commit()
     return str(new.id)
 
-# Route for updating the queue
-# Requires 2 headers: queue_id, destination
-@routes.route('/update_queue', methods=["POST"])
-def update_queue():
+@routes.route('/remove_from_queue', methods=["POST"])
+def remove_from_queue():
     enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
-    status = enquiry.queue
-    dest = request.headers['destination']
-    time = datetime.now()
+    enquiry.exitSessionTime = datetime.now()
+    db.session.commit()
+    return ''
+
+@routes.route('/undo_remove_from_queue', methods=["POST"])
+def undo_remove_from_queue():
+    enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
+    enquiry.exitSessionTime = Null
+    db.session.commit()
+    return ''
     
-    if not isChangeValid(status, dest):
-        raise ValueError("Illegal Update")
-    else:
-        if status in ('STUDYSmarter','Librarians'):
-            if enquiry.changeSessionTime == Null:
-                enquiry.changeSessionTime = time
-            else:
-                enquiry.exitSessionTime = time
-        elif status in ('Ended', 'Completed'):
-            if enquiry.exitSessionTime == Null:
-                enquiry.changeSessionTime = Null
-            else:
-                enquiry.exitSessionTime = Null
-        elif status == 'In Session':
-            if dest == 'Completed':
-                enquiry.exitSessionTime = time
-            else:
-                enquiry.changeSessionTime = Null
+@routes.route('/add_to_session', methods=["POST"])
+def add_to_session():
+    enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
+    enquiry.changeSessionTime = datetime.now()
+    db.session.commit()
+    return ''
     
-    enquiry.queue = dest
+@routes.route('/undo_add_to_session', methods=["POST"])
+def undo_add_to_session():
+    enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
+    enquiry.changeSessionTime = Null
+    db.session.commit()
+    return ''
+
+@routes.route('/finish_session', methods=["POST"])
+def finish_session():
+    enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
+    enquiry.exitSessionTime = datetime.now()
+    db.session.commit()
+    return ''
+
+@routes.route('/undo_finish_session', methods=["POST"])
+def undo_finish_session():
+    enquiry = db.session.query(Queue).filter(Queue.id == request.headers["queue_id"]).one()
+    enquiry.exitSessionTime = Null
     db.session.commit()
     return ''
