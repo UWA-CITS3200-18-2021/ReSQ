@@ -1,16 +1,21 @@
+from sqlalchemy.sql.expression import null
 from app import db, login_manager
-from app.globals import enquiryType, queueType
+from app.globals import enquiryType, queueType, statusType, roleType
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime
 from sqlalchemy.orm import validates
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# User table
+roleEnum = Enum(*roleType, name="roleEnum")
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(64), index=True, unique=True)
-    password_hash = Column(String(128))
+    username = Column(String(64), index=True, unique=True, nullable=False)
+    password_hash = Column(String(128), nullable=False)
+    role = Column(roleEnum, nullable=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -29,6 +34,7 @@ def load_user(id):
 # Setup of ENUM types
 enquiryEnum = Enum(*enquiryType, name="enquiryType")
 queueEnum = Enum(*queueType, name="queueType")
+statusEnum = Enum(*statusType, name="statusEnum")
 
 class Queue(db.Model):
 
@@ -38,6 +44,7 @@ class Queue(db.Model):
     unitCode = Column(String(8), nullable=False)
     enquiry = Column(enquiryEnum, nullable=False)
     queue = Column(queueEnum, nullable=False)
+    status = Column(statusEnum, nullable=False)
     enterQueueTime = Column(DateTime, nullable=False)
     changeSessionTime = Column(DateTime)
     exitSessionTime = Column(DateTime)

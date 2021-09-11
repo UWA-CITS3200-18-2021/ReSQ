@@ -32,8 +32,8 @@ $('#addToQueueForm').submit(function (e) {
 		var table = $('#libQueueTable tbody');
 	}
 	
-	fetch("add_to_queue", {
-        method: "GET",
+	fetch("add_entry", {
+        method: "POST",
         headers: {
             studentName: name,
             studentNumber: id,
@@ -41,10 +41,10 @@ $('#addToQueueForm').submit(function (e) {
             enquiry: enquiry,
             queue: team
         }
-    }).then(response => response.text())
-	.then(data => {queue_id = parseInt(data);
+    })
+
 	table.append(
-		`<tr id="${queue_id}" class="initialTime">
+		`<tr id="${id}" class="initialTime">
 		<td>${name}</td>
 		<td>${id}</td>
 		<td>${unit}</td>
@@ -54,8 +54,7 @@ $('#addToQueueForm').submit(function (e) {
 		<button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">how_to_reg</i></button>
 		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this, ${queue_id})"><i class="material-icons">close</i></button></td>
 		</tr>`
-	);
-	});
+	)
 
 	hideAddToQueue();
 	timers[id] = 0;
