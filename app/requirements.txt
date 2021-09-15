@@ -17,3 +17,4 @@ six==1.16.0
 SQLAlchemy==1.4.14
 Werkzeug==1.0.1
 selenium==3.141.0
+pytz==2019.3

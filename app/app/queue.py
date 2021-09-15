@@ -4,7 +4,7 @@ from sqlalchemy.sql.elements import Null
 
 from app import db
 from app.models import  Queue
-
+import pytz
 from datetime import datetime
 
 queue = Blueprint('queue', __name__)
@@ -18,7 +18,7 @@ def add_to_queue():
                         enquiry = request.headers['enquiry'],
                         queue = request.headers['queue'],
                         status = 'In Queue',
-                        enterQueueTime = datetime.now())
+                        enterQueueTime = datetime.now(pytz.timezone('Australia/Perth')))
     
     db.session.add(new)
     db.session.commit()
