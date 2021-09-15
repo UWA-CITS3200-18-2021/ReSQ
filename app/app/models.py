@@ -49,12 +49,13 @@ class Queue(db.Model):
     changeSessionTime = Column(DateTime)
     exitSessionTime = Column(DateTime)
 
-    def __init__(self, studentName, studentNumber, unitCode, enquiry, queue, enterQueueTime):
+    def __init__(self, studentName, studentNumber, unitCode, enquiry, queue, status, enterQueueTime):
         self.studentName = studentName
         self.studentNumber = studentNumber
         self.unitCode = unitCode
         self.enquiry = enquiry
         self.queue = queue
+        self.status = status
         self.enterQueueTime = enterQueueTime
     
     def __repr__(self):
