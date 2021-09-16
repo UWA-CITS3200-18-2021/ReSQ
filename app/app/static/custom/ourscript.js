@@ -4,6 +4,7 @@
 *
 */
 
+var inSessionTable = $('#inSession tbody');
 var timers = [];
 var timerIntervals = [];
 
@@ -26,11 +27,6 @@ $('#addToQueueForm').submit(function (e) {
 	let team = document.getElementById('team').value;
 	let enquiry = document.getElementById('enquiryType').value;
 
-	if (team == 'STUDYSmarter') {
-		var table = $('#SSQueueTable tbody');
-	} else {
-		var table = $('#libQueueTable tbody');
-	}
 	
 	fetch("add_entry", {
         method: "POST",
@@ -43,18 +39,34 @@ $('#addToQueueForm').submit(function (e) {
         }
     })
 
-	table.append(
-		`<tr id="${id}" class="initialTime">
-		<td>${name}</td>
-		<td>${id}</td>
-		<td>${unit}</td>
-		<td class="text-right">${enquiry}</td>
-		<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
-		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
-		</tr>`
-	)
+	if (team == 'STUDYSmarter') {
+		var table = $('#SSQueueTable tbody');
+		table.append(
+			`<tr id="${id}" class="initialTime">
+			<td>${name}</td>
+			<td>${id}</td>
+			<td>${unit}</td>
+			<td class="text-right">${enquiry}</td>
+			<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
+			<td class="td-actions text-right">
+			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionStudySmarter(this)"><i class="material-icons">how_to_reg</i></button>
+			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
+			</tr>`);
+	} else {
+		var table = $('#libQueueTable tbody');
+		table.append(
+			`<tr id="${id}" class="initialTime">
+			<td>${name}</td>
+			<td>${id}</td>
+			<td>${unit}</td>
+			<td class="text-right">${enquiry}</td>
+			<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
+			<td class="td-actions text-right">
+			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionLib(this)"><i class="material-icons">how_to_reg</i></button>
+			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
+			</tr>`
+	);
+	}
 
 	hideAddToQueue();
 	timers[id] = 0;
@@ -63,6 +75,24 @@ $('#addToQueueForm').submit(function (e) {
 
 function deleteRow(x) {
 	$(x).parents('tr').remove();
+}
+
+// add to current session as StudySmarter team
+function addSessionStudySmarter(x){
+	var row = $(x).parents('tr');
+	row.children().first().before(`<td>STUDYSmarter</td>`);
+	row.children().last().remove();
+	row.children().last().after(`<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success" onclick="deleteRow(this)"><i class="material-icons">how_to_reg</i></button></td>`);
+	inSessionTable.append(row);
+}
+
+// add to current session as Librarian team
+function addSessionLib(x){
+	var row = $(x).parents('tr');
+	row.children().first().before(`<td>Librarian</td>`);
+	row.children().last().remove();
+	row.children().last().after(`<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success" onclick="deleteRow(this)"><i class="material-icons">how_to_reg</i></button></td>`);
+	inSessionTable.append(row);
 }
 
 window.onclick = function (event) {
