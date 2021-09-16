@@ -52,23 +52,16 @@ $('#addToQueueForm').submit(function (e) {
 		<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this, ${queue_id})"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
 		</tr>`
 	)
 
 	hideAddToQueue();
 	timers[id] = 0;
-	console.log(timers[id]);
 	timerIntervals[id] = setInterval(setTime, 1000, id);
 });
 
-function deleteRow(x, id) {
-	fetch("remove_from_queue", {
-		method: "POST",
-		headers: {
-			queue_id: id,
-		}
-	})
+function deleteRow(x) {
 	$(x).parents('tr').remove();
 }
 

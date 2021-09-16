@@ -31,7 +31,7 @@ def update_entry():
     dest = request.headers['destination']
     entry = db.session.query(Queue).filter(Queue.id == id).first()
     src = entry.status
-    time = datetime.now()
+    time = datetime.now(pytz.timezone('Australia/Perth'))
 
     if src == 'Ended':
         if dest == 'In Queue':
