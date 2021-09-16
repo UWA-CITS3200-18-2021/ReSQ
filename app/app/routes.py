@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
-from app.models import  User
+from sqlalchemy.sql.elements import Null
+
+from app.models import User
 
 routes = Blueprint('routes', __name__)
 
+# Main Routes
 @routes.route('/')
 #@login_required
 def home():

@@ -1,14 +1,21 @@
+from sqlalchemy.sql.expression import null
 from app import db, login_manager
+from app.globals import enquiryType, queueType, statusType, roleType
 from flask_login import UserMixin
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, Enum, DateTime
+from sqlalchemy.orm import validates
 from werkzeug.security import generate_password_hash, check_password_hash
+
+# User table
+roleEnum = Enum(*roleType, name="roleEnum")
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    id = Column(Integer, primary_key=True)
+    username = Column(String(64), index=True, unique=True, nullable=False)
+    password_hash = Column(String(128), nullable=False)
+    role = Column(roleEnum, nullable=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -23,3 +30,46 @@ class User(db.Model, UserMixin):
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+# Setup of ENUM types
+enquiryEnum = Enum(*enquiryType, name="enquiryType")
+queueEnum = Enum(*queueType, name="queueType")
+statusEnum = Enum(*statusType, name="statusEnum")
+
+class Queue(db.Model):
+
+    id = Column(Integer, primary_key=True)
+    studentName = Column(String(64), nullable=False)
+    studentNumber = Column(Integer, nullable=False)
+    unitCode = Column(String(8), nullable=False)
+    enquiry = Column(enquiryEnum, nullable=False)
+    queue = Column(queueEnum, nullable=False)
+    status = Column(statusEnum, nullable=False)
+    enterQueueTime = Column(DateTime, nullable=False)
+    changeSessionTime = Column(DateTime)
+    exitSessionTime = Column(DateTime)
+
+    def __init__(self, studentName, studentNumber, unitCode, enquiry, queue, status, enterQueueTime):
+        self.studentName = studentName
+        self.studentNumber = studentNumber
+        self.unitCode = unitCode
+        self.enquiry = enquiry
+        self.queue = queue
+        self.status = status
+        self.enterQueueTime = enterQueueTime
+    
+    def __repr__(self):
+        return f"Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
+    
+    @validates('studentNumber')
+    def validate_studentNumber(self, key, studentNumber):
+        if len(studentNumber) != 8:
+            raise ValueError("studentNumber must be 8 digits")
+        return int(studentNumber)
+
+    @validates('unitCode')
+    def validate_unitCode(self, key, unitCode):
+        for i,c in enumerate(unitCode):
+            if (i < 4 and not c.isupper()) or (i >= 4 and not c.isnumeric()):
+                raise ValueError("unitCode must be of the form CCCCNNNN")
+        return unitCode
