@@ -9,29 +9,35 @@ from datetime import datetime
 
 queue = Blueprint('queue', __name__)
 
-# Add a new entry to the queue
-
 
 @queue.route('/add_entry', methods=["POST"])
 def add_to_queue():
+    # Add a new entry to the queue
     body = request.get_json(force=True)
-    new = Queue(studentName=body['studentName'],
-                studentNumber=body['studentNumber'],
-                unitCode=body['unitCode'],
-                enquiry=body['enquiry'],
-                queue=body['queue'],
-                status='In Queue',
-                enterQueueTime=datetime.now(pytz.timezone('Australia/Perth')))
 
-    db.session.add(new)
-    db.session.commit()
-    return str(new.id)
+    try:
+        new = Queue(studentName=body['studentName'],
+                    studentNumber=body['studentNumber'],
+                    unitCode=body['unitCode'],
+                    enquiry=body['enquiry'],
+                    queue=body['queue'],
+                    status='In Queue',
+                    enterQueueTime=datetime.now(pytz.timezone('Australia/Perth')))
+        db.session.add(new)
+        db.session.commit()
+        breakpoint()
+        return jsonify(new.to_dict()), 201
+    except KeyError as exception:
+        return jsonify({"message": f"KeyError of Parameter: {str(exception)}"}), 400
+    except ValueError as exception:
+        return jsonify({"message": f"ValueError of Parameter: {str(exception)}"}), 400
+    except Exception as exception:
+        return jsonify({"message": str(exception)}), 500
 
-# Update an entry in the queue table
 
-
-@queue.route('/update_entry', methods=["POST"])
+@ queue.route('/update_entry', methods=["POST"])
 def update_entry():
+    # Update an entry in the queue table
     body = request.get_json(force=True)
     id = body['id']
     dest = body['destination']
@@ -71,7 +77,7 @@ def update_entry():
 # Return a list containing the details of the specified queue
 
 
-@queue.route('/get_queue', methods=["GET"])
+@ queue.route('/get_queue', methods=["GET"])
 def get_queue():
     body = request.get_json(force=True)
 
