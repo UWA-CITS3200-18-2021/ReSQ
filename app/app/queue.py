@@ -35,44 +35,43 @@ def add_to_queue():
         return jsonify({"message": str(exception)}), 500
 
 
-@ queue.route('/update_entry', methods=["POST"])
-def update_entry():
+@ queue.route('/update_entry/<entry_id>', methods=["POST"])
+def update_entry(entry_id):
     # Update an entry in the queue table
     body = request.get_json(force=True)
-    id = body['id']
-    dest = body['destination']
-    entry = db.session.query(Queue).filter(Queue.id == id).first()
+    destination = body['destination']
+    entry = db.session.query(Queue).filter(Queue.id == entry_id).first()
     src = entry.status
     time = datetime.now(pytz.timezone('Australia/Perth'))
 
     if src == 'Ended':
-        if dest == 'In Queue':
+        if destination == 'In Queue':
             entry.exitSessionTime = Null
         else:
-            raise ValueError("Invalid Destination")
+            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
     elif src == 'In Queue':
-        if dest == 'Ended':
+        if destination == 'Ended':
             entry.exitSessionTime = time
-        elif dest == 'In Session':
+        elif destination == 'In Session':
             entry.changeSessionTime = time
         else:
-            raise ValueError("Invalid Destination")
+            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
     elif src == 'In Session':
-        if dest == 'In Queue':
+        if destination == 'In Queue':
             entry.changeSessionTime = Null
-        elif dest == 'Completed':
+        elif destination == 'Completed':
             entry.exitSessionTime = time
         else:
-            raise ValueError("Invalid Destination")
+            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
     elif src == 'Completed':
-        if dest == 'In Session':
+        if destination == 'In Session':
             entry.exitSessionTime = Null
         else:
-            raise ValueError("Invalid Destination")
+            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
 
-    entry.status = dest
+    entry.status = destination
     db.session.commit()
-    return ''
+    return jsonify(entry.to_dict()), 200
 
 # Return a list containing the details of the specified queue
 
