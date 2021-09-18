@@ -16,24 +16,26 @@ const queueList = {
 const addToQueueList = async (data) => {
 	// This function adds the data (object - of the student details) to the specified queueList
 	// And rerenders the table
-
-
+	console.log(data)
 	try{
 		const response = await fetch("add_entry", {
 			method: "POST",
-			body: data
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
 		})
-		console.log()
-		queueList[data.team].push(data)
+		const dataResponse = await response.json()
+		console.log(dataResponse)
+		queueList[data.queue].push(dataResponse)
+		timers[dataResponse.id] = 0;
+		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		rerenderTables()
 	}
-	catch(err){
-		// Maybe even display an alert
-		console.error(error)
+	catch(error){
+		// There's an error
+		console.log(error)
 	}
-
-	timers[data.id] = 0;
-	timerIntervals[data.id] = setInterval(setTime, 1000, data.id);
-	rerenderTables()
 }
 
 const rerenderTables = () => {
@@ -51,13 +53,13 @@ const rerenderTables = () => {
 	dataTablesToRerender.forEach(({tableSelector,queueName})=>{
 		const table = document.querySelector(tableSelector);
 		table.innerHTML = queueList[queueName].map(element => `<tr id="${element.id}" class="initialTime">
-		<td>${element.name}</td>
-		<td>${element.id}</td>
-		<td>${element.unit}</td>
+		<td>${element.studentName}</td>
+		<td>${element.studentNumber}</td>
+		<td>${element.unitCode}</td>
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.team}',${element.id})(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.queue}',${element.id})(this)"><i class="material-icons">how_to_reg</i></button>
 		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
@@ -66,7 +68,7 @@ function showAddToQueue() {
 	$('#addToQueue').css('display', 'block');
 }
 
-function hideAddToQueue() {
+function hideAddToQueueForm() {
 	document.getElementById('addToQueueForm').reset();
 	$('#addToQueue').css('display', 'none');
 }
@@ -75,19 +77,22 @@ $('#addToQueueForm').submit(function (e) {
 	// This is the function that executes on the submission of the Student Data
 	e.preventDefault();
 
-	let name = document.getElementById('studentName').value;
-	let studentNumber = document.getElementById('studentNumber').value;
-	let unitCode = document.getElementById('unitCode').value;
-	let queue = document.getElementById('queue').value;
-	let enquiryType = document.getElementById('enquiryType').value;
+	const studentName = document.getElementById('studentName').value;
+	const studentNumber = document.getElementById('studentNumber').value;
+	const unitCode = document.getElementById('unitCode').value;
+	const queue = document.getElementById('queue').value;
+	const enquiry = document.getElementById('enquiry').value;
 
+	// Adds to state and rerender
 	addToQueueList({
-		name,
+		studentName,
 		studentNumber,
 		unitCode,
 		queue,
-		enquiryType
+		enquiry
 	})
+
+	hideAddToQueueForm();
 });
 
 function deleteRow(x) {
@@ -113,8 +118,9 @@ return closureFunction
 }
 
 window.onclick = function (event) {
+	// This is an event to enable deslection of the modal by clicking background
 	if (event.target == document.getElementById('addToQueue')) {
-		hideAddToQueue();
+		hideAddToQueueForm();
 	}
 };
 
