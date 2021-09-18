@@ -81,7 +81,7 @@ class Queue(BaseModel):
         self.enterQueueTime = enterQueueTime
 
     def __repr__(self):
-        return f"Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
+        return f"<Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
 
     @validates('studentNumber')
     def validate_studentNumber(self, key, studentNumber):

@@ -25,14 +25,14 @@ def add_to_queue():
                     enterQueueTime=datetime.now(pytz.timezone('Australia/Perth')))
         db.session.add(new)
         db.session.commit()
-        breakpoint()
-        return jsonify(new.to_dict()), 201
+        print(new) # This print is important (do not remove)
+        return new.to_dict(), 201
     except KeyError as exception:
-        return jsonify({"message": f"KeyError of Parameter: {str(exception)}"}), 400
+        return {"message": f"KeyError of Parameter: {str(exception)}"}, 400
     except ValueError as exception:
-        return jsonify({"message": f"ValueError of Parameter: {str(exception)}"}), 400
+        return {"message": f"ValueError of Parameter: {str(exception)}"}, 400
     except Exception as exception:
-        return jsonify({"message": str(exception)}), 500
+        return {"message": str(exception)}, 500
 
 
 @ queue.route('/update_entry/<entry_id>', methods=["POST"])
@@ -48,30 +48,31 @@ def update_entry(entry_id):
         if status == 'In Queue':
             entry.exitSessionTime = Null
         else:
-            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
+            return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'In Queue':
         if status == 'Ended':
             entry.exitSessionTime = time
         elif status == 'In Session':
             entry.changeSessionTime = time
         else:
-            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
+            return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'In Session':
         if status == 'In Queue':
             entry.changeSessionTime = Null
         elif status == 'Completed':
             entry.exitSessionTime = time
         else:
-            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
+            return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'Completed':
         if status == 'In Session':
             entry.exitSessionTime = Null
         else:
-            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
+            return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
 
     entry.status = status
     db.session.commit()
-    return jsonify(entry.to_dict()), 200
+    print(entry) # This print is important (do not remove)
+    return entry.to_dict(), 200
 
 # Return a list containing the details of the specified queue
 
@@ -92,4 +93,4 @@ def get_queue():
             queue_to_send = Queue.query.all()
     else:
         queue_to_send = Queue.query.all()
-    return jsonify({"queue": [item.to_dict() for item in queue_to_send]}), 200
+    return {"queue": [item.to_dict() for item in queue_to_send]}, 200
