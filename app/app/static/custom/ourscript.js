@@ -48,7 +48,7 @@ $('#addToQueueForm').submit(function (e) {
 			<td class="text-right">${enquiry}</td>
 			<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
 			<td class="td-actions text-right">
-			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${team}')(this)"><i class="material-icons">how_to_reg</i></button>
+			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${team}',${id})(this)"><i class="material-icons">how_to_reg</i></button>
 			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
 			</tr>`
 	);
@@ -62,14 +62,19 @@ function deleteRow(x) {
 	$(x).parents('tr').remove();
 }
 
-function addSessionToTeam(team){
+function addSessionToTeam(team, id){
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
+		console.log(currentElement)
 		var row = $(currentElement).parents('tr');
 		row.children().first().before(`<td>${team}</td>`);
 		row.children().last().remove();
 		row.children().last().after(`<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success" onclick="deleteRow(this)"><i class="material-icons">how_to_reg</i></button></td>`);	
 		inSessionTable.append(row);
+		
+		clearInterval(timerIntervals[id]);
+		timers[id] = 0;
+		timerIntervals[id] = setInterval(setTime, 1000, id);
 	}
 	
 return closureFunction
