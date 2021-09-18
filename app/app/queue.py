@@ -39,37 +39,37 @@ def add_to_queue():
 def update_entry(entry_id):
     # Update an entry in the queue table
     body = request.get_json(force=True)
-    destination = body['destination']
+    status = body['status']
     entry = db.session.query(Queue).filter(Queue.id == entry_id).first()
     src = entry.status
     time = datetime.now(pytz.timezone('Australia/Perth'))
 
     if src == 'Ended':
-        if destination == 'In Queue':
+        if status == 'In Queue':
             entry.exitSessionTime = Null
         else:
-            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
+            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
     elif src == 'In Queue':
-        if destination == 'Ended':
+        if status == 'Ended':
             entry.exitSessionTime = time
-        elif destination == 'In Session':
+        elif status == 'In Session':
             entry.changeSessionTime = time
         else:
-            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
+            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
     elif src == 'In Session':
-        if destination == 'In Queue':
+        if status == 'In Queue':
             entry.changeSessionTime = Null
-        elif destination == 'Completed':
+        elif status == 'Completed':
             entry.exitSessionTime = time
         else:
-            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
+            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
     elif src == 'Completed':
-        if destination == 'In Session':
+        if status == 'In Session':
             entry.exitSessionTime = Null
         else:
-            return jsonify({"message": f"Invalid Destination: Going to {destination}, from {entry.status}"}), 400
+            return jsonify({"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}), 400
 
-    entry.status = destination
+    entry.status = status
     db.session.commit()
     return jsonify(entry.to_dict()), 200
 
