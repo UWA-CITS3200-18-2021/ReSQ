@@ -15,3 +15,9 @@ Most changes in the codebase can be matched to a github issue that contains desc
 The development is done with Docker to orchestrate multiple services as defined in the `docker-compose.yml` file:
 
 - Documentation at localhost:8001
+
+## Inconsistencies
+During the project, different developers have different terminology. Some of the inconsistencies are documented below
+
+## `queue` means Team Name as well
+`queue` refers to where the student belongs to in the queue. This can either be `StudySmarter` or `Librarian` team.

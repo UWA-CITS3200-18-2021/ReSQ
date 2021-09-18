@@ -5,9 +5,63 @@
 */
 
 var inSessionTable = $('#inSession tbody');
-var timers = [];
-var timerIntervals = [];
+const timers = [];
+const timerIntervals = [];
 
+const queueList = {
+	"STUDYSmarter":[],
+	"Librarian":[]
+}
+
+const addToQueueList = async (data) => {
+	// This function adds the data (object - of the student details) to the specified queueList
+	// And rerenders the table
+
+
+	try{
+		const response = await fetch("add_entry", {
+			method: "POST",
+			body: data
+		})
+		console.log()
+		queueList[data.team].push(data)
+	}
+	catch(err){
+		// Maybe even display an alert
+		console.error(error)
+	}
+
+	timers[data.id] = 0;
+	timerIntervals[data.id] = setInterval(setTime, 1000, data.id);
+	rerenderTables()
+}
+
+const rerenderTables = () => {
+	const dataTablesToRerender = [
+		{
+			"tableSelector":"#studysmarterDataTable",
+			"queueName":"STUDYSmarter"
+		},
+		{
+			"tableSelector":"#librarianDataTable",
+			"queueName":"Librarian"
+		},
+	]
+
+	dataTablesToRerender.forEach(({tableSelector,queueName})=>{
+		const table = document.querySelector(tableSelector);
+		table.innerHTML = queueList[queueName].map(element => `<tr id="${element.id}" class="initialTime">
+		<td>${element.name}</td>
+		<td>${element.id}</td>
+		<td>${element.unit}</td>
+		<td class="text-right">${element.enquiry}</td>
+		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
+		<td class="td-actions text-right">
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.team}',${element.id})(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
+		</tr>`).join("")
+	})
+}
 function showAddToQueue() {
 	$('#addToQueue').css('display', 'block');
 }
@@ -18,44 +72,22 @@ function hideAddToQueue() {
 }
 
 $('#addToQueueForm').submit(function (e) {
+	// This is the function that executes on the submission of the Student Data
 	e.preventDefault();
 
-	let queue_id;
 	let name = document.getElementById('studentName').value;
-	let id = document.getElementById('studentNumber').value;
-	let unit = document.getElementById('unitCode').value;
-	let team = document.getElementById('team').value;
-	let enquiry = document.getElementById('enquiryType').value;
+	let studentNumber = document.getElementById('studentNumber').value;
+	let unitCode = document.getElementById('unitCode').value;
+	let queue = document.getElementById('queue').value;
+	let enquiryType = document.getElementById('enquiryType').value;
 
-	
-	fetch("add_entry", {
-        method: "POST",
-        headers: {
-            studentName: name,
-            studentNumber: id,
-            unitCode: unit,
-            enquiry: enquiry,
-            queue: team
-        }
-    })
-
-	const table = $(`#${team == 'STUDYSmarter' ? 'SS' : 'lib'}QueueTable tbody`);
-	table.append(
-			`<tr id="${id}" class="initialTime">
-			<td>${name}</td>
-			<td>${id}</td>
-			<td>${unit}</td>
-			<td class="text-right">${enquiry}</td>
-			<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
-			<td class="td-actions text-right">
-			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${team}',${id})(this)"><i class="material-icons">how_to_reg</i></button>
-			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
-			</tr>`
-	);
-
-	hideAddToQueue();
-	timers[id] = 0;
-	timerIntervals[id] = setInterval(setTime, 1000, id);
+	addToQueueList({
+		name,
+		studentNumber,
+		unitCode,
+		queue,
+		enquiryType
+	})
 });
 
 function deleteRow(x) {

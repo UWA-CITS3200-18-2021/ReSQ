@@ -86,8 +86,8 @@ def get_queue():
             queue_to_send = db.session.query(Queue).filter(Queue.status == 'In Session').all()
         elif queue_request == 'STUDYSmarter':
             queue_to_send = db.session.query(Queue).filter(Queue.queue == 'STUDYSmarter', Queue.status == 'In Queue').all()
-        elif queue_request == 'Librarians':
-            queue_to_send = db.session.query(Queue).filter(Queue.queue == 'Librarians', Queue.status == 'In Queue').all()
+        elif queue_request == 'Librarian':
+            queue_to_send = db.session.query(Queue).filter(Queue.queue == 'Librarian', Queue.status == 'In Queue').all()
         else:
             queue_to_send = Queue.query.all()
     else:
