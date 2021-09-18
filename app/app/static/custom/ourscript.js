@@ -10,13 +10,14 @@ const timerIntervals = [];
 
 const queueList = {
 	"STUDYSmarter":[],
-	"Librarian":[]
+	"Librarian":[],
+	"In Session": []
 }
 
 const addToQueueList = async (data) => {
 	// This function adds the data (object - of the student details) to the specified queueList
 	// And rerenders the table
-	console.log(data)
+
 	try{
 		const response = await fetch("add_entry", {
 			method: "POST",
@@ -28,6 +29,7 @@ const addToQueueList = async (data) => {
 		const dataResponse = await response.json()
 		console.log(dataResponse)
 		queueList[data.queue].push(dataResponse)
+
 		timers[dataResponse.id] = 0;
 		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
 		rerenderTables()
@@ -172,3 +174,46 @@ $('#librariansAvailableIncrement').click(function () {
 	let next = curr + 1;
 	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
+
+window.onload = async (event) => {
+	console.info("Loading the Queue from API");
+
+	// Load every queue from the API parallel
+	const queueToLoad = Object.keys(queueList)
+
+	const requestPromises = queueToLoad.map(async (queue) => {
+		const response = await fetch("get_queue", {
+			method: "POST",
+			body: JSON.stringify({queue}),
+			headers: {
+				'Content-Type': 'application/json'
+		}})
+		const dataResponse = await response.json()
+		console.log
+		return dataResponse
+	})
+
+	const responsesResult = await Promise.all(requestPromises)
+	
+	// This assumes that queueToLoad is of the same index dimension as responsesResult (dimension by map)
+	queueToLoad.forEach((queue, index) => {
+		// Assigns the result of the response to the correct queueList state
+		queueList[queue] = responsesResult[index]["queue"]
+
+		// Set the timers correctly for each of the elements
+		responsesResult[index]["queue"].map(element => {
+			// Today - `enterQueueTime` is the relative date in seconds
+			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.enterQueueTime)).getTime()
+
+			// Convert to seconds (rounded)
+			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+			console.log(new Date())
+			console.log(element)
+			console.log(new Date(element.enterQueueTime))
+			console.log(timers[element.id])
+			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);
+		})
+	})
+	rerenderTables();
+	
+};

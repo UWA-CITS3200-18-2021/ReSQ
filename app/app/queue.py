@@ -22,10 +22,10 @@ def add_to_queue():
                     enquiry=body['enquiry'],
                     queue=body['queue'],
                     status='In Queue',
-                    enterQueueTime=datetime.now(pytz.timezone('Australia/Perth')))
+                    enterQueueTime=datetime.now())
         db.session.add(new)
         db.session.commit()
-        print(new) # This print is important (do not remove)
+        print(new)  # This print is important (do not remove)
         return new.to_dict(), 201
     except KeyError as exception:
         return {"message": f"KeyError of Parameter: {str(exception)}"}, 400
@@ -71,13 +71,13 @@ def update_entry(entry_id):
 
     entry.status = status
     db.session.commit()
-    print(entry) # This print is important (do not remove)
+    print(entry)  # This print is important (do not remove)
     return entry.to_dict(), 200
 
 # Return a list containing the details of the specified queue
 
 
-@ queue.route('/get_queue', methods=["GET"])
+@ queue.route('/get_queue', methods=["POST"])
 def get_queue():
     body = request.get_json(force=True)
 
