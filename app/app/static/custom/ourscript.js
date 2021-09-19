@@ -52,13 +52,10 @@ const moveToSessionList = async(data) => {
 			},
 		})
 		const dataResponse = await response.json()
-		let dataToPop = dataResponse
-		dataToPop.status = "In Queue"
-		const index = queueList[dataToPop.queue].indexOf(dataToPop)
+		const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
 		// pop the data from waiting queue
-		queueList[dataToPop.queue].splice(index, 1)
+		queueList[dataResponse.queue].splice(index, 1)
 		console.log(dataResponse)
-		dataResponse.id = data.id
 		queueList['In Session'].push(dataResponse)
 
 		clearInterval(timerIntervals[dataResponse.id]);
@@ -84,24 +81,19 @@ const terminateSession = async(data) => {
 			},
 		})
 		const dataResponse = await response.json()
-		if (dataResponse.status = "Ended"){
-			let dataToPop = dataResponse
-			dataToPop.status = "In Queue"
-			const index = queueList[dataToPop.queue].indexOf(dataToPop)
+		if (dataResponse.status == "Ended"){
+			const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from current queue
-			queueList[dataToPop.queue].splice(index, 1)
+			queueList[dataResponse.queue].splice(index, 1)
 		}
 		else{
-			let dataToPop = dataResponse
-			dataToPop.status = "In Session"
-			const index = queueList["In Session"].indexOf(dataToPop)
+			const index = queueList["In Session"].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from current queue
 			queueList["In Session"].splice(index, 1)
 		}
 		console.log(dataResponse)
-		dataResponse.id = data.id
 		timers[dataResponse.id] = 0;
-		clearInterval([dataResponse.id]);
+		clearInterval(timerIntervals[dataResponse.id]);
 		rerenderTables()
 	}
 	catch(error){
