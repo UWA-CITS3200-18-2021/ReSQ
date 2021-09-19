@@ -4,85 +4,202 @@
 *
 */
 
-var inSessionTable = $('#inSession tbody');
-var timers = [];
-var timerIntervals = [];
 
+const timers = [];
+const timerIntervals = [];
+
+const queueList = {
+	"STUDYSmarter":[],
+	"Librarian":[],
+	"In Session": []
+}
+
+const addToQueueList = async (data) => {
+	// This function adds the data (object - of the student details) to the specified queueList
+	// And rerenders the table
+
+	try{
+		const response = await fetch("add_entry", {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json()
+		queueList[data.queue].push(dataResponse)
+		
+		timers[dataResponse.id] = 0;
+		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		rerenderTables()
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+const moveToSessionList = async(data) => {
+	// This function move the data (object - of the student details) to the in Session table
+	// And rerenders the table
+	try{
+		const response = await fetch(`/update_entry/${data.id}`, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json()
+		const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
+		// pop the data from waiting queue
+		queueList[dataResponse.queue].splice(index, 1)
+		queueList['In Session'].push(dataResponse)
+
+		clearInterval(timerIntervals[dataResponse.id]);
+		timers[dataResponse.id] = 0;
+		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		rerenderTables()
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+const terminateSession = async(data) => {
+	// This function update the status data 
+	// And rerenders the table
+	try{
+		const response = await fetch("/update_entry/" + data.id, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json()
+		if (dataResponse.status == "Ended"){
+			const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
+			// pop the data from current queue
+			queueList[dataResponse.queue].splice(index, 1)
+		}
+		else{
+			const index = queueList["In Session"].findIndex((element) => element.id == dataResponse.id)
+			// pop the data from current queue
+			queueList["In Session"].splice(index, 1)
+		}
+		timers[dataResponse.id] = 0;
+		clearInterval(timerIntervals[dataResponse.id]);
+		rerenderTables()
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+const rerenderTables = () => {
+	const dataTablesToRerender = [
+		{
+			"tableSelector":"#studysmarterDataTable",
+			"queueName":"STUDYSmarter"
+		},
+		{
+			"tableSelector":"#librarianDataTable",
+			"queueName":"Librarian"
+		},
+	]
+
+	dataTablesToRerender.forEach(({tableSelector,queueName})=>{
+		const table = document.querySelector(tableSelector);
+		table.innerHTML = queueList[queueName].map(element => `<tr id="${element.id}" class="initialTime">
+		<td>${element.studentName}</td>
+		<td>${element.studentNumber}</td>
+		<td>${element.unitCode}</td>
+		<td class="text-right">${element.enquiry}</td>
+		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
+		<td class="td-actions text-right">
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}')(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		</tr>`).join("")
+	})
+	const inSessiontable = document.querySelector("#inSessionDataTable");
+	inSessiontable.innerHTML = queueList["In Session"].map(element => `<tr id="${element.id}" class="initialTime">
+	<td>${element.queue}</td>
+	<td>${element.studentName}</td>
+	<td>${element.studentNumber}</td>
+	<td>${element.unitCode}</td>
+	<td class="text-right">${element.enquiry}</td>
+	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
+	<td class="td-actions text-right">
+	<button type="button" rel="tooltip" class="btn btn-success" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
+	</tr>`).join("")
+}
 function showAddToQueue() {
 	$('#addToQueue').css('display', 'block');
 }
 
-function hideAddToQueue() {
+function hideAddToQueueForm() {
 	document.getElementById('addToQueueForm').reset();
 	$('#addToQueue').css('display', 'none');
 }
 
 $('#addToQueueForm').submit(function (e) {
+	// This is the function that executes on the submission of the Student Data
 	e.preventDefault();
 
-	let queue_id;
-	let name = document.getElementById('studentName').value;
-	let id = document.getElementById('studentNumber').value;
-	let unit = document.getElementById('unitCode').value;
-	let team = document.getElementById('team').value;
-	let enquiry = document.getElementById('enquiryType').value;
+	const studentName = document.getElementById('studentName').value;
+	const studentNumber = document.getElementById('studentNumber').value;
+	const unitCode = document.getElementById('unitCode').value;
+	const queue = document.getElementById('queue').value;
+	const enquiry = document.getElementById('enquiry').value;
 
-	
-	fetch("add_entry", {
-        method: "POST",
-        headers: {
-            studentName: name,
-            studentNumber: id,
-            unitCode: unit,
-            enquiry: enquiry,
-            queue: team
-        }
-    })
+	// Adds to state and rerender
+	addToQueueList({
+		studentName,
+		studentNumber,
+		unitCode,
+		queue,
+		enquiry
+	})
 
-	const table = $(`#${team == 'STUDYSmarter' ? 'SS' : 'lib'}QueueTable tbody`);
-	table.append(
-			`<tr id="${id}" class="initialTime">
-			<td>${name}</td>
-			<td>${id}</td>
-			<td>${unit}</td>
-			<td class="text-right">${enquiry}</td>
-			<td class="text-right"><label id="minutes${id}">00</label><label id="colon">:</label><label id="seconds${id}">00</label></td>
-			<td class="td-actions text-right">
-			<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${team}',${id})(this)"><i class="material-icons">how_to_reg</i></button>
-			<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
-			</tr>`
-	);
-
-	hideAddToQueue();
-	timers[id] = 0;
-	timerIntervals[id] = setInterval(setTime, 1000, id);
+	hideAddToQueueForm();
 });
 
-function deleteRow(x) {
-	$(x).parents('tr').remove();
-}
-
-function addSessionToTeam(team, id){
+function terminateRow(id, action) {
+	// This function is called when a session is finished or removed
+	// update status and fetch update_entry
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		console.log(currentElement)
-		var row = $(currentElement).parents('tr');
-		row.children().first().before(`<td>${team}</td>`);
-		row.children().last().remove();
-		row.children().last().after(`<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success" onclick="deleteRow(this)"><i class="material-icons">how_to_reg</i></button></td>`);	
-		inSessionTable.append(row);
-		
-		clearInterval(timerIntervals[id]);
-		timers[id] = 0;
-		timerIntervals[id] = setInterval(setTime, 1000, id);
+		const status = action == "delete" ? "Ended" : "Completed"
+		terminateSession({
+			id,
+			status
+		})
+}
+return closureFunction
+}
+
+function addSessionToTeam(id){
+	// This function is called when a student is moved to inSession queue
+	// update status and fetch update_entry
+	// This below is a function being stored to a variable that can be returned
+	const closureFunction = (currentElement) => {
+		const status = "In Session"		
+		moveToSessionList({
+			id,
+			status
+		})
 	}
 	
 return closureFunction
 }
 
 window.onclick = function (event) {
+	// This is an event to enable deslection of the modal by clicking background
 	if (event.target == document.getElementById('addToQueue')) {
-		hideAddToQueue();
+		hideAddToQueueForm();
 	}
 };
 
@@ -134,3 +251,40 @@ $('#librariansAvailableIncrement').click(function () {
 	let next = curr + 1;
 	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
+
+window.onload = async (event) => {
+	console.info("Loading the Queue from API");
+
+	// Load every queue from the API parallel
+	const queueToLoad = Object.keys(queueList)
+
+	const requestPromises = queueToLoad.map(async (queue) => {
+		const response = await fetch("get_queue", {
+			method: "POST",
+			body: JSON.stringify({queue}),
+			headers: {
+				'Content-Type': 'application/json'
+		}})
+		const dataResponse = await response.json()
+		return dataResponse
+	})
+
+	const responsesResult = await Promise.all(requestPromises)
+	
+	// This assumes that queueToLoad is of the same index dimension as responsesResult (dimension by map)
+	queueToLoad.forEach((queue, index) => {
+		// Assigns the result of the response to the correct queueList state
+		queueList[queue] = responsesResult[index]["queue"]
+
+		// Set the timers correctly for each of the elements
+		responsesResult[index]["queue"].map(element => {
+			const timeElement = element.status=="In Queue" ? "enterQueueTime" : "changeSessionTime"
+			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element[timeElement])).getTime()
+			// Convert to seconds (rounded)
+			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
+		)
+	})
+	rerenderTables();
+	
+};

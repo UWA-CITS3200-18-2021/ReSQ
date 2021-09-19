@@ -37,7 +37,7 @@ content %}
 						<th class="text-right">End Session</th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody id="inSessionDataTable"></tbody>
 			</table>
 		</div>
 	</div>
@@ -80,7 +80,7 @@ content %}
 						<th class="text-right">Actions</th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody id="studysmarterDataTable"></tbody>
 			</table>
 		</div>
 	</div>
@@ -100,7 +100,7 @@ content %}
 						<th class="td-actions text-right">Actions</th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody id="librarianDataTable"></tbody>
 			</table>
 		</div>
 	</div>
@@ -118,15 +118,15 @@ content %}
 				<label for="unitCode">Unit Code</label>
 				<input type="text" id="unitCode" class="form-control" required />
 				<div class="form-group-lg">
-					<label for="team">Team</label>
-					<select id="team" class="form-control">
+					<label for="queue">Team</label>
+					<select id="queue" class="form-control">
 						<option selected>STUDYSmarter</option>
-						<option>Librarians</option>
+						<option>Librarian</option>
 					</select>
 				</div>
 				<div class="form-group-lg">
-					<label for="enquiryType">Enquiry Type</label>
-					<select id="enquiryType" class="form-control">
+					<label for="enquiry">Enquiry Type</label>
+					<select id="enquiry" class="form-control">
 						<option selected>Essay</option>
 						<option>Grammar</option>
 						<option>Lab Report</option>

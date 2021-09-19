@@ -21,7 +21,7 @@ enquiryType = ( 'Essay',
                 'Other')
 
 queueType = (   'STUDYSmarter',
-                'Librarians')
+                'Librarian')
 
 statusType = (  'Ended',
                 'In Queue',
