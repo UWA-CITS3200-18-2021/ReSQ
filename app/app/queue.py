@@ -4,7 +4,6 @@ from sqlalchemy.sql.elements import Null
 
 from app import db
 from app.models import Queue
-import pytz
 from datetime import datetime
 
 queue = Blueprint('queue', __name__)
@@ -42,7 +41,7 @@ def update_entry(entry_id):
     status = body['status']
     entry = db.session.query(Queue).filter(Queue.id == entry_id).first()
     src = entry.status
-    time = datetime.now(pytz.timezone('Australia/Perth'))
+    time = datetime.now()
 
     if src == 'Ended':
         if status == 'In Queue':
