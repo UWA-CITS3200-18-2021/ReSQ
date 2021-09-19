@@ -29,9 +29,79 @@ const addToQueueList = async (data) => {
 		const dataResponse = await response.json()
 		console.log(dataResponse)
 		queueList[data.queue].push(dataResponse)
-
+		
 		timers[dataResponse.id] = 0;
 		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		rerenderTables()
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+const moveToSessionList = async(data) => {
+	// This function move the data (object - of the student details) to the in Session table
+	// And rerenders the table
+	try{
+		const response = await fetch("/update_entry/" + data.id, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json()
+		let dataToPop = dataResponse
+		dataToPop.status = "In Queue"
+		const index = queueList[dataToPop.queue].indexOf(dataToPop)
+		// pop the data from waiting queue
+		queueList[dataToPop.queue].splice(index, 1)
+		console.log(dataResponse)
+		dataResponse.id = data.id
+		queueList['In Session'].push(dataResponse)
+
+		clearInterval(timerIntervals[dataResponse.id]);
+		timers[dataResponse.id] = 0;
+		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		rerenderTables()
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+const terminateSession = async(data) => {
+	// This function update the status data 
+	// And rerenders the table
+	try{
+		const response = await fetch("/update_entry/" + data.id, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json()
+		if (dataResponse.status = "Ended"){
+			let dataToPop = dataResponse
+			dataToPop.status = "In Queue"
+			const index = queueList[dataToPop.queue].indexOf(dataToPop)
+			// pop the data from current queue
+			queueList[dataToPop.queue].splice(index, 1)
+		}
+		else{
+			let dataToPop = dataResponse
+			dataToPop.status = "In Session"
+			const index = queueList["In Session"].indexOf(dataToPop)
+			// pop the data from current queue
+			queueList["In Session"].splice(index, 1)
+		}
+		console.log(dataResponse)
+		dataResponse.id = data.id
+		timers[dataResponse.id] = 0;
+		clearInterval([dataResponse.id]);
 		rerenderTables()
 	}
 	catch(error){
@@ -61,8 +131,8 @@ const rerenderTables = () => {
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.queue}',${element.id})(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}','${element.status}')(this); deleteRow(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow('${element.id}','${element.status}')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -108,23 +178,40 @@ $('#addToQueueForm').submit(function (e) {
 	hideAddToQueueForm();
 });
 
-function deleteRow(x) {
-	$(x).parents('tr').remove();
+function deleteRow(id, status) {
+	const closureFunction = (currentElement) => {
+		console.log(currentElement)	
+		status = "Ended"
+		terminateSession({
+			id,
+			status
+		})
+}
+return closureFunction
 }
 
-function addSessionToTeam(team, id){
+function finishRow(id, status) {
+	const closureFunction = (currentElement) => {
+		console.log(currentElement)	
+		status = "Completed"
+		terminateSession({
+			id,
+			status
+		})
+}
+return closureFunction
+}
+
+function addSessionToTeam(id, status){
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		console.log(currentElement)
-		var row = $(currentElement).parents('tr');
-		row.children().first().before(`<td>${team}</td>`);
-		row.children().last().remove();
-		row.children().last().after(`<td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success" onclick="deleteRow(this)"><i class="material-icons">how_to_reg</i></button></td>`);	
-		inSessionTable.append(row);
-		
-		clearInterval(timerIntervals[id]);
-		timers[id] = 0;
-		timerIntervals[id] = setInterval(setTime, 1000, id);
+		console.log(currentElement)	
+		status = "In Session"
+		clearInterval(id);		
+		moveToSessionList({
+			id,
+			status
+		})
 	}
 	
 return closureFunction
