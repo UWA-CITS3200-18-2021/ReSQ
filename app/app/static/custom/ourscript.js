@@ -27,7 +27,6 @@ const addToQueueList = async (data) => {
 			},
 		})
 		const dataResponse = await response.json()
-		console.log(dataResponse)
 		queueList[data.queue].push(dataResponse)
 		
 		timers[dataResponse.id] = 0;
@@ -55,7 +54,6 @@ const moveToSessionList = async(data) => {
 		const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
 		// pop the data from waiting queue
 		queueList[dataResponse.queue].splice(index, 1)
-		console.log(dataResponse)
 		queueList['In Session'].push(dataResponse)
 
 		clearInterval(timerIntervals[dataResponse.id]);
@@ -91,7 +89,6 @@ const terminateSession = async(data) => {
 			// pop the data from current queue
 			queueList["In Session"].splice(index, 1)
 		}
-		console.log(dataResponse)
 		timers[dataResponse.id] = 0;
 		clearInterval(timerIntervals[dataResponse.id]);
 		rerenderTables()
@@ -172,7 +169,6 @@ $('#addToQueueForm').submit(function (e) {
 
 function deleteRow(id, status) {
 	const closureFunction = (currentElement) => {
-		console.log(currentElement)	
 		status = "Ended"
 		terminateSession({
 			id,
@@ -184,7 +180,6 @@ return closureFunction
 
 function finishRow(id, status) {
 	const closureFunction = (currentElement) => {
-		console.log(currentElement)	
 		status = "Completed"
 		terminateSession({
 			id,
@@ -197,7 +192,6 @@ return closureFunction
 function addSessionToTeam(id, status){
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		console.log(currentElement)	
 		status = "In Session"
 		clearInterval(id);		
 		moveToSessionList({
@@ -279,7 +273,6 @@ window.onload = async (event) => {
 				'Content-Type': 'application/json'
 		}})
 		const dataResponse = await response.json()
-		console.log
 		return dataResponse
 	})
 
@@ -299,10 +292,6 @@ window.onload = async (event) => {
 
 				// Convert to seconds (rounded)
 				timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-				console.log(new Date())
-				console.log(element)
-				console.log(new Date(element.enterQueueTime))
-				console.log(timers[element.id])
 				timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
 
 			else {
