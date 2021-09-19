@@ -43,7 +43,7 @@ const moveToSessionList = async(data) => {
 	// This function move the data (object - of the student details) to the in Session table
 	// And rerenders the table
 	try{
-		const response = await fetch("/update_entry/" + data.id, {
+		const response = await fetch(`/update_entry/${data.id}`, {
 			method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -120,8 +120,8 @@ const rerenderTables = () => {
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}','${element.status}')(this); deleteRow(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow('${element.id}','${element.status}')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}')(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -133,7 +133,7 @@ const rerenderTables = () => {
 	<td class="text-right">${element.enquiry}</td>
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
-	<button type="button" rel="tooltip" class="btn btn-success" onclick="finishRow('${element.id}','${element.status}')(this)"><i class="material-icons">how_to_reg</i></button>
+	<button type="button" rel="tooltip" class="btn btn-success" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
 	</tr>`).join("")
 }
 function showAddToQueue() {
@@ -167,32 +167,26 @@ $('#addToQueueForm').submit(function (e) {
 	hideAddToQueueForm();
 });
 
-function deleteRow(id, status) {
-	const closureFunction = (currentElement) => {
-		status = "Ended"
-		terminateSession({
-			id,
-			status
-		})
-}
-return closureFunction
-}
-
-function finishRow(id, status) {
-	const closureFunction = (currentElement) => {
-		status = "Completed"
-		terminateSession({
-			id,
-			status
-		})
-}
-return closureFunction
-}
-
-function addSessionToTeam(id, status){
+function terminateRow(id, action) {
+	// This function is called when a session is finished or removed
+	// update status and fetch update_entry
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		status = "In Session"		
+		const status = action == "delete" ? "Ended" : "Completed"
+		terminateSession({
+			id,
+			status
+		})
+}
+return closureFunction
+}
+
+function addSessionToTeam(id){
+	// This function is called when a student is moved to inSession queue
+	// update status and fetch update_entry
+	// This below is a function being stored to a variable that can be returned
+	const closureFunction = (currentElement) => {
+		const status = "In Session"		
 		moveToSessionList({
 			id,
 			status
