@@ -300,16 +300,24 @@ window.onload = async (event) => {
 
 		// Set the timers correctly for each of the elements
 		responsesResult[index]["queue"].map(element => {
-			// Today - `enterQueueTime` is the relative date in seconds
-			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.enterQueueTime)).getTime()
 
-			// Convert to seconds (rounded)
-			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-			console.log(new Date())
-			console.log(element)
-			console.log(new Date(element.enterQueueTime))
-			console.log(timers[element.id])
-			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);
+			if (element.status == "In Queue") {
+				// Today - `enterQueueTime` is the relative date in seconds
+				const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.enterQueueTime)).getTime()
+
+				// Convert to seconds (rounded)
+				timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+				console.log(new Date())
+				console.log(element)
+				console.log(new Date(element.enterQueueTime))
+				console.log(timers[element.id])
+				timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
+
+			else {
+				const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.changeSessionTime)).getTime()
+				// Convert to seconds (rounded)
+				timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+				timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
 		})
 	})
 	rerenderTables();
