@@ -4,7 +4,7 @@
 *
 */
 
-var inSessionTable = $('#inSession tbody');
+
 const timers = [];
 const timerIntervals = [];
 
@@ -65,6 +65,17 @@ const rerenderTables = () => {
 		<button type="button" rel="tooltip" class="btn btn-danger" onclick="deleteRow(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
+	const inSessiontable = document.querySelector("#inSessionDataTable");
+	inSessiontable.innerHTML = queueList["In Session"].map(element => `<tr id="${element.id}" class="initialTime">
+	<td>${element.queue}</td>
+	<td>${element.studentName}</td>
+	<td>${element.studentNumber}</td>
+	<td>${element.unitCode}</td>
+	<td class="text-right">${element.enquiry}</td>
+	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
+	<td class="td-actions text-right">
+	<button type="button" rel="tooltip" class="btn btn-success" onclick="finishRow('${element.id}','${element.status}')(this)"><i class="material-icons">how_to_reg</i></button>
+	</tr>`).join("")
 }
 function showAddToQueue() {
 	$('#addToQueue').css('display', 'block');
