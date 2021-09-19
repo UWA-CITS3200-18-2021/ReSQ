@@ -192,8 +192,7 @@ return closureFunction
 function addSessionToTeam(id, status){
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		status = "In Session"
-		clearInterval(id);		
+		status = "In Session"		
 		moveToSessionList({
 			id,
 			status
@@ -285,21 +284,12 @@ window.onload = async (event) => {
 
 		// Set the timers correctly for each of the elements
 		responsesResult[index]["queue"].map(element => {
-
-			if (element.status == "In Queue") {
-				// Today - `enterQueueTime` is the relative date in seconds
-				const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.enterQueueTime)).getTime()
-
-				// Convert to seconds (rounded)
-				timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-				timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
-
-			else {
-				const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element.changeSessionTime)).getTime()
-				// Convert to seconds (rounded)
-				timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-				timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
-		})
+			const timeElement = element.status=="In Queue" ? "enterQueueTime" : "changeSessionTime"
+			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element[timeElement])).getTime()
+			// Convert to seconds (rounded)
+			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
+		)
 	})
 	rerenderTables();
 	
