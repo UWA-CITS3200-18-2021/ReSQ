@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 import types
 
+# User table
 class BaseModel(db.Model):
 
     __abstract__ = True
