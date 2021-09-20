@@ -10,10 +10,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 import types
 
-# User table
-roleEnum = Enum(*roleType, name="roleEnum")
-
-
 class BaseModel(db.Model):
 
     __abstract__ = True
@@ -35,7 +31,7 @@ class User(BaseModel, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String(64), index=True, unique=True, nullable=False)
     password_hash = Column(String(128), nullable=False)
-    role = Column(roleEnum, nullable=False)
+    role = Column(Text, nullable=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -46,6 +42,12 @@ class User(BaseModel, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @validates
+    def validate_role(self, key, role):
+        if role not in roleType:
+            raise ValueError("Invalid roleType")
+        else:
+            return role
 
 @login_manager.user_loader
 def load_user(id):
