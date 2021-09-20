@@ -7,11 +7,11 @@ from app import db
 
 # Enum tuples
 enquiryType = ( 'Essay',
-                'Grammer',
+                'Grammar',
                 'Lab Report',
                 'Assignment',
                 'Literature Research',
-                'Resaerch Proposal',
+                'Research Proposal',
                 'Thesis/Paper',
                 'IELTS',
                 'Oral Presentation',

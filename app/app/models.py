@@ -2,7 +2,7 @@ from sqlalchemy.sql.expression import null
 from app import db, login_manager
 from app.globals import enquiryType, queueType, statusType, roleType
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
 from sqlalchemy.orm import validates
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -52,11 +52,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-# Setup of ENUM types
-enquiryEnum = Enum(*enquiryType, name="enquiryType")
-queueEnum = Enum(*queueType, name="queueType")
-statusEnum = Enum(*statusType, name="statusEnum")
-
+# Queue model for db
 
 class Queue(BaseModel):
 
@@ -64,9 +60,9 @@ class Queue(BaseModel):
     studentName = Column(String(64), nullable=False)
     studentNumber = Column(Integer, nullable=False)
     unitCode = Column(String(8), nullable=False)
-    enquiry = Column(enquiryEnum, nullable=False)
-    queue = Column(queueEnum, nullable=False)
-    status = Column(statusEnum, nullable=False)
+    enquiry = Column(Text, nullable=False)
+    queue = Column(Text, nullable=False)
+    status = Column(Text, nullable=False)
     enterQueueTime = Column(DateTime, nullable=False)
     changeSessionTime = Column(DateTime)
     exitSessionTime = Column(DateTime)
@@ -92,6 +88,27 @@ class Queue(BaseModel):
     @validates('unitCode')
     def validate_unitCode(self, key, unitCode):
         for i, c in enumerate(unitCode):
-            if (i < 4 and not c.isupper()) or (i >= 4 and not c.isnumeric()):
+            if (i < 4 and not (c.isupper() or c.islower())) or (i >= 4 and not c.isnumeric()):
                 raise ValueError("unitCode must be of the form CCCCNNNN")
         return unitCode
+
+    @validates('enquiry')
+    def validate_enquiry(self, key, enquiry):
+        if enquiry not in enquiryType:
+            raise ValueError('Enquiry is an invalid type')
+        else:
+            return enquiry
+
+    @validates('queue')
+    def validate_queue(self, key, queue):
+        if queue not in queueType:
+            raise ValueError('Enquiry is an invalid type')
+        else:
+            return queue
+
+    @validates('status')
+    def validate_status(self, key, status):
+        if status not in statusType:
+            raise ValueError('Enquiry is an invalid type')
+        else:
+            return status
