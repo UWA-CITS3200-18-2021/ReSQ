@@ -14,7 +14,8 @@ import types
 roleEnum = Enum(*roleType, name="roleEnum")
 
 
-class BaseModel(db.Model):
+
+class BaseModel(db.Model): 
 
     __abstract__ = True
 

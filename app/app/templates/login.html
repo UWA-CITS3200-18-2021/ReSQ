@@ -1,22 +1,67 @@
-<div>
-	<h2>Log in</h2>
-	<form method="POST">
-		<div>
-			<input
-				type="text"
-				name="username"
-				id="username"
-				value="{{request.form.username}}"
-				required=""
-				autocomplete="off"
-			/>
-			<label for="username">Username</label>
-		</div>
-		<div>
-			<input type="Password" name="password" id="password" value="{{request.form.password}}" required="" />
-			<label for="password">Password</label>
-		</div>
-		<input type="submit" name="" value="Login" />
-	</form>
-	<br />
+{% extends "base.html" %}{% block title %}ReSQ{% endblock %}
+{% block navbar %}
+<div class="sidebar-wrapper">
+	<ul class="nav">
+		<li class="nav-item">
+			<a class="nav-link" href="{{ url_for('routes.home')}}">
+				<i class="material-icons">list</i>
+				<p>Queue</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ url_for('routes.data')}}">
+				<i class="material-icons">insights</i>
+				<p>Data Analytics</p>
+			</a>
+		</li>
+		<!-- more sidebar itens here -->
+	</ul>
 </div>
+{% endblock %} {% block header %}
+<a class="navbar-brand" href="javascript:;">STUDYSmarter and Librarian Queue Log In</a>{% endblock %} 
+{% block content %}
+<div class="container">
+	<div class="row">
+	  <div class="col-lg-6 col-md-6 col-sm-8 ml-auto mr-auto">
+		<form class="form" method="POST">
+		  <div class="card card-login card-hidden">
+			<div class="card-header card-header-info text-center">
+			  <h4 class="card-title">Login</h4>
+			</div>
+			<div class="card-body">
+			  <span class="bmd-form-group">
+				<div class="input-group">
+				  <div class="input-group-prepend">
+					<span class="input-group-text">
+					  <i class="material-icons">face</i>
+					</span>
+				  </div>
+				  <input type="text" class="form-control" placeholder="Username..."type="text"
+				  name="username"
+				  id="username"
+				  value="{{request.form.username}}"
+				  required=""
+				  autocomplete="off">
+				</div>
+			  </span>
+			  <span class="bmd-form-group">
+				<div class="input-group">
+				  <div class="input-group-prepend">
+					<span class="input-group-text">
+					  <i class="material-icons">lock_outline</i>
+					</span>
+				  </div>
+				  <input type="password" class="form-control" placeholder="Password..." name="password" id="password" value="{{request.form.password}}" required="">
+				</div>
+			  </span>
+			</div>
+			<div class="card-footer justify-content-center">
+			  <input type="submit" class="btn btn-info btn-link btn-lg" name="" value="Login" />
+			</div>
+		  </div>
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>
+{% endblock %}
