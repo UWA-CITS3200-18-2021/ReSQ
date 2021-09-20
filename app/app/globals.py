@@ -5,6 +5,19 @@
 #############################
 from app import db
 
+# Invalid charcters for database entries
+invalidChar = ( "'",
+                '"',
+                "\0",
+                "\b",
+                "\n",
+                "\r",
+                "\t",
+                "\Z",
+                "\\",
+                "\%",
+                "\_")
+
 # Enum tuples
 enquiryType = ( 'Essay',
                 'Grammar',

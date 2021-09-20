@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import null
 from app import db, login_manager
-from app.globals import enquiryType, queueType, statusType, roleType
+from app.globals import enquiryType, queueType, statusType, roleType, invalidChar
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
 from sqlalchemy.orm import validates
@@ -81,6 +81,14 @@ class Queue(BaseModel):
 
     def __repr__(self):
         return f"<Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
+
+    @validates('studentName')
+    def validates_studentName(self, key, studentName):
+        for c in studentName:
+            if c.isnumeric() or c in invalidChar:
+                raise ValueError("Invalid character in studentName")
+
+        return studentName
 
     @validates('studentNumber')
     def validate_studentNumber(self, key, studentNumber):
