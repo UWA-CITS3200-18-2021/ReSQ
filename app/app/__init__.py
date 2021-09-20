@@ -13,6 +13,7 @@ app.config.from_object(Config)
 # Setup of Database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+db.create_all(app=app)
 
 # Setup of Login Manager
 login_manager = LoginManager()
@@ -26,6 +27,7 @@ from app.auth import auth
 from app.routes import routes
 from app.queue import queue
 
-app.register_blueprint(routes, url_prefix='/')
-app.register_blueprint(auth, url_prefix='/')
-app.register_blueprint(queue, url_prefix='/')
+app.register_blueprint(routes, url_prefix="/")
+app.register_blueprint(auth, url_prefix="/")
+app.register_blueprint(queue, url_prefix="/")
+
