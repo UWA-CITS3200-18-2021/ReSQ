@@ -16,7 +16,6 @@ def create_first_user_if_not_exist():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        db.session.close()
         print(f"User {username} has been created")
     else:
         print(f"User {username} already exists")
