@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import null
 from app import db, login_manager
-from app.globals import enquiryType, queueType, statusType, roleType
+from app.globals import enquiryType, queueType, statusType, roleType, invalidChar
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
 from sqlalchemy.orm import validates
@@ -11,11 +11,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 import types
 
 # User table
-roleEnum = Enum(*roleType, name="roleEnum")
-
-
-
-class BaseModel(db.Model): 
+class BaseModel(db.Model):
 
     __abstract__ = True
 
@@ -36,7 +32,7 @@ class User(BaseModel, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String(64), index=True, unique=True, nullable=False)
     password_hash = Column(String(128), nullable=False)
-    role = Column(roleEnum, nullable=False)
+    role = Column(Text, nullable=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -47,6 +43,12 @@ class User(BaseModel, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @validates
+    def validate_role(self, key, role):
+        if role not in roleType:
+            raise ValueError("Invalid roleType")
+        else:
+            return role
 
 @login_manager.user_loader
 def load_user(id):
@@ -79,6 +81,14 @@ class Queue(BaseModel):
 
     def __repr__(self):
         return f"<Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
+
+    @validates('studentName')
+    def validates_studentName(self, key, studentName):
+        for c in studentName:
+            if c.isnumeric() or c in invalidChar:
+                raise ValueError("Invalid character in studentName")
+
+        return studentName
 
     @validates('studentNumber')
     def validate_studentNumber(self, key, studentNumber):
