@@ -19,7 +19,6 @@ def changed_admin_login():
     new_user.set_password(admin_password)
     db.session.add(new_user)
     db.session.commit()
-    db.session.close()
 
 @auth.route('/login', methods=['GET', 'POST'])
 def admin_login():
