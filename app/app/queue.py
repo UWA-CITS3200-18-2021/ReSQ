@@ -24,6 +24,7 @@ def add_to_queue():
                     enterQueueTime=datetime.now())
         db.session.add(new)
         db.session.commit()
+        db.session.close()
         print(new)  # This print is important (do not remove)
         return new.to_dict(), 201
     except KeyError as exception:
@@ -70,6 +71,7 @@ def update_entry(entry_id):
 
     entry.status = status
     db.session.commit()
+    db.session.close()
     print(entry)  # This print is important (do not remove)
     return entry.to_dict(), 200
 
@@ -92,4 +94,5 @@ def get_queue():
             queue_to_send = Queue.query.all()
     else:
         queue_to_send = Queue.query.all()
+    db.session.close()
     return {"queue": [item.to_dict() for item in queue_to_send]}, 200
