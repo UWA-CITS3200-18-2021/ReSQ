@@ -23,9 +23,9 @@ def upgrade():
     sa.Column('studentName', sa.String(length=64), nullable=False),
     sa.Column('studentNumber', sa.Integer(), nullable=False),
     sa.Column('unitCode', sa.String(length=8), nullable=False),
-    sa.Column('enquiry', sa.Enum('Essay', 'Grammer', 'Lab Report', 'Assignment', 'Literature Research', 'Resaerch Proposal', 'Thesis/Paper', 'IELTS', 'Oral Presentation', 'Referencing', 'Finding Sources', 'Endnote', 'Other', name='enquiryType'), nullable=False),
-    sa.Column('queue', sa.Enum('STUDYSmarter', 'Librarian', name='queueType'), nullable=False),
-    sa.Column('status', sa.Enum('Ended', 'In Queue', 'In Session', 'Completed', name='statusEnum'), nullable=False),
+    sa.Column('enquiry', sa.Text(), nullable=False),
+    sa.Column('queue', sa.Text(), nullable=False),
+    sa.Column('status', sa.Text(), nullable=False),
     sa.Column('enterQueueTime', sa.DateTime(), nullable=False),
     sa.Column('changeSessionTime', sa.DateTime(), nullable=True),
     sa.Column('exitSessionTime', sa.DateTime(), nullable=True),
@@ -35,7 +35,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=64), nullable=False),
     sa.Column('password_hash', sa.String(length=128), nullable=False),
-    sa.Column('role', sa.Enum('Admin', 'Student Helper', name='roleEnum'), nullable=False),
+    sa.Column('role', sa.Text(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
