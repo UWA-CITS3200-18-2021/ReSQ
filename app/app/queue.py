@@ -6,8 +6,6 @@ from app import db
 from app.models import Queue
 from datetime import datetime
 
-from time import sleep
-
 queue = Blueprint('queue', __name__)
 
 
@@ -94,7 +92,4 @@ def get_queue():
             queue_to_send = Queue.query.all()
     else:
         queue_to_send = Queue.query.all()
-
-    db.session.commit()
-    print(queue_to_send) # This print is important (do not remove)
     return {"queue": [item.to_dict() for item in queue_to_send]}, 200
