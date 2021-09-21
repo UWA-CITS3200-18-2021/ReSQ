@@ -92,4 +92,7 @@ def get_queue():
             queue_to_send = Queue.query.all()
     else:
         queue_to_send = Queue.query.all()
+    
+    db.session.commit()
+    print(queue_to_send)
     return {"queue": [item.to_dict() for item in queue_to_send]}, 200
