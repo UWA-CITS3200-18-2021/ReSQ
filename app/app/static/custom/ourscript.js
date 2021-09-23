@@ -211,13 +211,13 @@ function setTime(id) {
 	} else {
 		clearInterval(timerIntervals[id]);
 	}
-	if (timers[id] == 600) {
+	if (timers[id] >= 600) {
 		document.getElementById(id).className = 'yellowTime';
 	}
-	if (timers[id] == 1200) {
+	if (timers[id] >= 1200) {
 		document.getElementById(id).className = 'orangeTime';
 	}
-	if (timers[id] == 1800) {
+	if (timers[id] >= 1800) {
 		document.getElementById(id).className = 'redTime';
 	}
 }
