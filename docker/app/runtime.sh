@@ -63,9 +63,9 @@ flask db upgrade
 # Run inbuilt FLASK server if ENV is DEVELOPMENT
 # =========================================
 if [ "${APP_ENV^^}" = "PRODUCTION" ]; then
-    # Run Flask development server (TODO: Change this for actual production)
+    # Run Flask development server
     printf "\n" && echo "Running Flask Production Server" | boxes -d shell -p a1l2
-    flask run --host=0.0.0.0
+    gunicorn main:app -b 0.0.0.0:5000 --workers=6 --keep-alive 20 --timeout 50
     exit
 fi
 
