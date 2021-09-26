@@ -84,3 +84,11 @@ Then run
 sh deploy.sh
 ```
 This will rebuild all the containers (for production) as well as the new code.
+
+## Gunicorn Process in Production
+The reason as to why we gunicorn process instead of `flask run` in production is for the main following reason:
+
+- gunicorn allows parallelising of HTTP request
+- automatic disconnect towards the database after the short-lived process (of responding to HTTP request)
+
+More information about its setup [here](https://flask.palletsprojects.com/en/2.0.x/deploying/wsgi-standalone/).
