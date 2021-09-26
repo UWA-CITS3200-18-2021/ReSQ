@@ -72,7 +72,6 @@ const moveToSessionOrUndo = async(data) => {
 			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(dataResponse.enterQueueTime)).getTime()
 			timers[dataResponse.id] = Math.round(timeDifferenceMiliseconds / 1000);
 			timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
-
 		}
 	
 		rerenderTables()
@@ -137,7 +136,7 @@ const rerenderTables = () => {
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="if(confirm('Are you sure?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
