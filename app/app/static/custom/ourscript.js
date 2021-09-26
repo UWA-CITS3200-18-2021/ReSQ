@@ -39,8 +39,9 @@ const addToQueueList = async (data) => {
 	}
 }
 
-const moveToSessionList = async(data) => {
+const moveToSessionOrUndo = async(data) => {
 	// This function move the data (object - of the student details) to the in Session table
+	// or Move the data from in Session table back to waiting queue table
 	// And rerenders the table
 	try{
 		const response = await fetch(`/update_entry/${data.id}`, {
@@ -50,15 +51,29 @@ const moveToSessionList = async(data) => {
 				'Content-Type': 'application/json'
 			},
 		})
-		const dataResponse = await response.json()
-		const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
-		// pop the data from waiting queue
-		queueList[dataResponse.queue].splice(index, 1)
-		queueList['In Session'].push(dataResponse)
-
-		clearInterval(timerIntervals[dataResponse.id]);
-		timers[dataResponse.id] = 0;
-		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		const dataResponse = await response.json()		
+		if (dataResponse.status == "In Session")
+		{	
+			const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
+			// pop the data from waiting queue
+			queueList[dataResponse.queue].splice(index, 1)
+			queueList['In Session'].push(dataResponse)
+			clearInterval(timerIntervals[dataResponse.id]);
+			timers[dataResponse.id] = 0;
+			timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		}
+		else
+		{	
+			const index = queueList['In Session'].findIndex((element) => element.id == dataResponse.id)
+			// pop the data from in Session queue
+			queueList['In Session'].splice(index, 1)
+			queueList[dataResponse.queue].push(dataResponse)
+			clearInterval(timerIntervals[dataResponse.id]);
+			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(dataResponse.enterQueueTime)).getTime()
+			timers[dataResponse.id] = Math.round(timeDifferenceMiliseconds / 1000);
+			timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
+		}
+	
 		rerenderTables()
 	}
 	catch(error){
@@ -120,8 +135,8 @@ const rerenderTables = () => {
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -134,6 +149,7 @@ const rerenderTables = () => {
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
 	<button type="button" rel="tooltip" class="btn btn-success" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" onclick="addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
 function showAddToQueue() {
@@ -181,13 +197,13 @@ function terminateRow(id, action) {
 return closureFunction
 }
 
-function addSessionToTeam(id){
-	// This function is called when a student is moved to inSession queue
+function addSessionToTeam(id, action){
+	// This function is called when a student is moved to inSession queue or undo button is clicked
 	// update status and fetch update_entry
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
-		const status = "In Session"		
-		moveToSessionList({
+		const status = action == "add" ? "In Session" : "In Queue"
+		moveToSessionOrUndo({
 			id,
 			status
 		})
@@ -211,13 +227,13 @@ function setTime(id) {
 	} else {
 		clearInterval(timerIntervals[id]);
 	}
-	if (timers[id] == 600) {
+	if (timers[id] >= 600) {
 		document.getElementById(id).className = 'yellowTime';
 	}
-	if (timers[id] == 1200) {
+	if (timers[id] >= 1200) {
 		document.getElementById(id).className = 'orangeTime';
 	}
-	if (timers[id] == 1800) {
+	if (timers[id] >= 1800) {
 		document.getElementById(id).className = 'redTime';
 	}
 }

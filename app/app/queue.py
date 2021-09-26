@@ -1,7 +1,5 @@
 from flask import Blueprint, request, jsonify
 
-from sqlalchemy.sql.elements import Null
-
 from app import db
 from app.models import Queue
 from datetime import datetime
@@ -45,7 +43,7 @@ def update_entry(entry_id):
 
     if src == 'Ended':
         if status == 'In Queue':
-            entry.exitSessionTime = Null
+            entry.exitSessionTime = None
         else:
             return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'In Queue':
@@ -57,14 +55,14 @@ def update_entry(entry_id):
             return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'In Session':
         if status == 'In Queue':
-            entry.changeSessionTime = Null
+            entry.changeSessionTime = None
         elif status == 'Completed':
             entry.exitSessionTime = time
         else:
             return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
     elif src == 'Completed':
         if status == 'In Session':
-            entry.exitSessionTime = Null
+            entry.exitSessionTime = None
         else:
             return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
 
