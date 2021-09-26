@@ -122,6 +122,7 @@ const rerenderTables = () => {
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}')(this)"><i class="material-icons">how_to_reg</i></button>
 		<button type="button" rel="tooltip" class="btn btn-danger" onclick="terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" onclick="if(confirm('Are you sure?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
