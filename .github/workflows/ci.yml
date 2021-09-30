@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build app container
-        run: docker build -t resq_app -f ./docker/api/Dockerfile .
+        run: docker build -t resq_app -f ./docker/app/Dockerfile .
 
       - name: Run tests in app container
         run: docker run --add-host=ci_host:172.17.0.1 --env-file test.env -v ./coverage_html_report:/app_code/coverage_html_report -v ./test_results:/app_code/test_results resq_app
