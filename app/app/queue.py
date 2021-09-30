@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 
 from app import db
-from app.models import Queue
+from app.models import Queue, QueueEventLog
 from datetime import datetime
 
 queue = Blueprint('queue', __name__)
@@ -11,19 +11,24 @@ queue = Blueprint('queue', __name__)
 def add_to_queue():
     # Add a new entry to the queue
     body = request.get_json(force=True)
-
     try:
-        new = Queue(studentName=body['studentName'],
+        new_queue_entry = Queue(studentName=body['studentName'],
                     studentNumber=body['studentNumber'],
                     unitCode=body['unitCode'],
                     enquiry=body['enquiry'],
                     queue=body['queue'],
                     status='In Queue',
                     enterQueueTime=datetime.now())
-        db.session.add(new)
+        db.session.add(new_queue_entry)
         db.session.commit()
-        print(new)  # This print is important (do not remove)
-        return new.to_dict(), 201
+
+        # new_queue_entry only has the id after db commit
+        new_queue_event_log = QueueEventLog(new_queue_entry)
+        db.session.add(new_queue_event_log)
+        db.session.commit()
+
+        print(new_queue_entry)  # This print is important (do not remove) - Unknown reason (further investigation needed)
+        return new_queue_entry.to_dict(), 201
     except KeyError as exception:
         return {"message": f"KeyError of Parameter: {str(exception)}"}, 400
     except ValueError as exception:
@@ -65,10 +70,15 @@ def update_entry(entry_id):
             entry.exitSessionTime = None
         else:
             return {"message": f"Invalid Status Transition: Going to {status}, from {entry.status}"}, 400
-
+   
     entry.status = status
+
+    # Add a new entry to the queue event log
+    new_queue_event_log = QueueEventLog(entry)
+    db.session.add(new_queue_event_log)
     db.session.commit()
-    print(entry)  # This print is important (do not remove)
+
+    print(entry)  # This print is important (do not remove) - Unknown  (further investigation needed)
     return entry.to_dict(), 200
 
 # Return a list containing the details of the specified queue
