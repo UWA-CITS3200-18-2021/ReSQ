@@ -44,9 +44,9 @@ if [ "${APP_ENV^^}" != "UNIT_TESTS" ]; then
     >&2 echo "Postgres is unavailable - sleeping"
     sleep 1
     done
+    >&2 echo "Postgres is up - continuing" && figlet "Postgres is up"
 fi
 
->&2 echo "Postgres is up - continuing" && figlet "Postgres is up"
 
 # Flask make migrate and migrate database
 printf "\n" && echo "Flask make migrate and migrate database" | boxes -d shell -p a1l2
