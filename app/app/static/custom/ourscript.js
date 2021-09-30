@@ -117,6 +117,10 @@ const terminateSession = async(data) => {
 
 function validateUserInput(data) {
 	// Check student name
+	if (data.studentName.length > 50) {
+		alert("'Student Name' field should is too long.");
+		return false;
+	}
 	for(let i = 0; i < data.studentName.length; i++) {
 		if (!isNaN(parseInt(data.studentName[i]))) {
 			alert("Please do not use numeric values in 'Student Name' field.");
