@@ -211,7 +211,7 @@ $('#addToQueueForm').submit(function (e) {
 	const studentName = document.getElementById('studentName').value;
 	const studentNumber = document.getElementById('studentNumber').value;
 	const unitCode = document.getElementById('unitCode').value;
-	const queue = document.getElementById('queue').value;
+	const queue = document.querySelector('input[id="queue"]:checked').value;
 	const enquiry = document.getElementById('enquiry').value;
 
 	let data = {

@@ -111,21 +111,21 @@ content %}
 		<div class="card-body">
 			<span class="close" onclick="hideAddToQueueForm()">&times;</span>
 			<form autocomplete="off" id="addToQueueForm">
-				<label for="studentName">Student Name</label>
+				<label for="studentName"><b>Student Name</b></label>
 				<input type="text" id="studentName" class="form-control" required />
-				<label for="studentNumber">Student Number</label>
-				<input type="number" id="studentNumber" class="form-control" required />
-				<label for="unitCode">Unit Code</label>
+				<label for="studentNumber"><b>Student Number</b></label>
+				<input type="text" minlength="8" maxlength="8" id="studentNumber" class="form-control" required />
+				<label for="unitCode"><b>Unit Code</b></label>
 				<input type="text" id="unitCode" minlength="8" maxlength="8" class="form-control" required />
 				<div class="form-group-lg">
-					<label for="queue">Team</label>
-					<select id="queue" class="form-control">
-						<option selected>STUDYSmarter</option>
-						<option>Librarian</option>
-					</select>
+					<label><b>Team</b></label><br>
+					<input type="radio" id="queue" name="queueSelector" value="STUDYSmarter">
+					<label for="STUDYSmarter">STUDYSmarter</label><br>
+					<input type="radio" id="queue" name="queueSelector" value="Librarian">
+					<label for="Librarian">Librarian</label><br>
 				</div>
 				<div class="form-group-lg">
-					<label for="enquiry">Enquiry Type</label>
+					<label for="enquiry"><b>Enquiry Type</b></label>
 					<select id="enquiry" class="form-control">
 						<option selected>Essay</option>
 						<option>Grammar</option>
