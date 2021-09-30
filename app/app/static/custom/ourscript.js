@@ -138,11 +138,7 @@ function validateUserInput(data) {
 	}
 	
 	// Check unit code
-	if (data.unitCode.length != 8) {
-		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
-		return false;
-	}
-	if (!/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
+	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
 		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
 		return false;
 	}
