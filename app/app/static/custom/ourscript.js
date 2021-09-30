@@ -143,7 +143,7 @@ function validateUserInput(data) {
 		return false;
 	}
 	if (!/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
-		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters TESSSSST.");
+		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
 		return false;
 	}
 
