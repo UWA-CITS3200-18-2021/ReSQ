@@ -81,6 +81,9 @@ if [ "${APP_ENV^^}" = "UNIT_TESTS" ]; then
     # Execute tests
     printf "\n" && echo "Running Unit tests" | boxes -d shell -p a1l2
     coverage run --source='.' --rcfile=.coveragerc -m pytest --alluredir=./test_results
+    
+    # Set a variable to the exit status code of the last command
+    EXIT_CODE_TEST="$?"
 
     # Create environment file
     cd $ALLURE_RESULTS_DIRECTORY
@@ -94,7 +97,7 @@ if [ "${APP_ENV^^}" = "UNIT_TESTS" ]; then
     coverage html -d /app_code/coverage_html_report  # Gen a html report
 
     printf "\n" && echo "UNIT TESTS COMPLETED" | boxes -d shell -p a1l2
-    exit
+    exit EXIT_CODE_TEST
 fi
 
 # =========================================
