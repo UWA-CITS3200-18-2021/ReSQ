@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import null
 from app import db, login_manager
-from app.globals import enquiryType, queueType, statusType, roleType, invalidChar
+from app.globals import queueType, statusType, roleType, invalidChar
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
 from sqlalchemy.orm import validates

@@ -6,9 +6,7 @@
 from app import db
 
 # Invalid charcters for database entries
-invalidChar = ( "'",
-                '"',
-                "\0",
+invalidChar = ( "\0",
                 "\b",
                 "\n",
                 "\r",
@@ -17,21 +15,6 @@ invalidChar = ( "'",
                 "\\",
                 "\%",
                 "\_")
-
-# Enum tuples
-enquiryType = ( 'Essay',
-                'Grammar',
-                'Lab Report',
-                'Assignment',
-                'Literature Research',
-                'Research Proposal',
-                'Thesis/Paper',
-                'IELTS',
-                'Oral Presentation',
-                'Referencing',
-                'Finding Sources',
-                'Endnote',
-                'Other')
 
 queueType = (   'STUDYSmarter',
                 'Librarian')
