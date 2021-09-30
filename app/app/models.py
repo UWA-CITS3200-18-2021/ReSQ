@@ -84,8 +84,8 @@ class Queue(BaseModel):
 
     @validates('studentName')
     def validates_studentName(self, key, studentName):
-        for c in studentName:
-            if c.isnumeric() or c in invalidChar:
+        for char in studentName:
+            if char.isnumeric() or char in invalidChar:
                 raise ValueError("Invalid character in studentName")
 
         return studentName
@@ -105,21 +105,21 @@ class Queue(BaseModel):
 
     @validates('enquiry')
     def validate_enquiry(self, key, enquiry):
-        for c in enquiry:
-            if c.isnumeric() or c in invalidChar:
-                raise ValueError("Invalid character in studentName")
+        for char in enquiry:
+            if char.isnumeric() or char in invalidChar:
+                raise ValueError("Invalid character in enquiry")
         return enquiry
 
     @validates('queue')
     def validate_queue(self, key, queue):
         if queue not in queueType:
-            raise ValueError('Enquiry is an invalid type')
+            raise ValueError('Queue is an invalid type')
         else:
             return queue
 
     @validates('status')
     def validate_status(self, key, status):
         if status not in statusType:
-            raise ValueError('Enquiry is an invalid type')
+            raise ValueError('Status is an invalid type')
         else:
             return status
