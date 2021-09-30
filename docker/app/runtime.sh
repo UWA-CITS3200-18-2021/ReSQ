@@ -94,6 +94,7 @@ if [ "${APP_ENV^^}" = "UNIT_TESTS" ]; then
     coverage html -d /app_code/coverage_html_report  # Gen a html report
 
     printf "\n" && echo "UNIT TESTS COMPLETED" | boxes -d shell -p a1l2
+    exit
 fi
 
 # =========================================
