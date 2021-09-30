@@ -121,39 +121,30 @@ function validateUserInput(data) {
 		alert("'Student Name' field should is too long.");
 		return false;
 	}
-	for(let i = 0; i < data.studentName.length; i++) {
-		if (!isNaN(parseInt(data.studentName[i]))) {
-			alert("Please do not use numeric values in 'Student Name' field.");
-			return false;
-		}
+	if (!/^([^0-9]*)$/.test(data.studentName)) {
+		alert("Please do not use numeric values in 'Student Name' field.");
+		return false;
 	}
+
 
 	// Check student number
 	if (data.studentNumber.length != 8) {
 		alert("'Student Number' field should be an 8 digit number.");
 		return false;
 	}
-	for(let i = 0; i < data.studentNumber.length; i++) {
-		if (isNaN(parseInt(data.studentNumber[i]))) {
-			alert("Please only numeric values in 'Student Number' field.");
-			return false;
-		}
+	if (!/^([0-9]*)$/.test(data.studentNumber)) {
+		alert("Please only numeric values in 'Student Number' field.");
+		return false;
 	}
-
+	
 	// Check unit code
 	if (data.unitCode.length != 8) {
 		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
 		return false;
 	}
-	for(let i = 0; i < 8; i++) {
-		if (i < 4 && !data.unitCode[i].match(/[a-zA-Z]/i)) {
-			alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
-			return false;
-		}
-		else if (i >= 4 && !data.unitCode[i].match(/[0-9]/i)) {
-			alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
-			return false;
-		}
+	if (!/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
+		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters TESSSSST.");
+		return false;
 	}
 
 	// All inputs are fine
