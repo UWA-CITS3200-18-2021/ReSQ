@@ -1,5 +1,6 @@
 # Project Specific Gitignores
 ./data
+test_results/
 
 # Environment Variables
 .env
