@@ -58,8 +58,7 @@
 			<div class="card-footer justify-content-center">
 			  <input type="submit" class="btn btn-info btn-link btn-lg" name="" value="Login" />
 			</div>
-		  </div>
-		  
+		  </div>		  
 		  {% with messages = get_flashed_messages(category_filter=["error"]) %}
    				{% if messages %}
       				{% for message in messages %}
@@ -68,8 +67,7 @@
 					  </div>
 					{% endfor %}
 				{% endif %}
-			{% endwith %}
-		
+			{% endwith %}		
 		</form>
 	  </div>
 	</div>
