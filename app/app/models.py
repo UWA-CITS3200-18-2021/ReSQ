@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import null
 from app import db, login_manager
-from app.globals import enquiryType, queueType, statusType, roleType, invalidChar
+from app.globals import queueType, statusType, roleType, invalidChar
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
 from sqlalchemy.orm import validates
@@ -84,8 +84,8 @@ class Queue(BaseModel):
 
     @validates('studentName')
     def validates_studentName(self, key, studentName):
-        for c in studentName:
-            if c.isnumeric() or c in invalidChar:
+        for char in studentName:
+            if char.isnumeric() or char in invalidChar:
                 raise ValueError("Invalid character in studentName")
 
         return studentName
@@ -105,21 +105,21 @@ class Queue(BaseModel):
 
     @validates('enquiry')
     def validate_enquiry(self, key, enquiry):
-        if enquiry not in enquiryType:
-            raise ValueError('Enquiry is an invalid type')
-        else:
-            return enquiry
+        for char in enquiry:
+            if char.isnumeric() or char in invalidChar:
+                raise ValueError("Invalid character in enquiry")
+        return enquiry
 
     @validates('queue')
     def validate_queue(self, key, queue):
         if queue not in queueType:
-            raise ValueError('Enquiry is an invalid type')
+            raise ValueError('Queue is an invalid type')
         else:
             return queue
 
     @validates('status')
     def validate_status(self, key, status):
         if status not in statusType:
-            raise ValueError('Enquiry is an invalid type')
+            raise ValueError('Status is an invalid type')
         else:
             return status
