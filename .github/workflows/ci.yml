@@ -43,7 +43,7 @@ jobs:
         run: docker build -t resq_app -f ./docker/app/Dockerfile .
 
       - name: Run tests in app container
-        run: docker run --add-host=ci_host:172.17.0.1 -e ALLURE_USER=$ALLURE_USER -e ALLURE_PASSWORD=$ALLURE_PASSWORD -e ALLURE_API_SERVER=$ALLURE_API_SERVER --env-file test.env -v /coverage_html_report:/app_code/coverage_html_report -v /test_results:/app_code/test_results resq_app
+        run: docker run -e ALLURE_USER=$ALLURE_USER -e ALLURE_PASSWORD=$ALLURE_PASSWORD -e ALLURE_API_SERVER=$ALLURE_API_SERVER --env-file test.env -v /coverage_html_report:/app_code/coverage_html_report -v /test_results:/app_code/test_results resq_app
 
       - uses: actions/upload-artifact@v1
         with:
