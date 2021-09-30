@@ -105,10 +105,10 @@ class Queue(BaseModel):
 
     @validates('enquiry')
     def validate_enquiry(self, key, enquiry):
-        if enquiry not in enquiryType:
-            raise ValueError('Enquiry is an invalid type')
-        else:
-            return enquiry
+        for c in enquiry:
+            if c.isnumeric() or c in invalidChar:
+                raise ValueError("Invalid character in studentName")
+        return enquiry
 
     @validates('queue')
     def validate_queue(self, key, queue):

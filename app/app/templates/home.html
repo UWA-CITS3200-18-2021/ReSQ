@@ -126,7 +126,8 @@ content %}
 				</div>
 				<div class="form-group-lg">
 					<label for="enquiry">Enquiry Type</label>
-					<select id="enquiry" class="form-control">
+					<input type="text" id="enquiry" list="enquiryEntries" class="form-control">
+					<datalist id="enquiryEntries">
 						<option selected>Essay</option>
 						<option>Grammar</option>
 						<option>Lab Report</option>
@@ -139,8 +140,7 @@ content %}
 						<option>Referencing</option>
 						<option>Finding Sources</option>
 						<option>Endnote</option>
-						<option>Other</option>
-					</select>
+					</datalist>
 				</div>
 				<br />
 				<button type="submit" class="btn btn-primary" id="addToQueueSubmit">Add</button>
