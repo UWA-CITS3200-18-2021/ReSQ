@@ -59,6 +59,40 @@ flask db migrate
 # Runs the migration
 flask db upgrade
 
+# ==============
+# Run Unit Tests
+# ==============
+if [ "${APP_ENV^^}" = "UNIT_TESTS" ]; then
+    printf "\n" && echo "Running Unit Tests" | boxes -d shell -p a1l2
+
+    # Install extra non-prod packages
+    printf "\n" && echo "Installing dev dependencies for $APP_ENV" | boxes -d shell -p a1l2
+    pip install -r requirements.txt
+
+    # Clean test results directory
+    export ALLURE_RESULTS_DIRECTORY="/app_code/test_results"
+    printf "\n" && echo "Cleaning test results directory $ALLURE_RESULTS_DIRECTORY" | boxes -d shell -p a1l2
+    rm -rf $ALLURE_RESULTS_DIRECTORY
+    mkdir $ALLURE_RESULTS_DIRECTORY
+
+    # Execute tests
+    printf "\n" && echo "Running Unit tests" | boxes -d shell -p a1l2
+    coverage run --source='.' --rcfile=.coveragerc -m pytest --alluredir=./test_results
+
+    # Create environment file
+    cd $ALLURE_RESULTS_DIRECTORY
+    printf "APP_ENV=$APP_ENV\nTYPE=UNIT_TESTS" > environment.properties
+
+    # Send results to the configured allure server
+    cd /app_code
+    python send_and_generate.py -project_id resq-unit-tests -app_env $APP_ENV -allure_username $ALLURE_USER -allure_password $ALLURE_PASSWORD -allure_server $ALLURE_API_SERVER -allure_results_path $ALLURE_RESULTS_DIRECTORY -allure_execution_name github -allure_execution_type github
+
+    coverage report  # Show coverage results in log output
+    coverage html -d /app_code/coverage_html_report  # Gen a html report
+
+    printf "\n" && echo "UNIT TESTS COMPLETED" | boxes -d shell -p a1l2
+fi
+
 # =========================================
 # Run inbuilt FLASK server if ENV is DEVELOPMENT
 # =========================================
