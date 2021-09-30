@@ -15,13 +15,13 @@ jobs:
       POSTGRES_DB: resq_db
       POSTGRES_PASSWORD: Password123
       POSTGRES_USER: resq_db_user
-      POSTGRES_URL: db
+      POSTGRES_URL: postgres
       POSTGRES_PORT: 5432
       ALLURE_USER: ${{secrets.ALLURE_USER}}
       ALLURE_PASSWORD: ${{secrets.ALLURE_PASSWORD}}
       ALLURE_API_SERVER: ${{secrets.ALLURE_API_SERVER}}
     services:
-      db:
+      postgres:
         image: postgres:12.4-alpine
         env:
           POSTGRES_DB: ${{env.POSTGRES_DB}}
