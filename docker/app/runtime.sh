@@ -36,12 +36,15 @@ fi
 # ==================================================
 # Wait until Database is available before continuing
 # ==================================================
-export DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_URL:$POSTGRES_PORT/$POSTGRES_DB
-printf "\n" && echo "Checking Database is UP at $DATABASE_URL" | boxes -d shell -p a1l2
-until psql $DATABASE_URL -c '\l'; do
-  >&2 echo "Postgres is unavailable - sleeping"
-  sleep 1
-done
+if [ "${APP_ENV^^}" != "UNIT_TESTS" ]; then
+    # Running this in CI will cost us a lot of time, so we'll skip this check
+    export DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_URL:$POSTGRES_PORT/$POSTGRES_DB
+    printf "\n" && echo "Checking Database is UP at $DATABASE_URL" | boxes -d shell -p a1l2
+    until psql $DATABASE_URL -c '\l'; do
+    >&2 echo "Postgres is unavailable - sleeping"
+    sleep 1
+    done
+fi
 
 >&2 echo "Postgres is up - continuing" && figlet "Postgres is up"
 
