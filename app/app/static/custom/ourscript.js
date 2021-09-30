@@ -11,13 +11,13 @@ const timerIntervals = [];
 const queueList = {
 	"STUDYSmarter":[],
 	"Librarian":[],
-	"In Session": []
-}
+	"In Session":[]
+};
 
 const addToQueueList = async (data) => {
 	// This function adds the data (object - of the student details) to the specified queueList
 	// And rerenders the table
-
+	
 	try{
 		const response = await fetch("add_entry", {
 			method: "POST",
@@ -37,6 +37,7 @@ const addToQueueList = async (data) => {
 		// There's an error
 		console.log(error)
 	}
+	
 }
 
 const moveToSessionOrUndo = async(data) => {
@@ -114,6 +115,38 @@ const terminateSession = async(data) => {
 	}
 }
 
+function validateUserInput(data) {
+	// Check student name
+	if (data.studentName.length > 50) {
+		alert("'Student Name' field should is too long.");
+		return false;
+	}
+	if (!/^([^0-9]*)$/.test(data.studentName)) {
+		alert("Please do not use numeric values in 'Student Name' field.");
+		return false;
+	}
+
+
+	// Check student number
+	if (data.studentNumber.length != 8) {
+		alert("'Student Number' field should be an 8 digit number.");
+		return false;
+	}
+	if (!/^([0-9]*)$/.test(data.studentNumber)) {
+		alert("Please only numeric values in 'Student Number' field.");
+		return false;
+	}
+	
+	// Check unit code
+	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
+		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
+		return false;
+	}
+
+	// All inputs are fine
+	return true;
+}
+
 const rerenderTables = () => {
 	const dataTablesToRerender = [
 		{
@@ -152,6 +185,7 @@ const rerenderTables = () => {
 	<button type="button" rel="tooltip" class="btn btn-undo" onclick="addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
+
 function showAddToQueue() {
 	$('#addToQueue').css('display', 'block');
 }
@@ -168,19 +202,23 @@ $('#addToQueueForm').submit(function (e) {
 	const studentName = document.getElementById('studentName').value;
 	const studentNumber = document.getElementById('studentNumber').value;
 	const unitCode = document.getElementById('unitCode').value;
-	const queue = document.getElementById('queue').value;
+	const queue = document.querySelector('input[id="queue"]:checked').value;
 	const enquiry = document.getElementById('enquiry').value;
 
-	// Adds to state and rerender
-	addToQueueList({
+	let data = {
 		studentName,
 		studentNumber,
 		unitCode,
 		queue,
 		enquiry
-	})
+	}
 
-	hideAddToQueueForm();
+	//Checks user input
+	if (validateUserInput(data)) {
+		// Adds to state and rerender
+		addToQueueList(data)
+		hideAddToQueueForm();
+	}
 });
 
 function terminateRow(id, action) {
