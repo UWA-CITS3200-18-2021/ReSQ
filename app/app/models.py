@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy.sql.expression import null
 from app import db, login_manager
 from app.globals import enquiryType, queueType, statusType, roleType, invalidChar
@@ -55,11 +57,12 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-# Queue model for db
+class QueueBaseModel(BaseModel):
+    """
+    This is an abstract/imaginary class that is used to inherit properties of a Queue based class
+    """
+    __abstract__ = True
 
-class Queue(BaseModel):
-
-    id = Column(Integer, primary_key=True)
     studentName = Column(String(64), nullable=False)
     studentNumber = Column(Integer, nullable=False)
     unitCode = Column(String(8), nullable=False)
@@ -69,18 +72,6 @@ class Queue(BaseModel):
     enterQueueTime = Column(DateTime, nullable=False)
     changeSessionTime = Column(DateTime)
     exitSessionTime = Column(DateTime)
-
-    def __init__(self, studentName, studentNumber, unitCode, enquiry, queue, status, enterQueueTime):
-        self.studentName = studentName
-        self.studentNumber = studentNumber
-        self.unitCode = unitCode
-        self.enquiry = enquiry
-        self.queue = queue
-        self.status = status
-        self.enterQueueTime = enterQueueTime
-
-    def __repr__(self):
-        return f"<Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
 
     @validates('studentName')
     def validates_studentName(self, key, studentName):
@@ -92,7 +83,7 @@ class Queue(BaseModel):
 
     @validates('studentNumber')
     def validate_studentNumber(self, key, studentNumber):
-        if len(studentNumber) != 8:
+        if len(str(studentNumber)) != 8:
             raise ValueError("studentNumber must be 8 digits")
         return int(studentNumber)
 
@@ -123,3 +114,49 @@ class Queue(BaseModel):
             raise ValueError('Enquiry is an invalid type')
         else:
             return status
+class Queue(QueueBaseModel):
+    # Queue model for db
+
+    id = Column(Integer, primary_key=True)
+
+    def __init__(self, studentName, studentNumber, unitCode, enquiry, queue, status, enterQueueTime):
+        self.studentName = studentName
+        self.studentNumber = studentNumber
+        self.unitCode = unitCode
+        self.enquiry = enquiry
+        self.queue = queue
+        self.status = status
+        self.enterQueueTime = enterQueueTime
+
+    def __repr__(self):
+        return f"<Queue #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
+
+
+
+class QueueEventLog(QueueBaseModel):
+    # QueueEventLog model for db
+
+    id = Column(Integer, primary_key=True)
+
+    # Useful for determining which groups of logs belong to 1 session
+    queue_session_id = Column(Integer, nullable=False)
+    log_date = Column(DateTime, nullable=False)
+
+    def __init__(self, queue_entry):
+        # Below are replicate / duplicates of the Queue attributes (From inherit QueueBaseModel)
+        self.studentName = queue_entry.studentName
+        self.studentNumber = queue_entry.studentNumber
+        self.unitCode = queue_entry.unitCode
+        self.enquiry = queue_entry.enquiry
+        self.queue = queue_entry.queue
+        self.status = queue_entry.status
+        self.enterQueueTime = queue_entry.enterQueueTime
+        self.changeSessionTime = queue_entry.changeSessionTime
+        self.exitSessionTime = queue_entry.exitSessionTime
+
+        # Below are specific to event logs
+        self.log_date =  datetime.now()
+        self.queue_session_id = queue_entry.id
+
+    def __repr__(self):
+        return f"<QueueEventLog #{self.id}{{Name: {self.studentName}, ID: {self.studentNumber}, Unit: {self.unitCode}, Enquiry: {self.enquiry}, Queue: {self.queue}>"
