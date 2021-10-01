@@ -23,3 +23,11 @@ def data():
         user = User.query.filter_by(id = current_user.id).first()
 
     return render_template('data.html', user=current_user)
+
+@routes.route('/export')
+@login_required
+def export():
+    if current_user.is_authenticated:
+        user = User.query.filter_by(id = current_user.id).first()
+
+    return render_template('export.html', user=current_user)
