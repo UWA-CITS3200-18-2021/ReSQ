@@ -12,7 +12,6 @@ from werkzeug.wrappers import Response
 export = Blueprint('export', __name__)
 
 #Generate csv file from a dict
-@stream_with_context
 def generate_csv(table):
     data = StringIO()
     w = csv.writer(data)
@@ -25,7 +24,18 @@ def generate_csv(table):
 
     # Write from dict
     for row in table:
-        w.writerow(row)
+        w.writerow((
+            row.id,
+            row.studentName,
+            row.studentNumber,
+            row.unitCode,
+            row.enquiry,
+            row.queue,
+            row.status,
+            row.enterQueueTime,
+            row.changeSessionTime,
+            row.exitSessionTime
+        ))
         yield data.getvalue()
         data.seek(0)
         data.truncate(0)
@@ -35,20 +45,22 @@ def generate_csv(table):
 def download_data():
         body = request.get_json(force=True)
         
-        if 'startTime' not in body:
+        if 'startTime' not in body or body['startTime'][0] == ' ':
             return {"message": f"Parameter startTime not in body"}, 400
-        elif 'endTime' not in body:
+        elif 'endTime' not in body or body['endTime'][0] == ' ':
             return {"message": f"Parameter endTime not in body"}, 400
         else:
             startTime = body['startTime']
             endTime = body['endTime']
             query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
-            print(query)
-
-            # Stream the response
-            # response = Response(generate_csv(query), mimetype='text/csv')
 
             # Generate a filename
-            # name = "log_from_{start}_to_{end}.csv".format(start = startTime, end = endTime)
-            # response.headers.set("Content-Disposition", "attachment", filename=name)
-            return '', 200 #response
+            name = "log_{start}_to_{end}.csv".format(start = startTime[:10], end = endTime[:10])
+
+            # Stream the response
+            response = Response(
+                generate_csv(query), 
+                mimetype='text/csv', 
+                headers={'Content-Disposition': f'attachment; filename={name}'})
+
+            return response
