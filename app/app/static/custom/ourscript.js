@@ -304,3 +304,36 @@ window.onload = async (event) => {
 	rerenderTables();
 	
 };
+
+$('#dateSubmit').on('click', function(e) {
+	const startDate = document.getElementById("startDate").value;
+	const endDate = document.getElementById("endDate").value;
+	let startTime = startDate + " 00:00:00.0"
+	let endTime = endDate + " 23:59:59.9"
+	console.log(startTime)
+	console.log(endTime)
+
+	requestCSV({
+		startTime,
+		endTime
+	})
+})
+
+const requestCSV = async (data) => {
+	// This function adds the data (object - of the student details) to the specified queueList
+	// And rerenders the table
+
+	try{
+		const response = await fetch("CSV", {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}

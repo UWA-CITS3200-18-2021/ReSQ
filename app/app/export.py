@@ -9,7 +9,7 @@ from io import StringIO
 from werkzeug.wrappers import Response
 
 
-data = Blueprint('routes', __name__)
+export = Blueprint('export', __name__)
 
 #Generate csv file from a dict
 @stream_with_context
@@ -31,7 +31,7 @@ def generate_csv(table):
         data.truncate(0)
 
 # Export to csv
-@data.route('/analytics/get_data', methods=['POST'])
+@export.route('/CSV', methods=['POST'])
 def download_data():
         body = request.get_json(force=True)
         
@@ -43,12 +43,12 @@ def download_data():
             startTime = body['startTime']
             endTime = body['endTime']
             query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
-            print(query[1])
+            print(query)
 
             # Stream the response
-            response = Response(generate_csv(query), mimetype='text/csv')
+            # response = Response(generate_csv(query), mimetype='text/csv')
 
             # Generate a filename
-            name = "log_from_{start}_to_{end}.csv".format(start = startTime, end = endTime)
-            response.headers.set("Content-Disposition", "attachment", filename=name)
-            return response
+            # name = "log_from_{start}_to_{end}.csv".format(start = startTime, end = endTime)
+            # response.headers.set("Content-Disposition", "attachment", filename=name)
+            return '', 200 #response
