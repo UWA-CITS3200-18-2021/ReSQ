@@ -117,23 +117,24 @@ content %}
 		<div class="card-body">
 			<span class="close" onclick="hideAddToQueueForm()">&times;</span>
 			<form autocomplete="off" id="addToQueueForm">
-				<label for="studentName">Student Name</label>
-				<input type="text" id="studentName" class="form-control" required />
-				<label for="studentNumber">Student Number</label>
-				<input type="number" id="studentNumber" class="form-control" required />
-				<label for="unitCode">Unit Code</label>
-				<input type="text" id="unitCode" class="form-control" required />
+				<label for="studentName"><b>Student Name</b></label>
+				<input type="text" maxlength="50" id="studentName" class="form-control" required />
+				<label for="studentNumber"><b>Student Number</b></label>
+				<input type="text" minlength="8" maxlength="8" id="studentNumber" class="form-control" required />
+				<label for="unitCode"><b>Unit Code</b></label>
+				<input type="text" id="unitCode" minlength="8" maxlength="8" class="form-control" required />
 				<div class="form-group-lg">
-					<label for="queue">Team</label>
-					<select id="queue" class="form-control">
-						<option selected>STUDYSmarter</option>
-						<option>Librarian</option>
-					</select>
+					<label><b>Team</b></label><br>
+					<input type="radio" id="queue" name="queueSelector" value="STUDYSmarter" checked>
+					<label for="STUDYSmarter">STUDYSmarter</label><br>
+					<input type="radio" id="queue" name="queueSelector" value="Librarian">
+					<label for="Librarian">Librarian</label><br>
 				</div>
 				<div class="form-group-lg">
 					<label for="enquiry">Enquiry Type</label>
-					<select id="enquiry" class="form-control">
-						<option selected>Essay</option>
+					<input type="text" id="enquiry" list="enquiryEntries" class="form-control" required />
+					<datalist id="enquiryEntries">
+						<option>Essay</option>
 						<option>Grammar</option>
 						<option>Lab Report</option>
 						<option>Assignment</option>
@@ -145,11 +146,10 @@ content %}
 						<option>Referencing</option>
 						<option>Finding Sources</option>
 						<option>Endnote</option>
-						<option>Other</option>
-					</select>
+					</datalist>
 				</div>
 				<br />
-				<button type="submit" class="btn btn-primary" id="addToQueueSubmit">Add</button>
+				<input type="submit" value="ADD" class="btn btn-primary">
 			</form>
 		</div>
 	</div>
