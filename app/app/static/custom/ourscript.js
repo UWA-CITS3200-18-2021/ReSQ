@@ -346,8 +346,9 @@ window.onload = async (event) => {
 $('#dateSubmit').on('click', function(e) {
 	const startDate = document.getElementById("startDate").value;
 	const endDate = document.getElementById("endDate").value;
-	let startTime = startDate + " 00:00:00.0"
-	let endTime = endDate + " 23:59:59.9"
+	// Format the dates to the appropriate dateTime format
+	const startTime = `${startDate} 00:00:00.0000000`;
+	const endTime = `${endDate} 23:59:59.999999`;
 
 	requestCSV({
 		startTime,
@@ -367,12 +368,11 @@ const requestCSV = async (data) => {
 				'Content-Type': 'application/json'
 			},
 		})
-		let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-		let filename = filenameRegex.exec(response.headers.get('Content-Disposition'))[0].replace('filename=','');
+		const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+		const filename = filenameRegex.exec(response.headers.get('Content-Disposition'))[0].replace('filename=','');
 		const dataResponse = await response.blob();
-		let downloadURL = URL.createObjectURL(dataResponse);
-		let a = document.createElement("a");
-		a.href = downloadURL;
+		const a = document.createElement("a");
+		a.href = URL.createObjectURL(dataResponse);
 		a.download = filename;
 		document.body.appendChild(a);
 		a.click();

@@ -5,6 +5,7 @@ from app import db
 from app.models import Queue
 
 import csv
+import re
 from io import StringIO
 from werkzeug.wrappers import Response
 
@@ -44,18 +45,23 @@ def generate_csv(table):
 @export.route('/CSV', methods=['POST'])
 def download_data():
         body = request.get_json(force=True)
-        
+        dateTimeFormat = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{6}"
+
         if 'startTime' not in body or body['startTime'][0] == ' ':
             return {"message": f"Parameter startTime not in body"}, 400
         elif 'endTime' not in body or body['endTime'][0] == ' ':
             return {"message": f"Parameter endTime not in body"}, 400
+        elif re.match(dateTimeFormat, body['startTime'][0]):
+            return {"message": f"Parameter startTime is of incorrect format"}, 400
+        elif re.match(dateTimeFormat, body['endTime'][0]):
+            return {"message": f"Parameter endTime is of incorrect format"}, 400
         else:
             startTime = body['startTime']
             endTime = body['endTime']
             query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
 
             # Generate a filename
-            name = "log_{start}_to_{end}.csv".format(start = startTime[:10], end = endTime[:10])
+            name = f"log_{startTime[:10]}_to_{endTime[:10]}.csv"
 
             # Stream the response
             response = Response(generate_csv(query), mimetype='text/csv')
