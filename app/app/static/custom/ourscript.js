@@ -318,8 +318,8 @@ $('#dateSubmit').on('click', function(e) {
 })
 
 const requestCSV = async (data) => {
-	// This function adds the data (object - of the student details) to the specified queueList
-	// And rerenders the table
+	// This function requests a csv from the application with the data
+	// between the two specified dates
 
 	try{
 		const response = await fetch("CSV", {
@@ -329,6 +329,15 @@ const requestCSV = async (data) => {
 				'Content-Type': 'application/json'
 			},
 		})
+		let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+		let filename = filenameRegex.exec(response.headers.get('Content-Disposition'))[0].replace('filename=','');
+		const dataResponse = await response.blob();
+		let downloadURL = URL.createObjectURL(dataResponse);
+		let a = document.createElement("a");
+		a.href = downloadURL;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
 	}
 	catch(error){
 		// There's an error

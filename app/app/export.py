@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, stream_with_context
+from flask import Flask, Blueprint, request, make_response
 from flask_login import login_required, current_user
 
 from app import db
@@ -58,9 +58,6 @@ def download_data():
             name = "log_{start}_to_{end}.csv".format(start = startTime[:10], end = endTime[:10])
 
             # Stream the response
-            response = Response(
-                generate_csv(query), 
-                mimetype='text/csv', 
-                headers={'Content-Disposition': f'attachment; filename={name}'})
-
+            response = Response(generate_csv(query), mimetype='text/csv')
+            response.headers["Content-Disposition"] = f"attachment; filename={name}"
             return response
