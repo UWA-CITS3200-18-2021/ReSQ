@@ -12,8 +12,9 @@ from werkzeug.wrappers import Response
 
 export = Blueprint('export', __name__)
 
-#Generate csv file from a dict
+#Generate csv file from a list of tuples
 def generate_csv(table):
+    # Initialisation
     data = StringIO()
     w = csv.writer(data)
 
@@ -23,7 +24,7 @@ def generate_csv(table):
     data.seek(0)
     data.truncate(0)
 
-    # Write from dict
+    # Write from list
     for row in table:
         w.writerow((
             row.id,
@@ -47,15 +48,20 @@ def download_data():
         body = request.get_json(force=True)
         dateTimeFormat = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{6}"
 
+        # Check recieved data
         if 'startTime' not in body or body['startTime'][0] == ' ':
             return {"message": f"Parameter startTime not in body"}, 400
+
         elif 'endTime' not in body or body['endTime'][0] == ' ':
             return {"message": f"Parameter endTime not in body"}, 400
+
         elif re.match(dateTimeFormat, body['startTime'][0]):
             return {"message": f"Parameter startTime is of incorrect format"}, 400
+            
         elif re.match(dateTimeFormat, body['endTime'][0]):
             return {"message": f"Parameter endTime is of incorrect format"}, 400
         else:
+            # Get data from body and query the database
             startTime = body['startTime']
             endTime = body['endTime']
             query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
