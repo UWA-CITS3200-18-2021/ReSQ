@@ -361,7 +361,7 @@ const requestCSV = async (data) => {
 	// This function requests a csv from the application with the data between the two specified dates
 	// 
 	// Data must contain two dateTimes name startTime and endTime
-	// and they must be strings of the format YYYY-MM-DD HH:MM:SS.SSSSSS
+	// and they must be strings of the format YYYY-MM-DD HH:MM:SS.SSSSSS ""
 	try{
 		const response = await fetch("CSV", {
 			method: "POST",
