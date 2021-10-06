@@ -27,7 +27,29 @@
 			<div class="logo">
 				<a href="{{ url_for('routes.home')}}" class="logo-normal resqLogo" style="margin-left: 20px">ReSQ</a>
 			</div>
-			{% block navbar %}{% endblock %}
+			{% block navbar %}<div class="sidebar-wrapper">
+				<ul class="nav">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('routes.home')}}">
+							<i class="material-icons">list</i>
+							<p>Queue</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('routes.data')}}">
+							<i class="material-icons">insights</i>
+							<p>Data Analytics</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('routes.export')}}">
+							<i class="material-icons">arrow_circle_down</i>
+							<p>Export Data</p>
+						</a>
+					</li>
+					<!-- more sidebar itens here -->
+				</ul>
+			</div>{% endblock %}
 			<div class="sidebar-background"></div>
 		</div>
 		<div class="main-panel">
@@ -56,6 +78,7 @@
 					{% endif %}
 				</div>
 			</nav>
+			
 			<!-- End Navbar -->
 			<div class="content">
 				<div class="container-fluid">{% block content %}{% endblock %}</div>
@@ -73,6 +96,7 @@
 			</footer>
 		</div>
 	</div>
+	
 	<!--   Core JS Files   -->
 	<script href="{{ url_for('static', filename='js/core/jquery.min.js') }}" type="text/javascript"></script>
 	<script href="{{ url_for('static', filename='js/core/popper.min.js') }}" type="text/javascript"></script>
