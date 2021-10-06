@@ -12,7 +12,7 @@ from werkzeug.wrappers import Response
 
 export = Blueprint('export', __name__)
 
-#Generate csv file from a list of tuples
+#Stream csv file from a list of tuples
 def generate_csv(table):
     # Initialisation
     data = StringIO()
@@ -51,13 +51,10 @@ def download_data():
         # Check recieved data
         if 'startTime' not in body or body['startTime'][0] == ' ':
             return {"message": f"Parameter startTime not in body"}, 400
-
         elif 'endTime' not in body or body['endTime'][0] == ' ':
             return {"message": f"Parameter endTime not in body"}, 400
-
         elif re.match(dateTimeFormat, body['startTime'][0]):
-            return {"message": f"Parameter startTime is of incorrect format"}, 400
-            
+            return {"message": f"Parameter startTime is of incorrect format"}, 400          
         elif re.match(dateTimeFormat, body['endTime'][0]):
             return {"message": f"Parameter endTime is of incorrect format"}, 400
         else:

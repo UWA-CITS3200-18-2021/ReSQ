@@ -343,6 +343,7 @@ window.onload = async (event) => {
 	
 };
 
+// Submit button for export page
 $('#dateSubmit').on('click', function(e) {
 	// Get values from page
 	const startDate = document.getElementById("startDate").value;
@@ -358,9 +359,9 @@ $('#dateSubmit').on('click', function(e) {
 })
 
 const requestCSV = async (data) => {
-	// This function requests a csv from the application with the data between the two specified dates
+	// This function requests a csv from the application with the database info between the two specified dates
 	// 
-	// Data must contain two dateTimes name startTime and endTime
+	// The variable data must contain two dateTimes name startTime and endTime
 	// and they must be strings of the format YYYY-MM-DD HH:MM:SS.SSSSSS ""
 	try{
 		const response = await fetch("CSV", {
