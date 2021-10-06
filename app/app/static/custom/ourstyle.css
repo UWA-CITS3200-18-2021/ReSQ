@@ -136,3 +136,7 @@ input[type="number"] {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+#studentsVisitedBarChart .ct-bar {
+  stroke-width: 8%;
+}

@@ -308,7 +308,7 @@ $('#librariansAvailableIncrement').click(function () {
 
 window.onload = async (event) => {
 	console.info("Loading the Queue from API");
-	generateChart();
+	
 	// Load every queue from the API parallel
 	const queueToLoad = Object.keys(queueList)
 
@@ -339,8 +339,9 @@ window.onload = async (event) => {
 			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
 		)
 	})
+	// Loads charts for data anylitcs page
+	generatePieCharts();
 	rerenderTables();
-	
 };
 
 // Submit button for export page
@@ -388,102 +389,93 @@ const requestCSV = async (data) => {
 	}
 }
 
-function generateChart() {
+function generateCharts(inputData, dates) {
 	// MAIN BAR GRAPH
+	let studentBarValues = inputData["studentBarGraph"];
 	var data = {
-		labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-		  series: [
-		  [5, 4, 3, 7, 5, 10, 3,],
-		  [3, 2, 9, 5, 4, 6, 4]
-		]
+		labels: [
+			'Sun  ' + dates[0],
+			'Mon  ' + dates[1],
+			'Tue  ' + dates[2],
+			'Wed  ' + dates[3],
+			'Thu  ' + dates[4],
+			'Fri  ' + dates[5],
+			'Sat  ' + dates[6]
+		],
+		  series: [studentBarValues]
 	  };
-	  
-	  var options = {
-		seriesBarDistance: 20
-	  };
-	  
-	  var responsiveOptions = [
-		['screen and (min-width: 641px) and (max-width: 1024px)', {
-		  seriesBarDistance: 10,
-		  axisX: {
-			labelInterpolationFnc: function (value) {
-			  return value;
-			}
-		  }
-		}],
-		['screen and (max-width: 640px)', {
-		  seriesBarDistance: 5,
-		  axisX: {
-			labelInterpolationFnc: function (value) {
-			  return value[0];
-			}
-		  }
-		}]
-	  ];
-	  
-	  new Chartist.Bar('#chartPreferences', data, options, responsiveOptions);
 
-	  // UNITS PIE CHART
-	  var data = {
-		labels: ['CITS', 'GENE', 'MATH'],
-		series: [20, 15, 40]
-	  };
-	  
-	  var options = {
-		labelInterpolationFnc: function(value) {
-		  return value[0]
+	var options = {
+		seriesBarDistance: 20,
+		axisY: {
+			onlyInteger: true
 		}
-	  };
-	  
-	  var responsiveOptions = [
+	};
+	
+	new Chartist.Bar('#studentsVisitedBarChart', data, options);
+
+	// UNITS PIE CHART
+	let unitsPieValues = inputData["unitsPieGraph"];
+	var data = {
+		labels: ['CITS', 'GENE', 'MATH', "CHEM", "PHYS"],
+		series: unitsPieValues
+	};
+	
+	var options = {
+		labelInterpolationFnc: function(value) {
+			return value[0]
+		}
+	};
+	
+	var responsiveOptions = [
 		['screen and (min-width: 640px)', {
-		  chartPadding: 30,
-		  labelOffset: 100,
-		  labelDirection: 'explode',
-		  labelInterpolationFnc: function(value) {
-			return value;
-		  }
+			chartPadding: 30,
+			labelOffset: 100,
+			labelDirection: 'explode',
+			labelInterpolationFnc: function(value) {
+				return value;
+			}
 		}],
 		['screen and (min-width: 1024px)', {
-		  labelOffset: 40,
-		  chartPadding: 20
+			labelOffset: 40,
+			chartPadding: 20
 		}]
-	  ];
-	  
-	  new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
+	];
+	
+	new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
 
-	  // STAFF PIE CHART
-	  var data = {
+	// STAFF PIE CHART
+	let staffPieValues = inputData["staffPieGraph"];
+	var data = {
 		labels: ['STUDYSmarter', 'Librarians'],
-		series: [65, 35]
-	  };
-	  
-	  var options = {
+		series: staffPieValues
+	};
+	
+	var options = {
 		labelInterpolationFnc: function(value) {
-		  return value[0]
+			return value[0]
 		}
-	  };
-	  
-	  var responsiveOptions = [
+	};
+	
+	var responsiveOptions = [
 		['screen and (min-width: 640px)', {
-		  chartPadding: 30,
-		  labelOffset: 100,
-		  labelDirection: 'explode',
-		  labelInterpolationFnc: function(value) {
-			return value;
-		  }
+			chartPadding: 30,
+			labelOffset: 100,
+			labelDirection: 'explode',
+			labelInterpolationFnc: function(value) {
+				return value;
+			}
 		}],
 		['screen and (min-width: 1024px)', {
-		  labelOffset: 40,
-		  chartPadding: 20
+			labelOffset: 40,
+			chartPadding: 20
 		}]
-	  ];
-	  
-	  new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
+	];
+	
+	new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
 }
 
-// Submit button for export page
-$('#dateDataSubmit').on('click', function(e) {
+$('#dateSubmitForAnalytics').on('click', function(e) {
 	// Get values from page
 	const dateSubmitted = document.getElementById("date").value;
 
@@ -492,6 +484,7 @@ $('#dateDataSubmit').on('click', function(e) {
 	// Gets the most recently passed Sunday and the next upcomming Saturday
 	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
 	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
+	console.log("first" + firstDay);
 	// Format the dates to the appropriate dateTime format
 	const startTime = `${firstDay} 00:00:00.0000000`;
 	const endTime = `${lastDay} 23:59:59.999999`;
@@ -502,8 +495,32 @@ $('#dateDataSubmit').on('click', function(e) {
 	})
 })
 
-const createDataChart = async (data) => {
+// Changes date from yyyy/mm/dd to dd/mm/yy
+function rearrangeDate(date) {
+	if(date.length != 10) return;
 	
+	var dateInt = date.split("");
+	var newDate = dateInt[8]+dateInt[9]+"-"+dateInt[5]+dateInt[6]+"-"+dateInt[2]+dateInt[3];
+	return newDate
+}
+
+// Returns all dates the next 7 days from startTime
+function getAllDaysOfWeek(startTime) {
+	var start = new Date(startTime);
+	const dates = new Array(7);
+	var newDate = new Date(start.setDate(start.getDate())).toJSON().slice(0,10);
+	dates[0] = rearrangeDate(newDate);
+	
+	for(var i = 1; i < 7; i++) {
+		newDate = new Date(start.setDate(start.getDate() + 1)).toJSON().slice(0,10);
+		dates[i] = rearrangeDate(newDate);
+	};
+	
+	return dates;
+}
+
+// Gets number of student sessions in each day and displays them
+const createDataChart = async (data) => {
 	try{
 		const response = await fetch("createChart", {
 			method: "POST",
@@ -513,6 +530,7 @@ const createDataChart = async (data) => {
 			},
 		})
 		const dataResponse = await response.json();
+		generateCharts(dataResponse, getAllDaysOfWeek(data.startTime.slice(0,10)));
 	}
 	catch(error){
 		// There's an error

@@ -1,19 +1,20 @@
-from flask import Flask, Blueprint, request, make_response
+from flask import Flask, Blueprint, request, jsonify
 from flask_login import login_required, current_user
+
+from random import sample
 
 from app import db
 from app.models import Queue
 
-import csv
 import re
 from io import StringIO
 from werkzeug.wrappers import Response
 
 
-data = Blueprint('data', __name__)
+analytics = Blueprint('analytics', __name__)
 
-# 
-@data.route('/createChart', methods=['POST'])
+#
+@analytics.route('/createChart', methods=['GET', 'POST'])
 def create_chart():
     body = request.get_json(force=True)
     dateTimeFormat = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{6}"
@@ -32,5 +33,12 @@ def create_chart():
         startTime = body['startTime']
         endTime = body['endTime']
         query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
+        print(query)
 
-        return "hello"
+        result = {
+            'studentBarGraph': sample(range(1,10), 7),
+            'unitsPieGraph' : sample(range(20,80), 5),
+            'staffPieGraph' : sample(range(30,80), 2)
+        }
+
+        return jsonify(result)

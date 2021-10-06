@@ -8,7 +8,7 @@
 			</a>
 		</li>
 		<li class="nav-item active">
-			<a class="nav-link" href="{{ url_for('routes.data')}}">
+			<a class="nav-link" href="{{ url_for('routes.analytics')}}">
 				<i class="material-icons">insights</i>
 				<p>Data Analytics</p>
 			</a>
@@ -34,7 +34,7 @@ endblock %} {% block content %}
 				  <h4 class="card-title">Weekly Data</h4>
 			</div>
 			<div class="card-body">
-				<div id="chartPreferences" class="ct-chart"></div>
+				<div id="studentsVisitedBarChart" class="ct-chart ct-double-octave"></div>
 				<div class="card-actions">
 					<div class="float-left" style="padding-left: 15%;">
 						<button name="prev" type="button" class="btn btn-info btn-link" id="previousWeek">
@@ -61,10 +61,10 @@ endblock %} {% block content %}
 	<div class="col-md-3 ml-auto mr-auto">
 		<div class="card">
 			<div class="card-body">
-				<label for="date"><b>Date:</b></label>
-				<label for="date"><small><i>(Will display data from week of chosen date.)</i></small></label><br>
+				<label for="date"><small><i>Will display data from the week (from Sun-Sat) of chosen date</i></small></label><br>
+				<label for="date"><b>Date:</b></label><br>
 				<input type="date" name="date" id="date"/><br><br>
-				<button id="dateDataSubmit" name="submit" class="btn btn-success">Submit</button>
+				<button id="dateSubmitForAnalytics" name="submit" class="btn btn-success">Submit</button>
 			</div>
 		</div>
 	</div>
@@ -74,10 +74,10 @@ endblock %} {% block content %}
 				<div class="card-icon">
 					<i class="material-icons">pie_chart</i>
 				  </div>
-				  <h4 class="card-title">Percentage per Unit</h4>
+				  <h4 class="card-title">Percentage per unit for this week</h4>
 			</div>
 			<div class="card-body">
-				<div id="unitsPieChart" class="ct-chart"></div>
+				<div id="unitsPieChart" class="ct-chart ct-major-tenth"></div>
 			</div>
 		</div>
 	</div>
@@ -87,10 +87,10 @@ endblock %} {% block content %}
 				<div class="card-icon">
 					<i class="material-icons">pie_chart</i>
 				  </div>
-				  <h4 class="card-title">Percentage per Staff type</h4>
+				  <h4 class="card-title">Percentage per staff type for this week</h4>
 			</div>
 			<div class="card-body">
-				<div id="unitsStaffChart" class="ct-chart"></div>
+				<div id="unitsStaffChart" class="ct-chart ct-major-tenth"></div>
 			</div>
 		</div>
 	</div>
