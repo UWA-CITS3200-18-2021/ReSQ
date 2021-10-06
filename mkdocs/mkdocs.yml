@@ -113,7 +113,7 @@ nav:
 - User:
   - Overview: user/index.md
   - Functionality: user/functionality.md
-  - Common Errors: user/common_errors.md
+  - Errors: user/Errors.md
 - Administrator:
   - Oveview: administrator/index.md
 - Developer:
