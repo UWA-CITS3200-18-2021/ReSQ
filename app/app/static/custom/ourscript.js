@@ -342,3 +342,48 @@ window.onload = async (event) => {
 	rerenderTables();
 	
 };
+
+// Submit button for export page
+$('#dateSubmit').on('click', function(e) {
+	// Get values from page
+	const startDate = document.getElementById("startDate").value;
+	const endDate = document.getElementById("endDate").value;
+	// Format the dates to the appropriate dateTime format
+	const startTime = `${startDate} 00:00:00.0000000`;
+	const endTime = `${endDate} 23:59:59.999999`;
+	// Send html request
+	requestCSV({
+		startTime,
+		endTime
+	})
+})
+
+const requestCSV = async (data) => {
+	// This function requests a csv from the application with the database info between the two specified dates
+	// 
+	// The variable data must contain two dateTimes name startTime and endTime
+	// and they must be strings of the format YYYY-MM-DD HH:MM:SS.SSSSSS ""
+	try{
+		const response = await fetch("CSV", {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		// Retrieve filename from response headers
+		const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+		const filename = filenameRegex.exec(response.headers.get('Content-Disposition'))[0].replace('filename=','');
+		// Use response to construct a download 
+		const dataResponse = await response.blob();
+		const a = document.createElement("a");
+		a.href = URL.createObjectURL(dataResponse);
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}

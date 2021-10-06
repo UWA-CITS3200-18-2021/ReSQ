@@ -26,8 +26,9 @@ login_manager.init_app(app)
 from app.auth import auth
 from app.routes import routes
 from app.queue import queue
+from app.export import export
 
 app.register_blueprint(routes, url_prefix="/")
 app.register_blueprint(auth, url_prefix="/")
 app.register_blueprint(queue, url_prefix="/")
-
+app.register_blueprint(export, url_prefix="/")
