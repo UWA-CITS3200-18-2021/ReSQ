@@ -18,7 +18,7 @@ def home():
 
     return render_template('home.html', user=current_user)
 
-@routes.route('/analytics')
+@routes.route('/analytics', methods=["GET", "POST"])
 @login_required
 def data():
     return render_template('data.html', user=current_user)

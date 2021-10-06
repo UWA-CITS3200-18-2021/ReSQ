@@ -308,7 +308,7 @@ $('#librariansAvailableIncrement').click(function () {
 
 window.onload = async (event) => {
 	console.info("Loading the Queue from API");
-
+	generateChart();
 	// Load every queue from the API parallel
 	const queueToLoad = Object.keys(queueList)
 
@@ -381,6 +381,138 @@ const requestCSV = async (data) => {
 		a.download = filename;
 		document.body.appendChild(a);
 		a.click();
+	}
+	catch(error){
+		// There's an error
+		console.log(error)
+	}
+}
+
+function generateChart() {
+	// MAIN BAR GRAPH
+	var data = {
+		labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		  series: [
+		  [5, 4, 3, 7, 5, 10, 3,],
+		  [3, 2, 9, 5, 4, 6, 4]
+		]
+	  };
+	  
+	  var options = {
+		seriesBarDistance: 20
+	  };
+	  
+	  var responsiveOptions = [
+		['screen and (min-width: 641px) and (max-width: 1024px)', {
+		  seriesBarDistance: 10,
+		  axisX: {
+			labelInterpolationFnc: function (value) {
+			  return value;
+			}
+		  }
+		}],
+		['screen and (max-width: 640px)', {
+		  seriesBarDistance: 5,
+		  axisX: {
+			labelInterpolationFnc: function (value) {
+			  return value[0];
+			}
+		  }
+		}]
+	  ];
+	  
+	  new Chartist.Bar('#chartPreferences', data, options, responsiveOptions);
+
+	  // UNITS PIE CHART
+	  var data = {
+		labels: ['CITS', 'GENE', 'MATH'],
+		series: [20, 15, 40]
+	  };
+	  
+	  var options = {
+		labelInterpolationFnc: function(value) {
+		  return value[0]
+		}
+	  };
+	  
+	  var responsiveOptions = [
+		['screen and (min-width: 640px)', {
+		  chartPadding: 30,
+		  labelOffset: 100,
+		  labelDirection: 'explode',
+		  labelInterpolationFnc: function(value) {
+			return value;
+		  }
+		}],
+		['screen and (min-width: 1024px)', {
+		  labelOffset: 40,
+		  chartPadding: 20
+		}]
+	  ];
+	  
+	  new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
+
+	  // STAFF PIE CHART
+	  var data = {
+		labels: ['STUDYSmarter', 'Librarians'],
+		series: [65, 35]
+	  };
+	  
+	  var options = {
+		labelInterpolationFnc: function(value) {
+		  return value[0]
+		}
+	  };
+	  
+	  var responsiveOptions = [
+		['screen and (min-width: 640px)', {
+		  chartPadding: 30,
+		  labelOffset: 100,
+		  labelDirection: 'explode',
+		  labelInterpolationFnc: function(value) {
+			return value;
+		  }
+		}],
+		['screen and (min-width: 1024px)', {
+		  labelOffset: 40,
+		  chartPadding: 20
+		}]
+	  ];
+	  
+	  new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
+}
+
+// Submit button for export page
+$('#dateDataSubmit').on('click', function(e) {
+	// Get values from page
+	const dateSubmitted = document.getElementById("date").value;
+
+	var date = new Date(dateSubmitted);
+
+	// Gets the most recently passed Sunday and the next upcomming Saturday
+	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
+	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
+	// Format the dates to the appropriate dateTime format
+	const startTime = `${firstDay} 00:00:00.0000000`;
+	const endTime = `${lastDay} 23:59:59.999999`;
+	// Send html request
+	createDataChart({
+		startTime,
+		endTime
+	})
+})
+
+const createDataChart = async (data) => {
+	
+	try{
+		const response = await fetch("createChart", {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		const dataResponse = await response.json();
 	}
 	catch(error){
 		// There's an error
