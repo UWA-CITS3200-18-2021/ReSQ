@@ -112,8 +112,6 @@ nav:
 - Overview: index.md
 - User:
   - Overview: user/index.md
-  - Functionality: user/functionality.md
-  - Errors: user/Errors.md
 - Administrator:
   - Oveview: administrator/index.md
 - Developer:
