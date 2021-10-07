@@ -143,6 +143,12 @@ function validateUserInput(data) {
 		return false;
 	}
 
+	// Check enquiry type
+	if (!/^([^0-9]*)$/.test(data.enquiry)) {
+		alert("Please do not use numeric values in 'Enquiry Type' field.");
+		return false;
+	}	
+
 	// All inputs are fine
 	return true;
 }
@@ -306,6 +312,24 @@ $('#librariansAvailableIncrement').click(function () {
 	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
 
+function genChartsForCurrentWeek() {
+	// Get current date
+	var date = new Date();
+
+	// Gets the most recently passed Sunday and the next upcomming Saturday
+	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
+	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
+
+	// Format the dates to the appropriate dateTime format
+	const startTime = `${firstDay} 00:00:00.0000000`;
+	const endTime = `${lastDay} 23:59:59.999999`;
+	// Send html request
+	createDataChart({
+		startTime,
+		endTime
+	})
+}
+
 window.onload = async (event) => {
 	console.info("Loading the Queue from API");
 	
@@ -339,8 +363,8 @@ window.onload = async (event) => {
 			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
 		)
 	})
-	// Loads charts for data anylitcs page
-	generatePieCharts();
+	// Load charts for data anylitcs page with current date
+	genChartsForCurrentWeek();
 	rerenderTables();
 };
 
@@ -389,8 +413,9 @@ const requestCSV = async (data) => {
 	}
 }
 
+// Generate all charts for a given week
 function generateCharts(inputData, dates) {
-	// MAIN BAR GRAPH
+	//----------------------------MAIN BAR GRAPH----------------------------
 	let studentBarValues = inputData["studentBarGraph"];
 	var data = {
 		labels: [
@@ -413,12 +438,16 @@ function generateCharts(inputData, dates) {
 	};
 	
 	new Chartist.Bar('#studentsVisitedBarChart', data, options);
+	//-----------------------------------------------------------------------
+
+	//----------------------------UNITS PIE GRAPH----------------------------
 
 	// UNITS PIE CHART
 	let unitsPieValues = inputData["unitsPieGraph"];
+	let topUnits = inputData["topUnits"];
 	var data = {
-		labels: ['CITS', 'GENE', 'MATH', "CHEM", "PHYS"],
-		series: unitsPieValues
+		labels: topUnits,
+		series: unitsPieValues 
 	};
 	
 	var options = {
@@ -444,7 +473,10 @@ function generateCharts(inputData, dates) {
 	
 	new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
 
-	// STAFF PIE CHART
+	//-----------------------------------------------------------------------
+
+	//----------------------------STAFF PIE GRAPH----------------------------
+
 	let staffPieValues = inputData["staffPieGraph"];
 	var data = {
 		labels: ['STUDYSmarter', 'Librarians'],
@@ -484,7 +516,7 @@ $('#dateSubmitForAnalytics').on('click', function(e) {
 	// Gets the most recently passed Sunday and the next upcomming Saturday
 	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
 	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
-	console.log("first" + firstDay);
+
 	// Format the dates to the appropriate dateTime format
 	const startTime = `${firstDay} 00:00:00.0000000`;
 	const endTime = `${lastDay} 23:59:59.999999`;
@@ -497,11 +529,9 @@ $('#dateSubmitForAnalytics').on('click', function(e) {
 
 // Changes date from yyyy/mm/dd to dd/mm/yy
 function rearrangeDate(date) {
-	if(date.length != 10) return;
-	
 	var dateInt = date.split("");
 	var newDate = dateInt[8]+dateInt[9]+"-"+dateInt[5]+dateInt[6]+"-"+dateInt[2]+dateInt[3];
-	return newDate
+	return newDate;
 }
 
 // Returns all dates the next 7 days from startTime

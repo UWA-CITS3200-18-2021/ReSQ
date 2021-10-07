@@ -37,6 +37,7 @@ def create_chart():
 
         result = {
             'studentBarGraph': sample(range(1,10), 7),
+            'topUnits' : ['CITS', 'GENE', 'MATH', "CHEM", "PHYS"],
             'unitsPieGraph' : sample(range(20,80), 5),
             'staffPieGraph' : sample(range(30,80), 2)
         }
