@@ -420,7 +420,6 @@ function generateCharts(inputData, dates) {
 	let studentBarValues = inputData["studentBarGraph"];
 	
 	studentVisitsCount = [0,0,0,0,0,0,0];
-
 	
 	for (const [key, value] of Object.entries(studentBarValues)) {
 		for(let i = 0; i < 7; i++) {
@@ -430,7 +429,6 @@ function generateCharts(inputData, dates) {
 			}
 		}
 	}
-	
 	
 	var data = {
 		labels: [
@@ -462,11 +460,14 @@ function generateCharts(inputData, dates) {
 	
 	let unitsArray = [];
 	let unitsCountArray = []
+
+	// Pushes all unit codes and number of visits for them in data arrays
 	Object.entries(topUnitValues).forEach(([key, value]) => {
 		unitsArray.push(key);
 		unitsCountArray.push(value);
 	});
 
+	// Only displays data if there was any that week
 	if(unitsCountArray.length > 0) {
 		var data = {series: unitsCountArray};
 		
@@ -496,6 +497,7 @@ function generateCharts(inputData, dates) {
 		// Create unit graph
 		new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
 	}
+	// Display blank pie graph saying "No data for this week"
 	else {
 		new Chartist.Pie('#unitsPieChart', {series: [100]}, {
 			labelInterpolationFnc: function(value) {
@@ -509,6 +511,7 @@ function generateCharts(inputData, dates) {
 	let staffPieValues = inputData["staffPieValues"];
 	const staffTypes = ['STUDYSmarter', 'Librarians']
 
+	// Only displays data if there was any that week
 	if(staffPieValues['STUDYSmarter'] > 0 || staffPieValues['Librarian'] > 0) {
 		var data = {
 			series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
@@ -538,6 +541,7 @@ function generateCharts(inputData, dates) {
 		// Create staff graph
 		new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
 	}
+	// Display blank pie graph saying "No data for this week"
 	else {
 		new Chartist.Pie('#unitsStaffChart', {series: [100]}, {
 			labelInterpolationFnc: function(value) {
