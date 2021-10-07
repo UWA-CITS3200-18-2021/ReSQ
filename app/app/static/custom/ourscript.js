@@ -418,6 +418,20 @@ function generateCharts(inputData, dates) {
 	//----------------------------MAIN BAR GRAPH----------------------------
 	// Get and set data for student chart
 	let studentBarValues = inputData["studentBarGraph"];
+	
+	studentVisitsCount = [0,0,0,0,0,0,0];
+
+	
+	for (const [key, value] of Object.entries(studentBarValues)) {
+		for(let i = 0; i < 7; i++) {
+			console.log(rearrangeDate(key), dates[i])
+			if(dates[i] == rearrangeDate(key)) {
+				studentVisitsCount[i] += value;
+			}
+		}
+	}
+	
+	
 	var data = {
 		labels: [
 			'Sun  ' + dates[0],
@@ -428,7 +442,7 @@ function generateCharts(inputData, dates) {
 			'Fri  ' + dates[5],
 			'Sat  ' + dates[6]
 		],
-		  series: [studentBarValues]
+		  series: [studentVisitsCount]
 	  };
 
 	// Set options for student chart
@@ -494,7 +508,6 @@ function generateCharts(inputData, dates) {
 	// Get and set data for staff chart
 	let staffPieValues = inputData["staffPieValues"];
 	const staffTypes = ['STUDYSmarter', 'Librarians']
-	console.log(staffPieValues['STUDYSmarter'])
 
 	if(staffPieValues['STUDYSmarter'] > 0 || staffPieValues['Librarian'] > 0) {
 		var data = {
