@@ -38,16 +38,8 @@ def create_chart():
         staffTypesDictionary = {}
         
         for q in query:
-            print(q.unitCode[:4])
             unitsDictionary[q.unitCode[:4].upper()] = unitsDictionary.get(q.unitCode[:4].upper(), 0) + 1
             staffTypesDictionary[q.queue] = staffTypesDictionary.get(q.queue, 0) + 1
-        print(unitsDictionary)
-        print(staffTypesDictionary)
-        
-        units = {0:'CITS', 1:'GENE', 2:'MATH', 3:"CHEM", 4:"PHYS"}
-        
-        staffPieRand = sample(range(10,90),2)
-        staffPieVals = {'STUDYSmarter' : staffPieRand[0], 'Librarian' : staffPieRand[1]}
 
         result = {
             'studentBarGraph': sample(range(1,10), 7),
@@ -55,5 +47,4 @@ def create_chart():
             'staffPieValues' : staffTypesDictionary
         }
         
-
         return json.dumps(result)

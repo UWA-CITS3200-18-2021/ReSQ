@@ -416,6 +416,7 @@ const requestCSV = async (data) => {
 // Generate all charts for a given week
 function generateCharts(inputData, dates) {
 	//----------------------------MAIN BAR GRAPH----------------------------
+	// Get and set data for student chart
 	let studentBarValues = inputData["studentBarGraph"];
 	var data = {
 		labels: [
@@ -430,6 +431,7 @@ function generateCharts(inputData, dates) {
 		  series: [studentBarValues]
 	  };
 
+	// Set options for student chart
 	var options = {
 		seriesBarDistance: 20,
 		axisY: {
@@ -437,12 +439,11 @@ function generateCharts(inputData, dates) {
 		}
 	};
 	
+	// Create students graph
 	new Chartist.Bar('#studentsVisitedBarChart', data, options);
 
 	//----------------------------UNITS PIE GRAPH----------------------------
-
-	// UNITS PIE CHART
-	
+	// Get and set data for units chart
 	let topUnitValues = inputData["topUnitValues"];
 	
 	let unitsArray = [];
@@ -451,64 +452,86 @@ function generateCharts(inputData, dates) {
 		unitsArray.push(key);
 		unitsCountArray.push(value);
 	});
-	
-	var data = {
-		series: unitsCountArray
-	};
-	
-	var sum = function(a, b) {
-		return a + b
-	};
 
-	var options = {
-		labelInterpolationFnc: function(value, idx) {
-			var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
-			return unitsArray[idx] + ' ' + percentage;
-		}
-	};
-	
-	var responsiveOptions = [
-		['screen and (min-width: 640px)', {
-			chartPadding: 30,
-			labelOffset: 100,
-			labelDirection: 'explode',
-		}],
-		['screen and (min-width: 1024px)', {
-			labelOffset: 50,
-			chartPadding: 20
-		}]
-	];
-	
-	new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
+	if(unitsCountArray.length > 0) {
+		var data = {series: unitsCountArray};
+		
+		var sum = function(a, b) {return a + b};
+
+		// Set options for unit chart
+		var options = {
+			labelInterpolationFnc: function(value, idx) {
+				var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+				return unitsArray[idx] + ' ' + percentage;
+			}
+		};
+		
+		// Set responsive options for unit chart
+		var responsiveOptions = [
+			['screen and (min-width: 640px)', {
+				chartPadding: 30,
+				labelOffset: 100,
+				labelDirection: 'explode',
+			}],
+			['screen and (min-width: 1024px)', {
+				labelOffset: 50,
+				chartPadding: 20
+			}]
+		];
+		
+		// Create unit graph
+		new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
+	}
+	else {
+		new Chartist.Pie('#unitsPieChart', {series: [100]}, {
+			labelInterpolationFnc: function(value) {
+			  return "No data for this week"
+			}
+		  });
+	}
 
 	//----------------------------STAFF PIE GRAPH----------------------------
-
+	// Get and set data for staff chart
 	let staffPieValues = inputData["staffPieValues"];
 	const staffTypes = ['STUDYSmarter', 'Librarians']
-	var data = {
-		series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
-	};
-	
-	var options = {
-		labelInterpolationFnc: function(value, idx) {
-			var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
-			return staffTypes[idx] + ' ' + percentage;
-		}
-	};
-	
-	var responsiveOptions = [
-		['screen and (min-width: 640px)', {
-			chartPadding: 30,
-			labelOffset: 100,
-			labelDirection: 'explode',
-		}],
-		['screen and (min-width: 1024px)', {
-			labelOffset: 50,
-			chartPadding: 20
-		}]
-	];
-	
-	new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
+	console.log(staffPieValues['STUDYSmarter'])
+
+	if(staffPieValues['STUDYSmarter'] > 0 || staffPieValues['Librarian'] > 0) {
+		var data = {
+			series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
+		};
+		
+		// Set options for staff chart
+		var options = {
+			labelInterpolationFnc: function(value, idx) {
+				var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+				return staffTypes[idx] + ' ' + percentage;
+			}
+		};
+		
+		// Set responsive options for staff chart
+		var responsiveOptions = [
+			['screen and (min-width: 640px)', {
+				chartPadding: 30,
+				labelOffset: 100,
+				labelDirection: 'explode',
+			}],
+			['screen and (min-width: 1024px)', {
+				labelOffset: 50,
+				chartPadding: 20
+			}]
+		];
+		
+		// Create staff graph
+		new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
+	}
+	else {
+		new Chartist.Pie('#unitsStaffChart', {series: [100]}, {
+			labelInterpolationFnc: function(value) {
+			  return "No data for this week"
+			}
+		  });
+	}
 }
 
 $('#dateSubmitForAnalytics').on('click', function(e) {
