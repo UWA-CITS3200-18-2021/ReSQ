@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint, request, jsonify
+from flask import Flask, Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
 
 from random import sample
-
+import json
 from app import db
 from app.models import Queue
 
@@ -33,13 +33,27 @@ def create_chart():
         startTime = body['startTime']
         endTime = body['endTime']
         query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
-        print(query)
+        
+        unitsDictionary = {}
+        staffTypesDictionary = {}
+        
+        for q in query:
+            print(q.unitCode[:4])
+            unitsDictionary[q.unitCode[:4].upper()] = unitsDictionary.get(q.unitCode[:4].upper(), 0) + 1
+            staffTypesDictionary[q.queue] = staffTypesDictionary.get(q.queue, 0) + 1
+        print(unitsDictionary)
+        print(staffTypesDictionary)
+        
+        units = {0:'CITS', 1:'GENE', 2:'MATH', 3:"CHEM", 4:"PHYS"}
+        
+        staffPieRand = sample(range(10,90),2)
+        staffPieVals = {'STUDYSmarter' : staffPieRand[0], 'Librarian' : staffPieRand[1]}
 
         result = {
             'studentBarGraph': sample(range(1,10), 7),
-            'topUnits' : ['CITS', 'GENE', 'MATH', "CHEM", "PHYS"],
-            'unitsPieGraph' : sample(range(20,80), 5),
-            'staffPieGraph' : sample(range(30,80), 2)
+            'topUnitValues' : unitsDictionary,
+            'staffPieValues' : staffTypesDictionary
         }
+        
 
-        return jsonify(result)
+        return json.dumps(result)

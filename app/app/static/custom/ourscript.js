@@ -331,8 +331,8 @@ function genChartsForCurrentWeek() {
 }
 
 window.onload = async (event) => {
-	console.info("Loading the Queue from API");
-	
+	console.info("Loading the Queue from API"); 
+
 	// Load every queue from the API parallel
 	const queueToLoad = Object.keys(queueList)
 
@@ -438,16 +438,23 @@ function generateCharts(inputData, dates) {
 	};
 	
 	new Chartist.Bar('#studentsVisitedBarChart', data, options);
-	//-----------------------------------------------------------------------
 
 	//----------------------------UNITS PIE GRAPH----------------------------
 
 	// UNITS PIE CHART
-	let unitsPieValues = inputData["unitsPieGraph"];
-	let topUnits = inputData["topUnits"];
+	
+	let topUnitValues = inputData["topUnitValues"];
+	
+	let unitsArray = [];
+	let unitsCountArray = []
+	Object.entries(topUnitValues).forEach(([key, value]) => {
+		unitsArray.push(key);
+		unitsCountArray.push(value);
+	});
+	
 	var data = {
-		labels: topUnits,
-		series: unitsPieValues 
+		labels: unitsArray,
+		series: unitsCountArray
 	};
 	
 	var options = {
@@ -473,14 +480,12 @@ function generateCharts(inputData, dates) {
 	
 	new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
 
-	//-----------------------------------------------------------------------
-
 	//----------------------------STAFF PIE GRAPH----------------------------
 
-	let staffPieValues = inputData["staffPieGraph"];
+	let staffPieValues = inputData["staffPieValues"];
 	var data = {
 		labels: ['STUDYSmarter', 'Librarians'],
-		series: staffPieValues
+		series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
 	};
 	
 	var options = {
