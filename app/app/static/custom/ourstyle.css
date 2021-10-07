@@ -140,3 +140,8 @@ input[type="number"] {
 #studentsVisitedBarChart .ct-bar {
   stroke-width: 8%;
 }
+
+.ct-label {
+  font-size: 15px;
+  font-weight: bolder; 
+}

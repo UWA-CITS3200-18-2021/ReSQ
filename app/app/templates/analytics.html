@@ -25,7 +25,17 @@
 {% endblock %} {% block header %} <a class="navbar-brand" href="javascript:;">Study Smarter Analytics</a>{%
 endblock %} {% block content %}
 <div class="row">
-	<div class="col-md-12 ml-auto mr-auto">
+	<div class="col-md-2 ml-auto mr-auto">
+		<div class="card">
+			<div class="card-body">
+				<label for="date"><small><i>Will display data from the week (from Sun-Sat) of chosen date</i></small></label><br>
+				<label for="date"><b>Date:</b></label><br>
+				<input type="date" name="date" id="date"/><br><br>
+				<button id="dateSubmitForAnalytics" name="submit" class="btn btn-success">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-10 ml-auto mr-auto">
 		<div class="card card-chart">
 			<div class="card-header card-header-info" data-header-animation="true">
 				<div class="card-icon">
@@ -58,17 +68,7 @@ endblock %} {% block content %}
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-3 ml-auto mr-auto">
-		<div class="card">
-			<div class="card-body">
-				<label for="date"><small><i>Will display data from the week (from Sun-Sat) of chosen date</i></small></label><br>
-				<label for="date"><b>Date:</b></label><br>
-				<input type="date" name="date" id="date"/><br><br>
-				<button id="dateSubmitForAnalytics" name="submit" class="btn btn-success">Submit</button>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4 ml-auto mr-auto">
+	<div class="col-md-6 ml-auto mr-auto">
 		<div class="card card-chart">
 			<div class="card-header card-header-info">
 				<div class="card-icon">
@@ -77,11 +77,11 @@ endblock %} {% block content %}
 				  <h4 class="card-title">Percentage per unit for this week</h4>
 			</div>
 			<div class="card-body">
-				<div id="unitsPieChart" class="ct-chart ct-major-tenth"></div>
+				<div id="unitsPieChart" class="ct-chart ct-double-octave" style="padding-bottom: 10%;"></div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4 ml-auto mr-auto">
+	<div class="col-md-6 ml-auto mr-auto">
 		<div class="card card-chart">
 			<div class="card-header card-header-info">
 				<div class="card-icon">
@@ -90,7 +90,7 @@ endblock %} {% block content %}
 				  <h4 class="card-title">Percentage per staff type for this week</h4>
 			</div>
 			<div class="card-body">
-				<div id="unitsStaffChart" class="ct-chart ct-major-tenth"></div>
+				<div id="unitsStaffChart" class="ct-chart ct-double-octave" style="padding-bottom: 10%;"></div>
 			</div>
 		</div>
 	</div>

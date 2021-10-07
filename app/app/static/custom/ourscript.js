@@ -453,13 +453,17 @@ function generateCharts(inputData, dates) {
 	});
 	
 	var data = {
-		labels: unitsArray,
 		series: unitsCountArray
 	};
 	
+	var sum = function(a, b) {
+		return a + b
+	};
+
 	var options = {
-		labelInterpolationFnc: function(value) {
-			return value[0]
+		labelInterpolationFnc: function(value, idx) {
+			var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+			return unitsArray[idx] + ' ' + percentage;
 		}
 	};
 	
@@ -468,12 +472,9 @@ function generateCharts(inputData, dates) {
 			chartPadding: 30,
 			labelOffset: 100,
 			labelDirection: 'explode',
-			labelInterpolationFnc: function(value) {
-				return value;
-			}
 		}],
 		['screen and (min-width: 1024px)', {
-			labelOffset: 40,
+			labelOffset: 50,
 			chartPadding: 20
 		}]
 	];
@@ -483,14 +484,15 @@ function generateCharts(inputData, dates) {
 	//----------------------------STAFF PIE GRAPH----------------------------
 
 	let staffPieValues = inputData["staffPieValues"];
+	const staffTypes = ['STUDYSmarter', 'Librarians']
 	var data = {
-		labels: ['STUDYSmarter', 'Librarians'],
 		series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
 	};
 	
 	var options = {
-		labelInterpolationFnc: function(value) {
-			return value[0]
+		labelInterpolationFnc: function(value, idx) {
+			var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+			return staffTypes[idx] + ' ' + percentage;
 		}
 	};
 	
@@ -499,12 +501,9 @@ function generateCharts(inputData, dates) {
 			chartPadding: 30,
 			labelOffset: 100,
 			labelDirection: 'explode',
-			labelInterpolationFnc: function(value) {
-				return value;
-			}
 		}],
 		['screen and (min-width: 1024px)', {
-			labelOffset: 40,
+			labelOffset: 50,
 			chartPadding: 20
 		}]
 	];
