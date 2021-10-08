@@ -41,8 +41,7 @@ def create_chart():
         for q in query:
             unitsDictionary[q.unitCode[:4].upper()] = unitsDictionary.get(q.unitCode[:4].upper(), 0) + 1
             staffTypesDictionary[q.queue] = staffTypesDictionary.get(q.queue, 0) + 1
-            studentsVisitedDictionary[str(q.enterQueueTime)[:10]] = \
-                studentsVisitedDictionary.get(str(q.enterQueueTime)[:10], 0) + 1
+            studentsVisitedDictionary[str(q.enterQueueTime)[:10]] = studentsVisitedDictionary.get(str(q.enterQueueTime)[:10], 0) + 1
 
         result = {
             'studentBarGraph': studentsVisitedDictionary,

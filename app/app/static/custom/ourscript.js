@@ -312,24 +312,6 @@ $('#librariansAvailableIncrement').click(function () {
 	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
 
-function genChartsForCurrentWeek() {
-	// Get current date
-	var date = new Date();
-
-	// Gets the most recently passed Sunday and the next upcomming Saturday
-	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
-	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
-
-	// Format the dates to the appropriate dateTime format
-	const startTime = `${firstDay} 00:00:00.0000000`;
-	const endTime = `${lastDay} 23:59:59.999999`;
-	// Send html request
-	createDataChart({
-		startTime,
-		endTime
-	})
-}
-
 window.onload = async (event) => {
 	console.info("Loading the Queue from API"); 
 
@@ -364,7 +346,7 @@ window.onload = async (event) => {
 		)
 	})
 	// Load charts for data anylitcs page with current date
-	genChartsForCurrentWeek();
+	generateChartsForWeek();
 	rerenderTables();
 };
 
@@ -413,6 +395,21 @@ const requestCSV = async (data) => {
 	}
 }
 
+function generateChartsForWeek(date=new Date()) {
+	// Gets the most recently passed Sunday and the next upcomming Saturday
+	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
+	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
+
+	// Format the dates to the appropriate dateTime format
+	const startTime = `${firstDay} 00:00:00.0000000`;
+	const endTime = `${lastDay} 23:59:59.999999`;
+	// Send html request
+	createDataChart({
+		startTime,
+		endTime
+	})
+}
+
 // Generate all charts for a given week
 function generateCharts(inputData, dates) {
 	//----------------------------MAIN BAR GRAPH----------------------------
@@ -423,7 +420,6 @@ function generateCharts(inputData, dates) {
 	
 	for (const [key, value] of Object.entries(studentBarValues)) {
 		for(let i = 0; i < 7; i++) {
-			console.log(rearrangeDate(key), dates[i])
 			if(dates[i] == rearrangeDate(key)) {
 				studentVisitsCount[i] += value;
 			}
@@ -551,24 +547,11 @@ function generateCharts(inputData, dates) {
 	}
 }
 
+// Gets selected date from page and generates charts
 $('#dateSubmitForAnalytics').on('click', function(e) {
-	// Get values from page
 	const dateSubmitted = document.getElementById("date").value;
-
 	var date = new Date(dateSubmitted);
-
-	// Gets the most recently passed Sunday and the next upcomming Saturday
-	var firstDay = new Date(date.setDate(date.getDate() - date.getDay())).toJSON().slice(0,10);
-	var lastDay = new Date(date.setDate(date.getDate() - date.getDay() + 6)).toJSON().slice(0,10);
-
-	// Format the dates to the appropriate dateTime format
-	const startTime = `${firstDay} 00:00:00.0000000`;
-	const endTime = `${lastDay} 23:59:59.999999`;
-	// Send html request
-	createDataChart({
-		startTime,
-		endTime
-	})
+	generateChartsForWeek(date);
 })
 
 // Changes date from yyyy/mm/dd to dd/mm/yy
