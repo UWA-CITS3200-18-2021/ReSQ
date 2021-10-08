@@ -23,13 +23,34 @@
 		<div class="sidebar" data-color="azure" data-background-color="white" data-image="nothing">
 			<!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
       Tip 2: you can also add an image using data-image tag
     -->
 			<div class="logo">
 				<a href="{{ url_for('routes.home')}}" class="logo-normal resqLogo" style="margin-left: 20px">ReSQ</a>
 			</div>
-			{% block navbar %}{% endblock %}
+			{% block navbar %}<div class="sidebar-wrapper">
+				<ul class="nav">
+					<li class="{% block navbar_home %}{% endblock %}">
+						<a class="nav-link" href="{{ url_for('routes.home')}}">
+							<i class="material-icons">list</i>
+							<p>Queue</p>
+						</a>
+					</li>
+					<li class="{% block navbar_data %}{% endblock %}">
+						<a class="nav-link" href="{{ url_for('routes.analytics')}}">
+							<i class="material-icons">insights</i>
+							<p>Data Analytics</p>
+						</a>
+					</li>
+					<li class="{% block navbar_export %}{% endblock %}">
+						<a class="nav-link" href="{{ url_for('routes.export')}}">
+							<i class="material-icons">arrow_circle_down</i>
+							<p>Export Data</p>
+						</a>
+					</li>
+					<!-- more sidebar itens here -->
+				</ul>
+			</div>{% endblock %}
 			<div class="sidebar-background"></div>
 		</div>
 		<div class="main-panel">
@@ -58,6 +79,7 @@
 					{% endif %}
 				</div>
 			</nav>
+			
 			<!-- End Navbar -->
 			<div class="content">
 				<div class="container-fluid">{% block content %}{% endblock %}</div>
