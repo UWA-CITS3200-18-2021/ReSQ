@@ -1,20 +1,16 @@
-from flask import Flask, Blueprint, request, jsonify, render_template
+from flask import Flask, Blueprint, request
 from flask_login import login_required, current_user
 
-from random import sample
+import re
 import json
 from app import db
 from app.models import Queue
 
-import re
-from io import StringIO
-from werkzeug.wrappers import Response
 
-
-analytics = Blueprint('analytics', __name__)
+data = Blueprint('data', __name__)
 
 #
-@analytics.route('/createChart', methods=['GET', 'POST'])
+@data.route('/createChart', methods=['GET', 'POST'])
 def create_chart():
     body = request.get_json(force=True)
     dateTimeFormat = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{6}"

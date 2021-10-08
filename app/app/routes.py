@@ -18,10 +18,10 @@ def home():
 
     return render_template('home.html', user=current_user)
 
-@routes.route('/analytics')
+@routes.route('/data')
 @login_required
-def analytics():
-    return render_template('analytics.html', user=current_user)
+def data():
+    return render_template('data.html', user=current_user)
 
 @routes.route('/export')
 @login_required

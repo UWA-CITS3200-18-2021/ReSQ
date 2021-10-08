@@ -27,10 +27,10 @@ from app.auth import auth
 from app.routes import routes
 from app.queue import queue
 from app.export import export
-from app.analytics import analytics
+from app.data import data
 
 app.register_blueprint(routes, url_prefix="/")
 app.register_blueprint(auth, url_prefix="/")
 app.register_blueprint(queue, url_prefix="/")
 app.register_blueprint(export, url_prefix="/")
-app.register_blueprint(analytics, url_prefix="/")
+app.register_blueprint(data, url_prefix="/")
