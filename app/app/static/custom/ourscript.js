@@ -426,7 +426,7 @@ function generateCharts(inputData, dates) {
 		}
 	}
 	
-	var data = {
+	var dataStudent = {
 		labels: [
 			'Sun  ' + dates[0],
 			'Mon  ' + dates[1],
@@ -440,7 +440,7 @@ function generateCharts(inputData, dates) {
 	  };
 
 	// Set options for student chart
-	var options = {
+	var optionsStudent = {
 		seriesBarDistance: 20,
 		axisY: {
 			onlyInteger: true
@@ -448,7 +448,7 @@ function generateCharts(inputData, dates) {
 	};
 	
 	// Create students graph
-	new Chartist.Bar('#studentsVisitedBarChart', data, options);
+	new Chartist.Bar('#studentsVisitedBarChart', dataStudent, optionsStudent);
 
 	//----------------------------UNITS PIE GRAPH----------------------------
 	// Get and set data for units chart
@@ -465,20 +465,20 @@ function generateCharts(inputData, dates) {
 
 	// Only displays data if there was any that week
 	if(unitsCountArray.length > 0) {
-		var data = {series: unitsCountArray};
+		var dataUnits = {series: unitsCountArray};
 		
 		var sum = function(a, b) {return a + b};
 
 		// Set options for unit chart
-		var options = {
+		var optionsUnits = {
 			labelInterpolationFnc: function(value, idx) {
-				var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+				var percentage = Math.round(value / dataUnits.series.reduce(sum) * 100) + '%';
 				return unitsArray[idx] + ' ' + percentage;
 			}
 		};
 		
 		// Set responsive options for unit chart
-		var responsiveOptions = [
+		var responsiveOptionsUnits = [
 			['screen and (min-width: 640px)', {
 				chartPadding: 30,
 				labelOffset: 100,
@@ -491,7 +491,7 @@ function generateCharts(inputData, dates) {
 		];
 		
 		// Create unit graph
-		new Chartist.Pie('#unitsPieChart', data, options, responsiveOptions);
+		new Chartist.Pie('#unitsPieChart', dataUnits, optionsUnits, responsiveOptionsUnits);
 	}
 	// Display blank pie graph saying "No data for this week"
 	else {
@@ -507,22 +507,28 @@ function generateCharts(inputData, dates) {
 	let staffPieValues = inputData["staffPieValues"];
 	const staffTypes = ['STUDYSmarter', 'Librarians']
 
+	let studySmarterPieValue = staffPieValues['STUDYSmarter'];
+	let librarianPieValue = staffPieValues['Librarian'];
+
+	if(studySmarterPieValue === undefined) {studySmarterPieValue = 0}
+	if(librarianPieValue === undefined) {librarianPieValue = 0}
+
 	// Only displays data if there was any that week
-	if(staffPieValues['STUDYSmarter'] > 0 || staffPieValues['Librarian'] > 0) {
-		var data = {
-			series: [staffPieValues['STUDYSmarter'], staffPieValues['Librarian']]
+	if(studySmarterPieValue > 0 || librarianPieValue > 0) {
+		var dataStaff = {
+			series: [studySmarterPieValue, librarianPieValue]
 		};
-		
+
 		// Set options for staff chart
-		var options = {
+		var optionsStaff = {
 			labelInterpolationFnc: function(value, idx) {
-				var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+				var percentage = Math.round(value / dataStaff.series.reduce(sum) * 100) + '%';
 				return staffTypes[idx] + ' ' + percentage;
 			}
 		};
 		
 		// Set responsive options for staff chart
-		var responsiveOptions = [
+		var responsiveOptionsStaff = [
 			['screen and (min-width: 640px)', {
 				chartPadding: 30,
 				labelOffset: 100,
@@ -535,7 +541,7 @@ function generateCharts(inputData, dates) {
 		];
 		
 		// Create staff graph
-		new Chartist.Pie('#unitsStaffChart', data, options, responsiveOptions);
+		new Chartist.Pie('#unitsStaffChart', dataStaff, optionsStaff, responsiveOptionsStaff);
 	}
 	// Display blank pie graph saying "No data for this week"
 	else {
