@@ -381,7 +381,6 @@ $('#dateSubmit').on('click', function(e) {
 			break;
 	}
 	// Format the dates to the appropriate dateTime format
-	console.log(startDate, endDate)
 	if(startDate.localeCompare(firstDay) == -1) {
 		startDate = firstDay;
 	}
