@@ -412,7 +412,17 @@ const requestCSV = async (data) => {
 		console.log(error)
 	}
 }
+$(document).ready(function() {
+	if(document.getElementById("dateRange6").checked) {
+		$(".date_selector").show("fast");
+	}
+})
 
-$("input[name='dateRangeSelector']").change(function() {
-	$(".date_selector").toggle();
+$("input[name='dateRangeSelector']").click(function() {
+	if($(this).attr("value")=="Custom") {
+		$(".date_selector").show("fast");
+	}
+	else {
+		$(".date_selector").hide("fast");
+	}
 })
