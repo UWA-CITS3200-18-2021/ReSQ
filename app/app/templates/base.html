@@ -11,6 +11,8 @@
 	<link rel="stylesheet" type="text/css"
 		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 	<!-- Material Kit CSS -->
 	<link href="{{ url_for('static', filename='css/material-dashboard.css') }}" rel="stylesheet" />
 	<link href="{{ url_for('static', filename='custom/ourstyle.css') }}" rel="stylesheet" />
@@ -21,7 +23,6 @@
 		<div class="sidebar" data-color="azure" data-background-color="white" data-image="nothing">
 			<!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
       Tip 2: you can also add an image using data-image tag
     -->
 			<div class="logo">
@@ -107,6 +108,7 @@
 	<script href="{{ url_for('static', filename='js/material-dashboard.js?v=2.2.2') }}" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{{ url_for('static', filename='custom/ourscript.js') }}"></script>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </body>
 
 </html>

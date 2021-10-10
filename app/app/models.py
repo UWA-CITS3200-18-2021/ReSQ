@@ -105,9 +105,6 @@ class Queue(BaseModel):
 
     @validates('enquiry')
     def validate_enquiry(self, key, enquiry):
-        for char in enquiry:
-            if char.isnumeric() or char in invalidChar:
-                raise ValueError("Invalid character in enquiry")
         return enquiry
 
     @validates('queue')

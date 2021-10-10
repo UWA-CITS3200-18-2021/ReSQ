@@ -141,4 +141,12 @@ input[type="number"] {
   display: block;
   cursor: pointer;
   color: rgb(0, 0, 0);
+
+  #studentsVisitedBarChart .ct-bar {
+  stroke-width: 8%;
+}
+
+.ct-label {
+  font-size: 14px;
+  font-weight: bolder; 
 }
