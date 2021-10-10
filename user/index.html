@@ -172,9 +172,60 @@
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+</label>
 <a class="md-nav__link md-nav__link--active" href="./">
         Overview
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-to-access-the-website">
+    How to access the website
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#queue">
+    Queue
+  </a>
+<nav aria-label="Queue" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#add-to-queue">
+    Add to queue
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#managing-a-session">
+    Managing a session
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#finishundo-a-session">
+    Finish/Undo a session
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-analytics">
+    Data analytics
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#export-data">
+    Export data
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -288,6 +339,51 @@
 <div class="md-sidebar__scrollwrap">
 <div class="md-sidebar__inner">
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-to-access-the-website">
+    How to access the website
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#queue">
+    Queue
+  </a>
+<nav aria-label="Queue" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#add-to-queue">
+    Add to queue
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#managing-a-session">
+    Managing a session
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#finishundo-a-session">
+    Finish/Undo a session
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-analytics">
+    Data analytics
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#export-data">
+    Export data
+  </a>
+</li>
+</ul>
 </nav>
 </div>
 </div>
@@ -298,6 +394,52 @@
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
 </a>
 <h1 id="user-documentation">User Documentation<a class="headerlink" href="#user-documentation" title="Permanent link">¶</a></h1>
+<h2 id="how-to-access-the-website">How to access the website<a class="headerlink" href="#how-to-access-the-website" title="Permanent link">¶</a></h2>
+<p>Click <a href="https://resq.systemhealthlab.com/login?next=%2F">here</a> to redirect to the website. User will need username and password to login. <br/>
+There will be 3 main tabs in the website, which are Queue, Data Analytics and Export Data</p>
+<h2 id="queue">Queue<a class="headerlink" href="#queue" title="Permanent link">¶</a></h2>
+<p>User can manage student sessions in the Queue tab. There are 3 tables, 2 of which are STUDYSmarter queue and Librarian queue. Students will be put into either queue depending on user's choice. <br/></p>
+<h3 id="add-to-queue">Add to queue<a class="headerlink" href="#add-to-queue" title="Permanent link">¶</a></h3>
+<p>In order to add a student to a waiting queue, look for the "ADD TO QUEUE" button in the top right corner </p>
+<p><img alt="" src="instruction/addqueue.PNG"/></p>
+<p>A form will show up as below. In this form, you can enter student information and choose the queue type between "STUDYSmarter" and "Librarian" </p>
+<p><img alt="" src="instruction/addtoqueue.PNG"/></p>
+<p>When successfully added, the student information will show up in the corresponding queue. Below is an example</p>
+<p><img alt="" src="instruction/addtoqueue2.PNG"/></p>
+<h3 id="managing-a-session">Managing a session<a class="headerlink" href="#managing-a-session" title="Permanent link">¶</a></h3>
+<p>If you want to move students from either waiting queue to "Current Session" table, click the green button in the "Actions" column <br/></p>
+<p><img alt="" src="instruction/add_remove.PNG"/></p>
+<p>If a student cancel the appointment, you can remove her/him from the waiting queue by clicking the red button in the "Actions" column <br/>
+A message box will show up and ask to confirm your action, click "Yes". <br/></p>
+<h3 id="finishundo-a-session">Finish/Undo a session<a class="headerlink" href="#finishundo-a-session" title="Permanent link">¶</a></h3>
+<p>When a session is done, user can click the green button to finish the session.<br/>
+When user accidentally added a student to this table from waiting queue, undo it by choosing the undo button </p>
+<p><img alt="" src="instruction/finish_undo.PNG"/></p>
+<h2 id="data-analytics">Data analytics<a class="headerlink" href="#data-analytics" title="Permanent link">¶</a></h2>
+<p>This website provide some basic data analytics for "at a glance" view. <br/></p>
+<p>There will be 3 charts generated in the Data analytics tab: <br/></p>
+<ul>
+<li>Students visited per day in the chosen week <br/></li>
+<li>The percentages of popular units in that week <br/></li>
+<li>Comparison between students enter STUDYSmarter and Librarian queue in that week <br/></li>
+</ul>
+<p><img alt="" src="instruction/analyse.PNG"/></p>
+<p>In order to generate data analytics for a chosen week: <br/></p>
+<ul>
+<li>Choose an arbitrary day in the week you want to generate data <br/></li>
+</ul>
+<p><img alt="" src="instruction/analyse2.PNG"/></p>
+<ul>
+<li>Click submit</li>
+</ul>
+<h2 id="export-data">Export data<a class="headerlink" href="#export-data" title="Permanent link">¶</a></h2>
+<p>If user wants to export data to a csv file for further data analysis:<br/></p>
+<ul>
+<li>Step 1: Navigate to the 'Export Data' tab <br/></li>
+<li>Step 2: Choose the 'start' and 'end' date to get the data between those days <br/>
+<img alt="" src="instruction/export.PNG"/></li>
+<li>Step 3: Click 'Submit', then download the file</li>
+</ul>
 </article>
 </div>
 </div>
