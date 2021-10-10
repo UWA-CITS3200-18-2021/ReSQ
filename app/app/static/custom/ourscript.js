@@ -345,28 +345,36 @@ window.onload = async (event) => {
 
 // Submit button for export page
 $('#dateSubmit').on('click', function(e) {
+	// First day of operation
+	const firstDay = "2021-09-28";
 	// Get values from page
 	const dateRange = $("input[name='dateRangeSelector']:checked").val()
 	let startDate;
 	// Get current date
-	const today = new Date();
+	let today = new Date();
+	today.setDate(31)
+	let start = new Date(today);
 	let endDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	// Generate correct dates based of input
 	switch(dateRange) {
 		case 'Last Day':
-			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-1);
+			start.setDate(start.getDate()-1)
+			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Week':
-			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-7);
+			start.setDate(start.getDate()-7)
+			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Month':
-			startDate = today.getFullYear()+'-'+(today.getMonth())+'-'+today.getDate();
+			start.setMonth(start.getMonth()-1)
+			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Year':
-			startDate = (today.getFullYear()-1)+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			start.setFullYear(start.getFullYear()-1)
+			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'All Time':
-			startDate = "2021-09-28";
+			startDate = firstDay;
 			break;
 		case 'Custom':
 			startDate = document.getElementById("startDate").value;
@@ -374,6 +382,10 @@ $('#dateSubmit').on('click', function(e) {
 			break;
 	}
 	// Format the dates to the appropriate dateTime format
+	console.log(startDate, endDate)
+	if(startDate.localeCompare(firstDay) == -1) {
+		startDate = firstDay;
+	}
 	const startTime = `${startDate} 00:00:00.0000000`;
 	const endTime = `${endDate} 23:59:59.999999`;
 	// Send html request
@@ -412,6 +424,7 @@ const requestCSV = async (data) => {
 		console.log(error)
 	}
 }
+
 $(document).ready(function() {
 	if(document.getElementById("dateRange6").checked) {
 		$(".date_selector").show("fast");
