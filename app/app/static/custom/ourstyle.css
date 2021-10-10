@@ -136,3 +136,9 @@ input[type="number"] {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+.export label {
+  display: block;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+}

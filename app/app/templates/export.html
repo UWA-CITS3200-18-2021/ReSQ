@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% block title %}ReSQ{% endblock %}
 {% block navbar_export %}active{% endblock %}
-{% block header %} <a class="navbar-brand" href="javascript:;">Export Data</a>{%
-endblock %} {% block content %}
+{% block header %} <a class="navbar-brand" href="javascript:;">Export Data</a>{%endblock %}
+{% block content %}
 <div class="row">
 	<div class="col-md-10 ml-auto mr-auto">
 		<div class="card card-chart">
@@ -9,11 +9,26 @@ endblock %} {% block content %}
 				<h4 class="card-title">Export to CSV</h2>
 			</div>
 			<div class="card-body">
-				<h5 class="card-title">Start Date</h4>
-				<input type="date" name="startDate" id="startDate"/>
-				<h5 class="card-title">End Date</h4>
-				<input type="date" name="endDate" id="endDate"/>
-				<h5 class="card-title">Submit</h4>
+				<div class="export">
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="Last Day" checked> Last Day</label>
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="Last Week"> Last Week</label>
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="Last Month"> Last Month</label>
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="Last Year"> Last Year</label>
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="All Time"> All Time</label>
+					<label><input type="radio" id="dateRange" name="dateRangeSelector" value="Custom"> Custom</label>
+					<div class="date_selector" style="display: none;">
+						<table>
+							<tr>
+								<td align="right">Start Date</td>
+								<td align="left"><input type="date" name="startDate" id="startDate"></td>
+							</tr>
+							<tr>
+								<td align="right">End Date</td>
+								<td align="left"><input type="date" name="endDate" id="endDate"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				<button id="dateSubmit" class="btn btn-success">Submit</button>
 			</div>
 		</div>

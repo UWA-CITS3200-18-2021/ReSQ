@@ -346,8 +346,30 @@ window.onload = async (event) => {
 // Submit button for export page
 $('#dateSubmit').on('click', function(e) {
 	// Get values from page
-	const startDate = document.getElementById("startDate").value;
-	const endDate = document.getElementById("endDate").value;
+	const dateRange = $("input[name='dateRangeSelector']:checked").val()
+	let startDate;
+	// Get current date
+	const today = new Date();
+	let endDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	console.log(endDate)
+	// Generate correct dates based of input
+	switch(dateRange) {
+		case 'Last Day':
+			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-1);
+			console.log(startDate)
+		case 'Last Week':
+			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-7);
+		case 'Last Month':
+			startDate = today.getFullYear()+'-'+(today.getMonth())+'-'+today.getDate();
+		case 'Last Year':
+			startDate = (today.getFullYear()-1)+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		case 'All Time':
+			startDate = "2021-09-28";
+		case 'Custom':
+			startDate = document.getElementById("startDate").value;
+			endDate = document.getElementById("endDate").value;
+	}
+	console.log(endDate)
 	// Format the dates to the appropriate dateTime format
 	const startTime = `${startDate} 00:00:00.0000000`;
 	const endTime = `${endDate} 23:59:59.999999`;
@@ -387,3 +409,7 @@ const requestCSV = async (data) => {
 		console.log(error)
 	}
 }
+
+$("input[name='dateRangeSelector']").change(function() {
+	$(".date_selector").toggle();
+})
