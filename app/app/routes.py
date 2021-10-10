@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
 from sqlalchemy.sql.elements import Null
