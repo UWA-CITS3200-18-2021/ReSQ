@@ -351,25 +351,28 @@ $('#dateSubmit').on('click', function(e) {
 	// Get current date
 	const today = new Date();
 	let endDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-	console.log(endDate)
 	// Generate correct dates based of input
 	switch(dateRange) {
 		case 'Last Day':
 			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-1);
-			console.log(startDate)
+			break;
 		case 'Last Week':
 			startDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()-7);
+			break;
 		case 'Last Month':
 			startDate = today.getFullYear()+'-'+(today.getMonth())+'-'+today.getDate();
+			break;
 		case 'Last Year':
 			startDate = (today.getFullYear()-1)+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			break;
 		case 'All Time':
 			startDate = "2021-09-28";
+			break;
 		case 'Custom':
 			startDate = document.getElementById("startDate").value;
 			endDate = document.getElementById("endDate").value;
+			break;
 	}
-	console.log(endDate)
 	// Format the dates to the appropriate dateTime format
 	const startTime = `${startDate} 00:00:00.0000000`;
 	const endTime = `${endDate} 23:59:59.999999`;
