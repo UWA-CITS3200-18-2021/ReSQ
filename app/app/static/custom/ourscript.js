@@ -352,7 +352,6 @@ $('#dateSubmit').on('click', function(e) {
 	let startDate;
 	// Get current date
 	let today = new Date();
-	today.setDate(31)
 	let start = new Date(today);
 	let endDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	// Generate correct dates based of input
