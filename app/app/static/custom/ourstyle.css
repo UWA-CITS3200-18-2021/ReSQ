@@ -121,12 +121,12 @@ input[type="number"] {
   left: 46%;
 }
 
-.test {
-  background-color: rgba(74, 74, 74, 0.4);
+.btn-queue {
+  background-color: rgba(156, 39, 176, 1);
   border: 30px;
   margin-bottom: 30px;
 }
-.test:hover {
+.btn-queue:hover {
   background-color: rgb(8, 244, 228);
 }
 
@@ -149,5 +149,5 @@ input[type="number"] {
 
 .ct-label {
   font-size: 14px;
-  font-weight: bolder; 
+  font-weight: bolder;
 }
