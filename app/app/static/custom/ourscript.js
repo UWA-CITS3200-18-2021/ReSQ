@@ -174,8 +174,8 @@ const rerenderTables = () => {
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="testing111" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="testing2222" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Place Student in Session" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -187,8 +187,8 @@ const rerenderTables = () => {
 	<td class="text-right">${element.enquiry}</td>
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
-	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="testing3333" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" data-toggle="tooltip" data-placement="top" title="testing444" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Finish Session" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
 
