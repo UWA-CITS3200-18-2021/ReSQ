@@ -137,6 +137,12 @@ input[type="number"] {
   user-select: none; /* Standard */
 }
 
+.export label {
+  display: block;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+}
+
 #studentsVisitedBarChart .ct-bar {
   stroke-width: 8%;
 }
