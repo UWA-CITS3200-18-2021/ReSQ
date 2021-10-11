@@ -151,3 +151,7 @@ input[type="number"] {
   font-size: 14px;
   font-weight: bolder; 
 }
+
+input[type='radio'] { 
+  transform: scale(1.3); 
+}
