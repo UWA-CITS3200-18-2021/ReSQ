@@ -74,3 +74,6 @@ endblock %} {% block content %}
 	</div>
 </div>
 {% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='custom/data.js') }}"></script>
+{% endblock %}

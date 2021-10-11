@@ -103,10 +103,8 @@ content %}
 				<input type="text" id="unitCode" minlength="8" maxlength="8" class="form-control" required />
 				<div class="form-group-lg">
 					<label><b>Team</b></label><br>
-					<input type="radio" id="queue" name="queueSelector" value="STUDYSmarter" checked>
-					<label for="STUDYSmarter">STUDYSmarter</label><br>
-					<input type="radio" id="queue" name="queueSelector" value="Librarian">
-					<label for="Librarian">Librarian</label><br>
+					<label><input type="radio" id="queue" name="queueSelector" value="STUDYSmarter" checked>&emsp;STUDYSmarter</label><br>
+					<label><input type="radio" id="queue" name="queueSelector" value="Librarian">&emsp;Librarian</label><br>
 				</div>
 				<div class="form-group-lg">
 					<label for="enquiry"><b>Enquiry Type</b></label>
@@ -132,4 +130,7 @@ content %}
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='custom/queue.js') }}"></script>
 {% endblock %}
