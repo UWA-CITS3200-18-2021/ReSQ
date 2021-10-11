@@ -345,45 +345,40 @@ window.onload = async (event) => {
 
 // Submit button for export page
 $('#dateSubmit').on('click', function(e) {
-	// First day of operation
-	const firstDay = "2021-09-28";
+	const firstday = new Date('2021-09-28');
+	// Setup date values
+	let start = new Date();
+	let end = new Date(start);
 	// Get values from page
 	const dateRange = $("input[name='dateRangeSelector']:checked").val()
-	let startDate;
-	// Get current date
-	let today = new Date();
-	let start = new Date(today);
-	let endDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	// Generate correct dates based of input
 	switch(dateRange) {
 		case 'Last Day':
 			start.setDate(start.getDate()-1)
-			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Week':
 			start.setDate(start.getDate()-7)
-			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Month':
 			start.setMonth(start.getMonth()-1)
-			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'Last Year':
 			start.setFullYear(start.getFullYear()-1)
-			startDate = start.getFullYear()+'-'+('0' + (start.getMonth()+1)).slice(-2)+'-'+start.getDate();
 			break;
 		case 'All Time':
-			startDate = firstDay;
+			start = firstday;
 			break;
 		case 'Custom':
-			startDate = document.getElementById("startDate").value;
-			endDate = document.getElementById("endDate").value;
+			start = new Date(document.getElementById("startDate").value);
+			end = new Date(document.getElementById("endDate").value);
 			break;
 	}
 	// Format the dates to the appropriate dateTime format
-	if(startDate.localeCompare(firstDay) == -1) {
-		startDate = firstDay;
+	if(start < firstday) {
+		start = firstday;
 	}
+	const startDate = start.toISOString().split("T").shift();
+	const endDate = end.toISOString().split("T").shift();
 	const startTime = `${startDate} 00:00:00.0000000`;
 	const endTime = `${endDate} 23:59:59.999999`;
 	// Send html request
