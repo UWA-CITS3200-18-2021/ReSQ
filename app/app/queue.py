@@ -22,8 +22,8 @@ def add_to_queue():
                     enterQueueTime=datetime.now())
         db.session.add(new)
         db.session.commit()
-        db.session.refresh(new)
-        return new.to_dict, 201
+        print(new)  # This print is important (do not remove)
+        return new.to_dict(), 201
     except KeyError as exception:
         return {"message": f"KeyError of Parameter: {str(exception)}"}, 400
     except ValueError as exception:
@@ -68,7 +68,7 @@ def update_entry(entry_id):
 
     entry.status = status
     db.session.commit()
-    db.session.refresh(entry)  # This print is important (do not remove)
+    print(entry)  # This print is important (do not remove)
     return entry.to_dict(), 200
 
 # Return a list containing the details of the specified queue
@@ -92,5 +92,5 @@ def get_queue():
         queue_to_send = Queue.query.all()
     
     db.session.commit()
-    db.session.refresh(queue_to_send)
+    print(queue_to_send)
     return {"queue": [item.to_dict() for item in queue_to_send]}, 200
