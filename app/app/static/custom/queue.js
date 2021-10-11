@@ -225,7 +225,7 @@ const rerenderTables = () => {
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
 	<button type="button" rel="tooltip" class="btn btn-success" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" onclick="addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
 
