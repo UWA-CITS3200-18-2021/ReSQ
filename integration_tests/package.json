@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "allure:send": "export $(grep -v '#.*' ../.env | xargs) && python ../app/send_and_generate.py -project_id 'resq-e2e-tests' -app_env TEST -allure_username $ALLURE_USER -allure_password $ALLURE_PASSWORD -allure_server $ALLURE_API_SERVER -allure_results_path cypress/results -allure_execution_name github -allure_execution_type github",
     "cypress:open": "export cypress_url=http://localhost:5000 && cypress open --project .",
     "cypress:run": "cypress run --env url=http://localhost:5000"
   },
