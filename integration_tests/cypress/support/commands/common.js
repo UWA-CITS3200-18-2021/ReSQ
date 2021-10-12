@@ -12,6 +12,6 @@ export const login = (username,password) => {
     cy.get('#username').type(usernameToType);
     cy.get('#password').type(passwordToType);
 
-    // // Find one of the buttons to exist in this page to verify successful login
-    // cy.get("Add To Queue")
+    // Submit
+    cy.contains('.btn', "Login").click();
 }
