@@ -25,3 +25,4 @@ pytest-flask==1.2.0
 allure-pytest==2.8.33 # test tagging and reporting
 requests==2.25.1 # uploading
 coverage==5.4
+pytest-mock==3.5.1
