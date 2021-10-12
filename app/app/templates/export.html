@@ -10,12 +10,12 @@
 			</div>
 			<div class="card-body">
 				<div class="export">
-					<label><input type="radio" id="dateRange1" name="dateRangeSelector" value="Last Day" checked> Last Day</label>
-					<label><input type="radio" id="dateRange2" name="dateRangeSelector" value="Last Week"> Last Week</label>
-					<label><input type="radio" id="dateRange3" name="dateRangeSelector" value="Last Month"> Last Month</label>
-					<label><input type="radio" id="dateRange4" name="dateRangeSelector" value="Last Year"> Last Year</label>
-					<label><input type="radio" id="dateRange5" name="dateRangeSelector" value="All Time"> All Time</label>
-					<label><input type="radio" id="dateRange6" name="dateRangeSelector" value="Custom"> Custom</label>
+					<label><input type="radio" id="dateRange1" name="dateRangeSelector" value="Last Day" checked>&emsp;Last Day</label>
+					<label><input type="radio" id="dateRange2" name="dateRangeSelector" value="Last Week">&emsp;Last Week</label>
+					<label><input type="radio" id="dateRange3" name="dateRangeSelector" value="Last Month">&emsp;Last Month</label>
+					<label><input type="radio" id="dateRange4" name="dateRangeSelector" value="Last Year">&emsp;Last Year</label>
+					<label><input type="radio" id="dateRange5" name="dateRangeSelector" value="All Time">&emsp;All Time</label>
+					<label><input type="radio" id="dateRange6" name="dateRangeSelector" value="Custom">&emsp;Custom</label>
 					<div class="date_selector" style="display: none">
 						<table>
 							<tr>
@@ -34,4 +34,7 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='custom/export.js') }}"></script>
 {% endblock %}

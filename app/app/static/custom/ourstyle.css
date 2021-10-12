@@ -138,9 +138,11 @@ input[type="number"] {
 }
 
 .export label {
-  display: block;
+  display: flex;
+  align-items: bottom;
   cursor: pointer;
   color: rgb(0, 0, 0);
+  padding: 0.3%;
 }
 
 #studentsVisitedBarChart .ct-bar {
@@ -158,4 +160,9 @@ input[type="number"] {
 	line-height: 1.5em;
 	font-weight: 300;
   margin-bottom: 0;
+}
+
+input[type='radio'] { 
+  width: 1%;
+  height: 1.3em;
 }
