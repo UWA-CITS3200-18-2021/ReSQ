@@ -1,0 +1,21 @@
+{
+  "name": "resq_cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "export cypress_url=http://localhost:5000 && cypress open --project .",
+    "cypress:run": "cypress run --env url=http://localhost:5000"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@shelex/cypress-allure-plugin": "^2.5.0",
+    "allure-commandline": "^2.13.8"
+  },
+  "dependencies": {
+    "cypress": "^6.6.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1"
+  }
+}
