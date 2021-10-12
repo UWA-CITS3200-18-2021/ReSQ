@@ -1,9 +1,46 @@
-/*
-*
-* OUR CUSTOM JAVASCRIPT SHOULD BE ADDED HERE
-*
-*/
+// Window onload function
+window.onload = async (event) => {
+	console.info("Loading the Queue from API"); 
 
+	// Load every queue from the API parallel
+	const queueToLoad = Object.keys(queueList)
+
+	const requestPromises = queueToLoad.map(async (queue) => {
+		const response = await fetch("get_queue", {
+			method: "POST",
+			body: JSON.stringify({queue}),
+			headers: {
+				'Content-Type': 'application/json'
+		}})
+		const dataResponse = await response.json()
+		return dataResponse
+	})
+
+	const responsesResult = await Promise.all(requestPromises)
+	
+	// This assumes that queueToLoad is of the same index dimension as responsesResult (dimension by map)
+	queueToLoad.forEach((queue, index) => {
+		// Assigns the result of the response to the correct queueList state
+		queueList[queue] = responsesResult[index]["queue"]
+        
+		// Set the timers correctly for each of the elements
+		responsesResult[index]["queue"].map(element => {
+			const timeElement = element.status=="In Queue" ? "enterQueueTime" : "changeSessionTime"
+			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element[timeElement])).getTime()
+			// Convert to seconds (rounded)
+			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
+			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
+		)
+	})
+    rerenderTables();
+};
+
+window.onclick = function (event) {
+	// This is an event to enable deslection of the modal by clicking background
+	if (event.target == document.getElementById('addToQueue')) {
+		hideAddToQueueForm();
+	}
+};
 
 const timers = [];
 const timerIntervals = [];
@@ -143,6 +180,12 @@ function validateUserInput(data) {
 		return false;
 	}
 
+	// Check enquiry type
+	if (!/^([^0-9]*)$/.test(data.enquiry)) {
+		alert("Please do not use numeric values in 'Enquiry Type' field.");
+		return false;
+	}	
+
 	// All inputs are fine
 	return true;
 }
@@ -168,8 +211,8 @@ const rerenderTables = () => {
 		<td class="text-right">${element.enquiry}</td>
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
-		<button type="button" rel="tooltip" class="btn btn-success" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Place Student in Session" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
+		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -181,8 +224,8 @@ const rerenderTables = () => {
 	<td class="text-right">${element.enquiry}</td>
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
-	<button type="button" rel="tooltip" class="btn btn-success" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" onclick="addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Finish Session" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
 
@@ -250,13 +293,6 @@ function addSessionToTeam(id, action){
 return closureFunction
 }
 
-window.onclick = function (event) {
-	// This is an event to enable deslection of the modal by clicking background
-	if (event.target == document.getElementById('addToQueue')) {
-		hideAddToQueueForm();
-	}
-};
-
 function setTime(id) {
 	if (document.getElementById('seconds' + id) != undefined) {
 		timers[id]++;
@@ -305,40 +341,3 @@ $('#librariansAvailableIncrement').click(function () {
 	let next = curr + 1;
 	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
-
-window.onload = async (event) => {
-	console.info("Loading the Queue from API");
-
-	// Load every queue from the API parallel
-	const queueToLoad = Object.keys(queueList)
-
-	const requestPromises = queueToLoad.map(async (queue) => {
-		const response = await fetch("get_queue", {
-			method: "POST",
-			body: JSON.stringify({queue}),
-			headers: {
-				'Content-Type': 'application/json'
-		}})
-		const dataResponse = await response.json()
-		return dataResponse
-	})
-
-	const responsesResult = await Promise.all(requestPromises)
-	
-	// This assumes that queueToLoad is of the same index dimension as responsesResult (dimension by map)
-	queueToLoad.forEach((queue, index) => {
-		// Assigns the result of the response to the correct queueList state
-		queueList[queue] = responsesResult[index]["queue"]
-
-		// Set the timers correctly for each of the elements
-		responsesResult[index]["queue"].map(element => {
-			const timeElement = element.status=="In Queue" ? "enterQueueTime" : "changeSessionTime"
-			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element[timeElement])).getTime()
-			// Convert to seconds (rounded)
-			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
-		)
-	})
-	rerenderTables();
-	
-};

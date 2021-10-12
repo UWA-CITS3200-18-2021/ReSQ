@@ -136,3 +136,22 @@ input[type="number"] {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+.export label {
+  display: block;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+}
+
+#studentsVisitedBarChart .ct-bar {
+  stroke-width: 8%;
+}
+
+.ct-label {
+  font-size: 14px;
+  font-weight: bolder; 
+}
+
+input[type='radio'] { 
+  transform: scale(1.3); 
+}

@@ -38,9 +38,9 @@ def admin_login():
                 login_user(user, remember=True)
                 return redirect(url_for('routes.home'))
             else:
-                flash("Incorrect password, try again.", category="error")
+                flash("Incorrect username or password, please try again.", category="error")
         else:
-            flash("User does not exist", category="error")
+            flash("Incorrect username or password, please try again.", category="error")
 
     return render_template('login.html', user=current_user)
 
