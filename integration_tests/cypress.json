@@ -2,9 +2,9 @@
     "videoUploadOnPasses": false,
     "env": {
         "allure": true,
-        "allureResultsPath": "/e2e/cypress/results",
-        "username":"admin",
-        "password":"Password123"
+        "allureResultsPath": "cypress/results",
+        "username": "admin",
+        "password": "Password123"
     },
     "experimentalStudio": true
 }
