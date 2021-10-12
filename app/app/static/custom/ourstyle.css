@@ -139,10 +139,9 @@ input[type="number"] {
 
 .export label {
   display: flex;
-  align-items: bottom;
   cursor: pointer;
   color: rgb(0, 0, 0);
-  padding: 0.3%;
+  margin: 0.3%;
 }
 
 #studentsVisitedBarChart .ct-bar {
@@ -155,14 +154,20 @@ input[type="number"] {
 }
 
 .form-table, label {
+  display: inline-flex;
+  align-items: center;
   color: #333333;
   font-size: 0.875rem;
-	line-height: 1.5em;
 	font-weight: 300;
   margin-bottom: 0;
 }
 
+.form-group-lg label {
+  cursor: pointer;
+}
+
 input[type='radio'] { 
-  width: 1%;
-  height: 1.3em;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
 }
