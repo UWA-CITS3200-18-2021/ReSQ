@@ -19,3 +19,10 @@ Werkzeug==1.0.1
 selenium==3.141.0
 pytz==2019.3
 gunicorn==20.0.4
+# Developer tools (TODO: We should separate packages of production and development)
+pytest==6.2.5 # test runner
+pytest-flask==1.2.0
+allure-pytest==2.8.33 # test tagging and reporting
+requests==2.25.1 # uploading
+coverage==5.4
+pytest-mock==3.5.1

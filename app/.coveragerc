@@ -1,0 +1,3 @@
+[report]
+omit =
+    ./send_and_generate.py

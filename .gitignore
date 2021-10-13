@@ -1,5 +1,8 @@
 # Project Specific Gitignores
 data/
+test_results/
+coverage_html_report/
+environment.properties
 
 # Environment Variables
 .env
