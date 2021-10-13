@@ -127,7 +127,7 @@ input[type="number"] {
   margin-bottom: 30px;
 }
 .btn-queue:hover {
-  background-color: rgb(8, 244, 228);
+  background-color: rgba(155, 39, 176, 0.637);
 }
 
 .material-icons {
