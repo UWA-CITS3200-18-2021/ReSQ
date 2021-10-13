@@ -313,6 +313,45 @@
     Allure Report Generator
   </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#integration-testing">
+    Integration Testing
+  </a>
+<nav aria-label="Integration Testing" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#running-tests-via-cypress-ide">
+    Running Tests Via Cypress IDE
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuring-cypress">
+    Configuring Cypress
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#writing-tests">
+    Writing Tests
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-files-and-directory-organization">
+    Test files and directory organization
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-results">
+    Test Results
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#allure-integration-with-cypress">
+    Allure Integration with Cypress
+  </a>
+</li>
+</ul>
+</nav>
+</li>
 </ul>
 </nav>
 </li>
@@ -376,6 +415,45 @@
     Allure Report Generator
   </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#integration-testing">
+    Integration Testing
+  </a>
+<nav aria-label="Integration Testing" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#running-tests-via-cypress-ide">
+    Running Tests Via Cypress IDE
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuring-cypress">
+    Configuring Cypress
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#writing-tests">
+    Writing Tests
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-files-and-directory-organization">
+    Test files and directory organization
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-results">
+    Test Results
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#allure-integration-with-cypress">
+    Allure Integration with Cypress
+  </a>
+</li>
+</ul>
+</nav>
+</li>
 </ul>
 </nav>
 </div>
@@ -424,6 +502,80 @@ for the html report.</p>
 <h2 id="allure-report-generator">Allure Report Generator<a class="headerlink" href="#allure-report-generator" title="Permanent link">¶</a></h2>
 <p>Allure Testing report is used as a tool to generate test report. More information here https://docs.qameta.io/allure/</p>
 <p>This repo has a file called <code>send_and_generate.py</code>. It is a simple script that sends a test report to Allure and generates a report. This is currently integrated with the <a href="https://allure.systemhealthlab.com/">UWA System Health Lab Allure Setup</a>. Documentation can be seen <a href="https://uwasystemhealth.github.io/allure_shl_setup/">here</a>.</p>
+<h2 id="integration-testing">Integration Testing<a class="headerlink" href="#integration-testing" title="Permanent link">¶</a></h2>
+<p>The integration tests are created with <a href="https://www.cypress.io/">Cypress</a>. This integration testing allows us to create frontend tests and obtain video or screenshots that can improve the quality of the test.</p>
+<h3 id="running-tests-via-cypress-ide">Running Tests Via Cypress IDE<a class="headerlink" href="#running-tests-via-cypress-ide" title="Permanent link">¶</a></h3>
+<details class="info" open="open"><summary>Installment Prerequisite</summary><ol>
+<li>Install <a href="https://nodejs.org/en/download/">Nodejs</a> and NPM (should be automatically installed with Nodejs).</li>
+<li>Go to <code>integration_tests</code> folder and do <code>npm install</code>. That is going to install your <code>package.json</code> packages.</li>
+</ol>
+</details>
+<ol>
+<li>In one terminal, run <code>docker-compose up</code> for running application.</li>
+<li>Without closing terminal opened in 1), open a new terminal and go to <code>/integration_tests</code> and:<ul>
+<li>Run <code>yarn run cypress:open</code> or</li>
+<li>Run <code>npm run cypress:open</code></li>
+</ul>
+</li>
+</ol>
+<p>Note that by using this, the Cypress IDE will be running outside the docker container.</p>
+<h3 id="configuring-cypress">Configuring Cypress<a class="headerlink" href="#configuring-cypress" title="Permanent link">¶</a></h3>
+<p>Cypress configuration can be adjusted in the <code>cypress.json</code> file. If you want to define global varibles, this is the place to do it.
+Global variables can be used in the code with <code>Cypress.env('VAR')</code>.</p>
+<p>More information can be seen in the official docs https://docs.cypress.io/guides/references/configuration</p>
+<h3 id="writing-tests">Writing Tests<a class="headerlink" href="#writing-tests" title="Permanent link">¶</a></h3>
+<p>There are 2 ways to create tests:</p>
+<ol>
+<li>By writing code tests, see <a href="https://docs.cypress.io/guides/getting-started/writing-your-first-test#Write-your-first-test">Writing Test</a></li>
+<li>Or by using the <a href="https://docs.cypress.io/guides/core-concepts/cypress-studio">Cypress Studio</a></li>
+</ol>
+<p>Cypress studio makes it easy to create test by recording the user action through the Cypress IDE. Upon action of the user, Cypress studio writes codes in the tests which could be adjusted later for flexibility.</p>
+<details class="info" open="open"><summary>To use Cypress Studio Test Creation</summary><p>Firstly, you need a test suite ends with <code>.spec.js</code> in the <code>integration_tests/cypress/integration</code> folder (either newly created from a test template or existing test).</p>
+<details class="example"><summary>Test Template</summary><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'Test Suite'</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Setup Scripts Here</span>
+<span class="p">})</span>
+
+<span class="nx">it</span><span class="p">(</span><span class="s1">'Test Name'</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Extend test with Cypress Studio</span>
+<span class="p">})</span>
+<span class="p">})</span>
+</code></pre></div>
+</td></tr></table>
+</details>
+<ol>
+<li>Select a test suite in the Cypress IDE to extend</li>
+<li>Hover on the test, and click the "magic wand" icon near the test</li>
+<li>Interact with the Cypress Web interface as if you are the test runner</li>
+<li>Save the test when you are done</li>
+<li>Modify the tests created by Cypress IDE as you need</li>
+</ol>
+<details class="faq" open="open"><summary>Magic Wand Icon</summary><p><img alt="Magic Wand Icon" src="/images/developers/integration_testing/magic_wand.png"/></p>
+</details>
+</details>
+<h3 id="test-files-and-directory-organization">Test files and directory organization<a class="headerlink" href="#test-files-and-directory-organization" title="Permanent link">¶</a></h3>
+<p>All test specs are located in <code>integration_tests/cypress/integration</code>. We recomend follow an structure by feature. </p>
+<p>In <code>integration_tests/cypress/support</code> you can write reusable pieces of code for execute in all your tests with <a href="https://docs.cypress.io/api/cypress-api/custom-commands">commands</a>.</p>
+<h3 id="test-results">Test Results<a class="headerlink" href="#test-results" title="Permanent link">¶</a></h3>
+<p>Results after tests suite finished are stored in the following folders:</p>
+<ul>
+<li><code>integration_tests/cypress/screenshots</code>: Screenshots generated by cypress</li>
+<li><code>integration_tests/cypress/videos</code>: Videos generated by cypress</li>
+<li><code>integration_tests/cypress/results</code>: Allure formatted results</li>
+</ul>
+<h3 id="allure-integration-with-cypress">Allure Integration with Cypress<a class="headerlink" href="#allure-integration-with-cypress" title="Permanent link">¶</a></h3>
+<p>Cypress test runner has installed an allure plugin which is used to generate tests results with allure format.</p>
+<ul>
+<li><a href="https://github.com/Shelex/cypress-allure-plugin">Documentation</a></li>
+</ul>
 </article>
 </div>
 </div>
