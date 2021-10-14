@@ -140,7 +140,8 @@ input[type="number"] {
 .export label {
   display: block;
   cursor: pointer;
-  color: rgb(0, 0, 0);
+  color: rgb(245, 26, 26);
+  
 }
 
 #studentsVisitedBarChart .ct-bar {
@@ -149,7 +150,7 @@ input[type="number"] {
 
 .ct-label {
   font-size: 14px;
-  font-weight: bolder; 
+  font-weight: bold; 
 }
 
 input[type='radio'] { 
