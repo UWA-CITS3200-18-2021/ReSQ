@@ -5,7 +5,7 @@ from app import db
 from app.models import Queue
 
 import csv
-import re
+from datetime import datetime
 from io import StringIO
 from werkzeug.wrappers import Response
 
@@ -46,27 +46,29 @@ def generate_csv(table):
 @export.route('/CSV', methods=['POST'])
 def download_data():
         body = request.get_json(force=True)
-        dateTimeFormat = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{6}"
 
         # Check recieved data
-        if 'startTime' not in body or body['startTime'][0] == ' ':
+        if 'startTime' not in body:
             return {"message": f"Parameter startTime not in body"}, 400
-        elif 'endTime' not in body or body['endTime'][0] == ' ':
+        elif 'endTime' not in body:
             return {"message": f"Parameter endTime not in body"}, 400
-        elif re.match(dateTimeFormat, body['startTime'][0]):
-            return {"message": f"Parameter startTime is of incorrect format"}, 400          
-        elif re.match(dateTimeFormat, body['endTime'][0]):
-            return {"message": f"Parameter endTime is of incorrect format"}, 400
-        else:
-            # Get data from body and query the database
-            startTime = body['startTime']
-            endTime = body['endTime']
-            query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
 
-            # Generate a filename
-            name = f"log_{startTime[:10]}_to_{endTime[:10]}.csv"
+        # Check correct format
+        try:
+            datetime.strptime(body['startTime'], "%Y-%m-%d %H:%M:%S.%f")
+            datetime.strptime(body['endTime'], "%Y-%m-%d %H:%M:%S.%f")
+        except ValueError as exception:
+            return {"message": f"ValueError of Parameter: {str(exception)}"}, 400
+        
+        # Get data from body and query the database
+        startTime = body['startTime']
+        endTime = body['endTime']
+        query = db.session.query(Queue).filter(Queue.enterQueueTime >= startTime, Queue.exitSessionTime <= endTime).all()
 
-            # Stream the response
-            response = Response(generate_csv(query), mimetype='text/csv')
-            response.headers["Content-Disposition"] = f"attachment; filename={name}"
-            return response
+        # Generate a filename
+        name = f"log_{startTime[:10]}_to_{endTime[:10]}.csv"
+
+        # Stream the response
+        response = Response(generate_csv(query), mimetype='text/csv')
+        response.headers["Content-Disposition"] = f"attachment; filename={name}"
+        return response

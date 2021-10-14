@@ -41,7 +41,7 @@ $('#dateSubmit').on('click', function(e) {
 	}
 	const startDate = start.toISOString().split("T").shift();
 	const endDate = end.toISOString().split("T").shift();
-	const startTime = `${startDate} 00:00:00.0000000`;
+	const startTime = `${startDate} 00:00:00.000000`;
 	const endTime = `${endDate} 23:59:59.999999`;
 	// Send html request
 	requestCSV({
