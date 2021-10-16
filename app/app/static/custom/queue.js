@@ -1,3 +1,6 @@
+let studySmarterAvailable = 1;
+let librariansAvailable = 1;
+
 // Window onload function
 window.onload = async (event) => {
 	console.info("Loading the Queue from API"); 
@@ -155,34 +158,82 @@ const terminateSession = async(data) => {
 function validateUserInput(data) {
 	// Check student name
 	if (data.studentName.length > 50) {
-		alert("'Student Name' field should is too long.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "'Student Name' field should is too long."
+		})
 		return false;
 	}
 	if (!/^([^0-9]*)$/.test(data.studentName)) {
-		alert("Please do not use numeric values in 'Student Name' field.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "Please do not use numeric values in 'Student Name' field."
+		})
 		return false;
 	}
 
 
 	// Check student number
 	if (data.studentNumber.length != 8) {
-		alert("'Student Number' field should be an 8 digit number.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "'Student Number' field should be an 8 digit number."
+		})
 		return false;
 	}
 	if (!/^([0-9]*)$/.test(data.studentNumber)) {
-		alert("Please only numeric values in 'Student Number' field.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "Please only numeric values in 'Student Number' field."
+		})
 		return false;
 	}
 	
 	// Check unit code
 	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
-		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 5000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters."
+		})
 		return false;
 	}
 
 	// Check enquiry type
 	if (!/^([^0-9]*)$/.test(data.enquiry)) {
-		alert("Please do not use numeric values in 'Enquiry Type' field.");
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			padding: '1em',
+			text: "Please do not use numeric values in 'Enquiry Type' field."
+		})
 		return false;
 	}	
 
@@ -212,7 +263,7 @@ const rerenderTables = () => {
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Place Student in Session" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(customConfirm('Are you sure you want to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -225,8 +276,22 @@ const rerenderTables = () => {
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
 	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Finish Session" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(customConfirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
+}
+
+function customConfirm(message){
+	return Swal.fire({
+		text: message,
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Confirm'
+	  }).then(function(result) {
+		if (result.isConfirmed) {return true;}
+		else {return false;}
+	});
 }
 
 function showAddToQueue() {
@@ -286,7 +351,15 @@ function staffAvailable(id) {
 		let STUDYSmarterInSession = $("table#inSession td:contains('STUDYSmarter')").length;
 		if(STUDYSmarterStaff > STUDYSmarterInSession) {return true} //enough staff
 		else {
-			alert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.")
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 5500,
+				timerProgressBar: true,
+				padding: '1em',
+				text:"All STUDYSmarter staff already in a session. Finish a session or increase staff available."
+			})
 			return false
 		}
 	}
@@ -295,7 +368,15 @@ function staffAvailable(id) {
 		let librariansInSession = $("table#inSession td:contains('Librarian')").length;
 		if(librarianStaff > librariansInSession) {return true} //enough staff
 		else{
-			alert("All Librarian staff already in a session. Finish a session or increase staff available.")
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 5500,
+				timerProgressBar: true,
+				padding: '1em',
+				text: "All Librarian staff already in a session. Finish a session or increase staff available."
+			})
 			return false
 		}
 	}
@@ -363,21 +444,21 @@ function pad(val) {
 
 $('#studySmarterAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
-		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
+		studySmarterAvailable -= 1;
+		document.getElementById('studySmarterAvailableCount').innerHTML = studySmarterAvailable;
 	}
 });
 $('#studySmarterAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('studySmarterAvailableCount').innerHTML = next;
+	studySmarterAvailable += 1;
+	document.getElementById('studySmarterAvailableCount').innerHTML = studySmarterAvailable;
 });
 $('#librariansAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
-		document.getElementById('librariansAvailableCount').innerHTML -= 1;
+		librariansAvailable -= 1;
+		document.getElementById('librariansAvailableCount').innerHTML = librariansAvailable;
 	}
 });
 $('#librariansAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('librariansAvailableCount').innerHTML = next;
+	librariansAvailable += 1;
+	document.getElementById('librariansAvailableCount').innerHTML = librariansAvailable;
 });
