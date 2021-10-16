@@ -15,7 +15,7 @@ endblock %} {% block content %}
 	</div>
 	<div class="col-md-10 ml-auto mr-auto">
 		<div class="card card-chart">
-			<div class="card-header card-header-info" data-header-animation="true">
+			<div class="card-header card-header-info">
 				<div class="card-icon">
 					<i class="material-icons">equalizer</i>
 				  </div>
@@ -23,20 +23,6 @@ endblock %} {% block content %}
 			</div>
 			<div class="card-body">
 				<div id="studentsVisitedBarChart" class="ct-chart ct-double-octave"></div>
-				<div class="card-actions">
-					<div class="float-left" style="padding-left: 15%;">
-						<button name="prev" type="button" class="btn btn-info btn-link" id="previousWeek">
-							<i class="material-icons" style="font-size: 40px;">arrow_back</i>
-						</button>
-						<label for="prev">Previous Week</label>
-					</div>
-					<div class="float-right" style="padding-right: 15%;">
-						<label for="prev">Next Week</label>
-						<button name="next" type="button" class="btn btn-info btn-link" id="nextWeek">
-							<i class="material-icons" style="font-size: 40px;">arrow_forward</i>
-						</button>
-					</div>
-				</div>
 				<h4 class="card-title">Students visited per day</h4>
 			</div>
 			<div class="card-footer"></div>
