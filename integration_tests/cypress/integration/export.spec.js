@@ -13,8 +13,8 @@ describe("Login", () => {
 
         // By default the selection is "Last Day" (which means the entirety of yesterday)
         // Need to know the date to determine file name
-        const dateEnd = Cypress.moment().subtract(1, 'days')
-        const dateStart = Cypress.moment().subtract(2, 'days')
+        const dateEnd = Cypress.moment().subtract(0, 'days')
+        const dateStart = Cypress.moment().subtract(1, 'days')
 
         // Get string in the format YYYY-MM-DD
         const dateEndString = Cypress.moment(dateEnd).format('YYYY-MM-DD');
