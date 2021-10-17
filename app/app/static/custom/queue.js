@@ -1,12 +1,3 @@
-const DEFAULT_SWAL_PROPS ={
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 3000,
-				timerProgressBar: true,
-				padding: '1em',
-				}
-
 // Window onload function
 window.onload = async (event) => {
 	console.info("Loading the Queue from API"); 
