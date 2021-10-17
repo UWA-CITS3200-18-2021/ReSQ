@@ -6,6 +6,14 @@ There will be 3 main tabs in the website, which are Queue, Data Analytics and Ex
 
 ## Queue
 User can manage student sessions in the Queue tab. There are 3 tables, 2 of which are STUDYSmarter queue and Librarian queue. Students will be put into either queue depending on user's choice. <br />
+### Staff management
+On the right side of the queue home page, you can see 2 small boxes saying "STUDYSmarter Team Available" and "Librarians Available". You can click the "+" and "-" icon to modify the number base on your current available staff. <br />
+
+![](instruction/limit_staff.PNG)
+
+If you try to add student to the inSession queue which exceeds your current setup for each staff type, the website will give a warning alert and require you to modify the staff number.
+
+![](instruction/error.PNG)
 
 ### Add to queue
 In order to add a student to a waiting queue, look for the "ADD TO QUEUE" button in the top right corner 
@@ -55,7 +63,8 @@ In order to generate data analytics for a chosen week: <br />
 If user wants to export data to a csv file for further data analysis:<br />
 
 - Step 1: Navigate to the 'Export Data' tab <br />
-- Step 2: Choose the 'start' and 'end' date to get the data between those days <br />
+- Step 2: There are premade options such as "Last week" or "Last Day". You can also choose "Custom" option to export data between a period of your choice<br />
+
 ![](instruction/export.PNG)
 - Step 3: Click 'Submit', then download the file
 
