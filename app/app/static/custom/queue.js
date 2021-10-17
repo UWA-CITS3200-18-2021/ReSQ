@@ -278,16 +278,56 @@ function terminateRow(id, action) {
 return closureFunction
 }
 
+function staffAvailable(id) {
+	let queue = findQueue(id);
+
+	if(queue == "STUDYSmarter"){
+		let STUDYSmarterStaff = document.getElementById('studySmarterAvailableCount').innerHTML;
+		let STUDYSmarterInSession = $("table#inSession td:contains('STUDYSmarter')").length;
+		if(STUDYSmarterStaff > STUDYSmarterInSession) {return true} //enough staff
+		else {
+			alert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.")
+			return false
+		}
+	}
+	else if(queue == "Librarian"){
+		let librarianStaff = document.getElementById('librariansAvailableCount').innerHTML;
+		let librariansInSession = $("table#inSession td:contains('Librarian')").length;
+		if(librarianStaff > librariansInSession) {return true} //enough staff
+		else{
+			alert("All Librarian staff already in a session. Finish a session or increase staff available.")
+			return false
+		}
+	}
+	//if something has gone wrong better to let them add to session than to block them
+	else {return true}
+}
+
+function findQueue(id){
+	for(let i = 0; i < queueList["STUDYSmarter"].length; i++) {
+		if(queueList["STUDYSmarter"][i].id == id) {return "STUDYSmarter"}
+	};
+
+	for(let i = 0; i < queueList["Librarian"].length; i++) {
+		if(queueList["Librarian"][i].id == id) {return "Librarian"}
+	};
+
+	return 0
+}
+
 function addSessionToTeam(id, action){
 	// This function is called when a student is moved to inSession queue or undo button is clicked
 	// update status and fetch update_entry
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
 		const status = action == "add" ? "In Session" : "In Queue"
-		moveToSessionOrUndo({
-			id,
-			status
-		})
+		// can always move back to queue (undo) but only into session if enough staff is availble
+		if(!(status == "In Session" && !staffAvailable(id))) {
+			moveToSessionOrUndo({
+				id,
+				status
+			})
+		}
 	}
 	
 return closureFunction
