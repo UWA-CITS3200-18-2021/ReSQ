@@ -32,6 +32,13 @@ window.onload = async (event) => {
 			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
 		)
 	})
+
+	// Gets and displays staff availble, defaults to one of each if cookies have expired
+	if(getCookie('studySmarterAvailable') == "") createCookie('studySmarterAvailable', 1, 1);
+	document.getElementById('studySmarterAvailableCount').innerHTML = getCookie('studySmarterAvailable');
+	if(getCookie('librariansAvailable') == "") createCookie('librariansAvailable', 1, 1);
+	document.getElementById('librariansAvailableCount').innerHTML = getCookie('librariansAvailable');
+
     rerenderTables();
 };
 
@@ -363,21 +370,53 @@ function pad(val) {
 
 $('#studySmarterAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
-		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
+		let count = parseInt(getCookie('studySmarterAvailable'));
+		createCookie('studySmarterAvailable', count-1, 1);
+		document.getElementById('studySmarterAvailableCount').innerHTML = getCookie('studySmarterAvailable');
 	}
 });
 $('#studySmarterAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('studySmarterAvailableCount').innerHTML = next;
+	let count = parseInt(getCookie('studySmarterAvailable'));
+	createCookie('studySmarterAvailable', count+1, 1);
+	document.getElementById('studySmarterAvailableCount').innerHTML = getCookie('studySmarterAvailable');
 });
 $('#librariansAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
-		document.getElementById('librariansAvailableCount').innerHTML -= 1;
+		let count = parseInt(getCookie('librariansAvailable'));
+		createCookie('librariansAvailable', count-1, 1);
+		document.getElementById('librariansAvailableCount').innerHTML = getCookie('librariansAvailable');
 	}
 });
 $('#librariansAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('librariansAvailableCount').innerHTML = next;
+	let count = parseInt(getCookie('librariansAvailable'));
+	createCookie('librariansAvailable', count+1, 1);
+	document.getElementById('librariansAvailableCount').innerHTML = getCookie('librariansAvailable');
 });
+
+function createCookie(name, value, days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    }
+    else {
+        expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function getCookie(c_name) {
+    if (document.cookie.length > 0) {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1) {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) {
+                c_end = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(c_start, c_end));
+        }
+    }
+    return "";
+}
