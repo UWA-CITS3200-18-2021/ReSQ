@@ -121,13 +121,13 @@ input[type="number"] {
   left: 46%;
 }
 
-.test {
-  background-color: rgba(74, 74, 74, 0.4);
+.btn-queue {
+  background-color: rgba(156, 39, 176, 1);
   border: 30px;
   margin-bottom: 30px;
 }
-.test:hover {
-  background-color: rgb(8, 244, 228);
+.btn-queue:hover {
+  background-color: rgba(155, 39, 176, 0.637);
 }
 
 .material-icons {
@@ -138,9 +138,10 @@ input[type="number"] {
 }
 
 .export label {
-  display: block;
+  display: flex;
   cursor: pointer;
   color: rgb(0, 0, 0);
+  margin: 0.3%;
 }
 
 #studentsVisitedBarChart .ct-bar {
@@ -152,6 +153,21 @@ input[type="number"] {
   font-weight: bold; 
 }
 
+.form-table, label {
+  display: inline-flex;
+  align-items: center;
+  color: #333333;
+  font-size: 0.875rem;
+	font-weight: 300;
+  margin-bottom: 0;
+}
+
+.form-group-lg label {
+  cursor: pointer;
+}
+
 input[type='radio'] { 
-  transform: scale(1.3); 
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
 }
