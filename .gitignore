@@ -277,3 +277,4 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+integration_tests/package-lock.json
