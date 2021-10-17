@@ -1,3 +1,12 @@
+const DEFAULT_SWAL_PROPS ={
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				padding: '1em',
+				}
+
 // Window onload function
 window.onload = async (event) => {
 	console.info("Loading the Queue from API"); 
@@ -152,85 +161,49 @@ const terminateSession = async(data) => {
 	}
 }
 
+function showAlert(message, timer){
+	Swal.fire({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: timer,
+		timerProgressBar: true,
+		padding: '1em',
+		text: message
+	})
+}
+
 function validateUserInput(data) {
 	// Check student name
 	if (data.studentName.length > 50) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "'Student Name' field should is too long."
-		})
+		showAlert("'Student Name' field should is too long.", 3500)
 		return false;
 	}
 	if (!/^([^0-9]*)$/.test(data.studentName)) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "Please do not use numeric values in 'Student Name' field."
-		})
+		showAlert("Please do not use numeric values in 'Student Name' field.", 3500)
 		return false;
 	}
 
 
 	// Check student number
 	if (data.studentNumber.length != 8) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "'Student Number' field should be an 8 digit number."
-		})
+		showAlert("'Student Number' field should be an 8 digit number.", 3500)
 		return false;
 	}
 	if (!/^([0-9]*)$/.test(data.studentNumber)) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "Please only numeric values in 'Student Number' field."
-		})
+		showAlert("Please only numeric values in 'Student Number' field.", 3500)
 		return false;
 	}
 	
 	// Check unit code
 	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 5000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters."
-		})
+		showAlert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.", 3500)
 		return false;
 	}
 
 	// Check enquiry type
 	if (!/^([^0-9]*)$/.test(data.enquiry)) {
-		Swal.fire({
-			toast: true,
-			position: 'top-end',
-			showConfirmButton: false,
-			timer: 3000,
-			timerProgressBar: true,
-			padding: '1em',
-			text: "Please do not use numeric values in 'Enquiry Type' field."
-		})
+		showAlert("Please do not use numeric values in 'Enquiry Type' field.", 3500)
 		return false;
 	}	
 
@@ -348,15 +321,7 @@ function staffAvailable(id) {
 		let STUDYSmarterInSession = $("table#inSession td:contains('STUDYSmarter')").length;
 		if(STUDYSmarterStaff > STUDYSmarterInSession) {return true} //enough staff
 		else {
-			Swal.fire({
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 5500,
-				timerProgressBar: true,
-				padding: '1em',
-				text:"All STUDYSmarter staff already in a session. Finish a session or increase staff available."
-			})
+			showAlert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.", 5500)
 			return false
 		}
 	}
@@ -365,15 +330,7 @@ function staffAvailable(id) {
 		let librariansInSession = $("table#inSession td:contains('Librarian')").length;
 		if(librarianStaff > librariansInSession) {return true} //enough staff
 		else{
-			Swal.fire({
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 5500,
-				timerProgressBar: true,
-				padding: '1em',
-				text: "All Librarian staff already in a session. Finish a session or increase staff available."
-			})
+			showAlert("All Librarian staff already in a session. Finish a session or increase staff available.", 5500)
 			return false
 		}
 	}
