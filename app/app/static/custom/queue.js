@@ -376,9 +376,11 @@ $('#studySmarterAvailableDecrement').click(function () {
 	}
 });
 $('#studySmarterAvailableIncrement').click(function () {
-	let count = parseInt(localStorage.getItem('studySmarterAvailable'));
-	localStorage.setItem('studySmarterAvailable', count + 1);
-	document.getElementById('studySmarterAvailableCount').innerHTML = localStorage.getItem('studySmarterAvailable');
+	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) < 9) {
+		let count = parseInt(localStorage.getItem('studySmarterAvailable'));
+		localStorage.setItem('studySmarterAvailable', count + 1);
+		document.getElementById('studySmarterAvailableCount').innerHTML = localStorage.getItem('studySmarterAvailable');
+	}
 });
 $('#librariansAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
@@ -388,7 +390,9 @@ $('#librariansAvailableDecrement').click(function () {
 	}
 });
 $('#librariansAvailableIncrement').click(function () {
-	let count = parseInt(localStorage.getItem('librariansAvailable'));
-	localStorage.setItem('librariansAvailable', count + 1);
-	document.getElementById('librariansAvailableCount').innerHTML = localStorage.getItem('librariansAvailable');
+	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) < 9) {
+		let count = parseInt(localStorage.getItem('librariansAvailable'));
+		localStorage.setItem('librariansAvailable', count + 1);
+		document.getElementById('librariansAvailableCount').innerHTML = localStorage.getItem('librariansAvailable');
+	}
 });
