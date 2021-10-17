@@ -1,6 +1,3 @@
-let studySmarterAvailable = 1;
-let librariansAvailable = 1;
-
 // Window onload function
 window.onload = async (event) => {
 	console.info("Loading the Queue from API"); 
@@ -263,7 +260,7 @@ const rerenderTables = () => {
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Place Student in Session" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(customConfirm('Are you sure you want to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="customConfirm('Are you sure you want to remove ${element.studentName}?', '${element.id}','delete', this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -276,12 +273,12 @@ const rerenderTables = () => {
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
 	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Finish Session" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(customConfirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="customConfirm('Move ${element.studentName} back to waiting queue?', '${element.id}','undo', this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
 }
 
-function customConfirm(message){
-	return Swal.fire({
+function customConfirm(message, id, action, row){
+	Swal.fire({
 		text: message,
 		icon: 'warning',
 		showCancelButton: true,
@@ -289,8 +286,8 @@ function customConfirm(message){
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Confirm'
 	  }).then(function(result) {
-		if (result.isConfirmed) {return true;}
-		else {return false;}
+		if (result.isConfirmed && action == 'undo') {addSessionToTeam(id, action)(row)}
+		else if (result.isConfirmed && action == 'delete') {terminateRow(id, action)(row)}
 	});
 }
 
@@ -444,21 +441,21 @@ function pad(val) {
 
 $('#studySmarterAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
-		studySmarterAvailable -= 1;
-		document.getElementById('studySmarterAvailableCount').innerHTML = studySmarterAvailable;
+		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
 	}
 });
 $('#studySmarterAvailableIncrement').click(function () {
-	studySmarterAvailable += 1;
-	document.getElementById('studySmarterAvailableCount').innerHTML = studySmarterAvailable;
+	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
+	let next = curr + 1;
+	document.getElementById('studySmarterAvailableCount').innerHTML = next;
 });
 $('#librariansAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
-		librariansAvailable -= 1;
-		document.getElementById('librariansAvailableCount').innerHTML = librariansAvailable;
+		document.getElementById('librariansAvailableCount').innerHTML -= 1;
 	}
 });
 $('#librariansAvailableIncrement').click(function () {
-	librariansAvailable += 1;
-	document.getElementById('librariansAvailableCount').innerHTML = librariansAvailable;
+	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
+	let next = curr + 1;
+	document.getElementById('librariansAvailableCount').innerHTML = next;
 });
