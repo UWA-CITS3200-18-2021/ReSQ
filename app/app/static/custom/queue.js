@@ -159,37 +159,49 @@ const terminateSession = async (data) => {
 	}
 }
 
+function showAlert(message, timer){
+	Swal.fire({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: timer,
+		timerProgressBar: true,
+		padding: '1em',
+		text: message
+	})
+}
+
 function validateUserInput(data) {
 	// Check student name
 	if (data.studentName.length > 50) {
-		alert("'Student Name' field should is too long.");
+		showAlert("'Student Name' field should is too long.", 3500)
 		return false;
 	}
 	if (!/^([^0-9]*)$/.test(data.studentName)) {
-		alert("Please do not use numeric values in 'Student Name' field.");
+		showAlert("Please do not use numeric values in 'Student Name' field.", 3500)
 		return false;
 	}
 
 
 	// Check student number
 	if (data.studentNumber.length != 8) {
-		alert("'Student Number' field should be an 8 digit number.");
+		showAlert("'Student Number' field should be an 8 digit number.", 3500)
 		return false;
 	}
 	if (!/^([0-9]*)$/.test(data.studentNumber)) {
-		alert("Please only numeric values in 'Student Number' field.");
+		showAlert("Please only numeric values in 'Student Number' field.", 3500)
 		return false;
 	}
 
 	// Check unit code
 	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
-		alert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.");
+		showAlert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.", 3500)
 		return false;
 	}
 
 	// Check enquiry type
 	if (!/^([^0-9]*)$/.test(data.enquiry)) {
-		alert("Please do not use numeric values in 'Enquiry Type' field.");
+		showAlert("Please do not use numeric values in 'Enquiry Type' field.", 3500)
 		return false;
 	}
 
@@ -219,7 +231,7 @@ const rerenderTables = () => {
 		<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 		<td class="td-actions text-right">
 		<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Place Student in Session" onclick="addSessionToTeam('${element.id}','add')(this)"><i class="material-icons">how_to_reg</i></button>
-		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="if(confirm('Are you sure to remove ${element.studentName}?')) terminateRow('${element.id}','delete')(this)"><i class="material-icons">close</i></button></td>
+		<button type="button" rel="tooltip" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="customConfirm('Are you sure you want to remove ${element.studentName}?', '${element.id}','delete', this)"><i class="material-icons">close</i></button></td>
 		</tr>`).join("")
 	})
 	const inSessiontable = document.querySelector("#inSessionDataTable");
@@ -232,8 +244,22 @@ const rerenderTables = () => {
 	<td class="text-right"><label id="minutes${element.id}">00</label><label id="colon">:</label><label id="seconds${element.id}">00</label></td>
 	<td class="td-actions text-right">
 	<button type="button" rel="tooltip" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Finish Session" onclick="terminateRow('${element.id}','finish')(this)"><i class="material-icons">how_to_reg</i></button>
-	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="if(confirm('Move ${element.studentName} back to waiting queue?')) addSessionToTeam('${element.id}','undo')(this)"><i class="material-icons">undo</i></button>
+	<button type="button" rel="tooltip" class="btn btn-undo" title="Move Back to Queue" onclick="customConfirm('Move ${element.studentName} back to waiting queue?', '${element.id}','undo', this)"><i class="material-icons">undo</i></button>
 	</tr>`).join("")
+}
+
+function customConfirm(message, id, action, row){
+	Swal.fire({
+		text: message,
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Confirm'
+	  }).then(function(result) {
+		if (result.isConfirmed && action == 'undo') {addSessionToTeam(id, action)(row)}
+		else if (result.isConfirmed && action == 'delete') {terminateRow(id, action)(row)}
+	});
 }
 
 function showAddToQueue() {
@@ -293,16 +319,16 @@ function staffAvailable(id) {
 		let STUDYSmarterInSession = $("table#inSession td:contains('STUDYSmarter')").length;
 		if (STUDYSmarterStaff > STUDYSmarterInSession) { return true } //enough staff
 		else {
-			alert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.")
+			showAlert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.", 5500)
 			return false
 		}
 	}
 	else if (queue == "Librarian") {
 		let librarianStaff = document.getElementById('librariansAvailableCount').innerHTML;
 		let librariansInSession = $("table#inSession td:contains('Librarian')").length;
-		if (librarianStaff > librariansInSession) { return true } //enough staff
-		else {
-			alert("All Librarian staff already in a session. Finish a session or increase staff available.")
+		if(librarianStaff > librariansInSession) {return true} //enough staff
+		else{
+			showAlert("All Librarian staff already in a session. Finish a session or increase staff available.", 5500)
 			return false
 		}
 	}
