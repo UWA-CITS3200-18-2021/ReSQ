@@ -1,6 +1,6 @@
 // Window onload function
 window.onload = async (event) => {
-	console.info("Loading the Queue from API"); 
+	console.info("Loading the Queue from API");
 
 	// Load every queue from the API parallel
 	const queueToLoad = Object.keys(queueList)
@@ -8,31 +8,40 @@ window.onload = async (event) => {
 	const requestPromises = queueToLoad.map(async (queue) => {
 		const response = await fetch("get_queue", {
 			method: "POST",
-			body: JSON.stringify({queue}),
+			body: JSON.stringify({ queue }),
 			headers: {
 				'Content-Type': 'application/json'
-		}})
+			}
+		})
 		const dataResponse = await response.json()
 		return dataResponse
 	})
 
 	const responsesResult = await Promise.all(requestPromises)
-	
+
 	// This assumes that queueToLoad is of the same index dimension as responsesResult (dimension by map)
 	queueToLoad.forEach((queue, index) => {
 		// Assigns the result of the response to the correct queueList state
 		queueList[queue] = responsesResult[index]["queue"]
-        
+
 		// Set the timers correctly for each of the elements
 		responsesResult[index]["queue"].map(element => {
-			const timeElement = element.status=="In Queue" ? "enterQueueTime" : "changeSessionTime"
+			const timeElement = element.status == "In Queue" ? "enterQueueTime" : "changeSessionTime"
 			const timeDifferenceMiliseconds = (new Date()).getTime() - (new Date(element[timeElement])).getTime()
 			// Convert to seconds (rounded)
 			timers[element.id] = Math.round(timeDifferenceMiliseconds / 1000);
-			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);}
+			timerIntervals[element.id] = setInterval(setTime, 1000, element.id);
+		}
 		)
 	})
-    rerenderTables();
+
+	// Gets and displays staff availble, defaults to one of each if cookies have expired
+	if (localStorage.getItem('studySmarterAvailable') == null) localStorage.setItem('studySmarterAvailable', 1);
+	document.getElementById('studySmarterAvailableCount').innerHTML = localStorage.getItem('studySmarterAvailable');
+	if (localStorage.getItem('librariansAvailable') == null) localStorage.setItem('librariansAvailable', 1);
+	document.getElementById('librariansAvailableCount').innerHTML = localStorage.getItem('librariansAvailable');
+
+	rerenderTables();
 };
 
 window.onclick = function (event) {
@@ -46,16 +55,16 @@ const timers = [];
 const timerIntervals = [];
 
 const queueList = {
-	"STUDYSmarter":[],
-	"Librarian":[],
-	"In Session":[]
+	"STUDYSmarter": [],
+	"Librarian": [],
+	"In Session": []
 };
 
 const addToQueueList = async (data) => {
 	// This function adds the data (object - of the student details) to the specified queueList
 	// And rerenders the table
-	
-	try{
+
+	try {
 		const response = await fetch("add_entry", {
 			method: "POST",
 			body: JSON.stringify(data),
@@ -65,23 +74,23 @@ const addToQueueList = async (data) => {
 		})
 		const dataResponse = await response.json()
 		queueList[data.queue].push(dataResponse)
-		
+
 		timers[dataResponse.id] = 0;
 		timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
 		rerenderTables()
 	}
-	catch(error){
+	catch (error) {
 		// There's an error
 		console.log(error)
 	}
-	
+
 }
 
-const moveToSessionOrUndo = async(data) => {
+const moveToSessionOrUndo = async (data) => {
 	// This function move the data (object - of the student details) to the in Session table
 	// or Move the data from in Session table back to waiting queue table
 	// And rerenders the table
-	try{
+	try {
 		const response = await fetch(`/update_entry/${data.id}`, {
 			method: "POST",
 			body: JSON.stringify(data),
@@ -89,9 +98,8 @@ const moveToSessionOrUndo = async(data) => {
 				'Content-Type': 'application/json'
 			},
 		})
-		const dataResponse = await response.json()		
-		if (dataResponse.status == "In Session")
-		{	
+		const dataResponse = await response.json()
+		if (dataResponse.status == "In Session") {
 			const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from waiting queue
 			queueList[dataResponse.queue].splice(index, 1)
@@ -100,8 +108,7 @@ const moveToSessionOrUndo = async(data) => {
 			timers[dataResponse.id] = 0;
 			timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
 		}
-		else
-		{	
+		else {
 			const index = queueList['In Session'].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from in Session queue
 			queueList['In Session'].splice(index, 1)
@@ -111,19 +118,19 @@ const moveToSessionOrUndo = async(data) => {
 			timers[dataResponse.id] = Math.round(timeDifferenceMiliseconds / 1000);
 			timerIntervals[dataResponse.id] = setInterval(setTime, 1000, dataResponse.id);
 		}
-	
+
 		rerenderTables()
 	}
-	catch(error){
+	catch (error) {
 		// There's an error
 		console.log(error)
 	}
 }
 
-const terminateSession = async(data) => {
+const terminateSession = async (data) => {
 	// This function update the status data 
 	// And rerenders the table
-	try{
+	try {
 		const response = await fetch("/update_entry/" + data.id, {
 			method: "POST",
 			body: JSON.stringify(data),
@@ -132,12 +139,12 @@ const terminateSession = async(data) => {
 			},
 		})
 		const dataResponse = await response.json()
-		if (dataResponse.status == "Ended"){
+		if (dataResponse.status == "Ended") {
 			const index = queueList[dataResponse.queue].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from current queue
 			queueList[dataResponse.queue].splice(index, 1)
 		}
-		else{
+		else {
 			const index = queueList["In Session"].findIndex((element) => element.id == dataResponse.id)
 			// pop the data from current queue
 			queueList["In Session"].splice(index, 1)
@@ -146,7 +153,7 @@ const terminateSession = async(data) => {
 		clearInterval(timerIntervals[dataResponse.id]);
 		rerenderTables()
 	}
-	catch(error){
+	catch (error) {
 		// There's an error
 		console.log(error)
 	}
@@ -185,7 +192,7 @@ function validateUserInput(data) {
 		showAlert("Please only numeric values in 'Student Number' field.", 3500)
 		return false;
 	}
-	
+
 	// Check unit code
 	if (data.unitCode.length != 8 || !/([A-Za-z]){4}([0-9]){4}$/.test(data.unitCode)) {
 		showAlert("'Unit Code' field should be 4 alphabetic characters followed by 4 numerics characters.", 3500)
@@ -196,7 +203,7 @@ function validateUserInput(data) {
 	if (!/^([^0-9]*)$/.test(data.enquiry)) {
 		showAlert("Please do not use numeric values in 'Enquiry Type' field.", 3500)
 		return false;
-	}	
+	}
 
 	// All inputs are fine
 	return true;
@@ -205,16 +212,16 @@ function validateUserInput(data) {
 const rerenderTables = () => {
 	const dataTablesToRerender = [
 		{
-			"tableSelector":"#studysmarterDataTable",
-			"queueName":"STUDYSmarter"
+			"tableSelector": "#studysmarterDataTable",
+			"queueName": "STUDYSmarter"
 		},
 		{
-			"tableSelector":"#librarianDataTable",
-			"queueName":"Librarian"
+			"tableSelector": "#librarianDataTable",
+			"queueName": "Librarian"
 		},
 	]
 
-	dataTablesToRerender.forEach(({tableSelector,queueName})=>{
+	dataTablesToRerender.forEach(({ tableSelector, queueName }) => {
 		const table = document.querySelector(tableSelector);
 		table.innerHTML = queueList[queueName].map(element => `<tr id="${element.id}" class="initialTime">
 		<td>${element.studentName}</td>
@@ -300,23 +307,23 @@ function terminateRow(id, action) {
 			id,
 			status
 		})
-}
-return closureFunction
+	}
+	return closureFunction
 }
 
 function staffAvailable(id) {
 	let queue = findQueue(id);
 
-	if(queue == "STUDYSmarter"){
+	if (queue == "STUDYSmarter") {
 		let STUDYSmarterStaff = document.getElementById('studySmarterAvailableCount').innerHTML;
 		let STUDYSmarterInSession = $("table#inSession td:contains('STUDYSmarter')").length;
-		if(STUDYSmarterStaff > STUDYSmarterInSession) {return true} //enough staff
+		if (STUDYSmarterStaff > STUDYSmarterInSession) { return true } //enough staff
 		else {
 			showAlert("All STUDYSmarter staff already in a session. Finish a session or increase staff available.", 5500)
 			return false
 		}
 	}
-	else if(queue == "Librarian"){
+	else if (queue == "Librarian") {
 		let librarianStaff = document.getElementById('librariansAvailableCount').innerHTML;
 		let librariansInSession = $("table#inSession td:contains('Librarian')").length;
 		if(librarianStaff > librariansInSession) {return true} //enough staff
@@ -326,37 +333,37 @@ function staffAvailable(id) {
 		}
 	}
 	//if something has gone wrong better to let them add to session than to block them
-	else {return true}
+	else { return true }
 }
 
-function findQueue(id){
-	for(let i = 0; i < queueList["STUDYSmarter"].length; i++) {
-		if(queueList["STUDYSmarter"][i].id == id) {return "STUDYSmarter"}
+function findQueue(id) {
+	for (let i = 0; i < queueList["STUDYSmarter"].length; i++) {
+		if (queueList["STUDYSmarter"][i].id == id) { return "STUDYSmarter" }
 	};
 
-	for(let i = 0; i < queueList["Librarian"].length; i++) {
-		if(queueList["Librarian"][i].id == id) {return "Librarian"}
+	for (let i = 0; i < queueList["Librarian"].length; i++) {
+		if (queueList["Librarian"][i].id == id) { return "Librarian" }
 	};
 
 	return 0
 }
 
-function addSessionToTeam(id, action){
+function addSessionToTeam(id, action) {
 	// This function is called when a student is moved to inSession queue or undo button is clicked
 	// update status and fetch update_entry
 	// This below is a function being stored to a variable that can be returned
 	const closureFunction = (currentElement) => {
 		const status = action == "add" ? "In Session" : "In Queue"
 		// can always move back to queue (undo) but only into session if enough staff is availble
-		if(!(status == "In Session" && !staffAvailable(id))) {
+		if (!(status == "In Session" && !staffAvailable(id))) {
 			moveToSessionOrUndo({
 				id,
 				status
 			})
 		}
 	}
-	
-return closureFunction
+
+	return closureFunction
 }
 
 function setTime(id) {
@@ -389,21 +396,29 @@ function pad(val) {
 
 $('#studySmarterAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) > 0) {
-		document.getElementById('studySmarterAvailableCount').innerHTML -= 1;
+		let count = parseInt(localStorage.getItem('studySmarterAvailable'));
+		localStorage.setItem('studySmarterAvailable', count - 1);
+		document.getElementById('studySmarterAvailableCount').innerHTML = localStorage.getItem('studySmarterAvailable');
 	}
 });
 $('#studySmarterAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('studySmarterAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('studySmarterAvailableCount').innerHTML = next;
+	if (parseInt(document.getElementById('studySmarterAvailableCount').innerHTML) < 9) {
+		let count = parseInt(localStorage.getItem('studySmarterAvailable'));
+		localStorage.setItem('studySmarterAvailable', count + 1);
+		document.getElementById('studySmarterAvailableCount').innerHTML = localStorage.getItem('studySmarterAvailable');
+	}
 });
 $('#librariansAvailableDecrement').click(function () {
 	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) > 0) {
-		document.getElementById('librariansAvailableCount').innerHTML -= 1;
+		let count = parseInt(localStorage.getItem('librariansAvailable'));
+		localStorage.setItem('librariansAvailable', count - 1);
+		document.getElementById('librariansAvailableCount').innerHTML = localStorage.getItem('librariansAvailable');
 	}
 });
 $('#librariansAvailableIncrement').click(function () {
-	let curr = parseInt(document.getElementById('librariansAvailableCount').innerHTML);
-	let next = curr + 1;
-	document.getElementById('librariansAvailableCount').innerHTML = next;
+	if (parseInt(document.getElementById('librariansAvailableCount').innerHTML) < 9) {
+		let count = parseInt(localStorage.getItem('librariansAvailable'));
+		localStorage.setItem('librariansAvailable', count + 1);
+		document.getElementById('librariansAvailableCount').innerHTML = localStorage.getItem('librariansAvailable');
+	}
 });
