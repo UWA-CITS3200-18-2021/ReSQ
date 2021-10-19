@@ -112,6 +112,9 @@ nav:
 - Overview: index.md
 - User:
   - Overview: user/index.md
+  - Queue: user/queue.md
+  - Data Analytics: user/data_analytics.md
+  - Export Data: user/export_data.md
 - Developer:
   - Overview: developer/index.md
   - Requirements: developer/requirements.md
