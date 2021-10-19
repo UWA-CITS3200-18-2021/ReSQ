@@ -116,7 +116,7 @@ nav:
   - Overview: developer/index.md
   - Requirements: developer/requirements.md
   - Coding Patterns: developer/coding_patterns.md
-  - Frontend and Backend: frontend_and_backend.md
+  - Frontend and Backend: developer/frontend_and_backend.md
   - Automated Testing: developer/automated_testing.md
   - CI Pipeline: developer/ci_pipeline.md
   - Deployment: developer/deployment.md
