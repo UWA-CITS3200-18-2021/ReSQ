@@ -10,9 +10,3 @@ ResQ is an online live queue tool for use by the staff of the UWA STUDYSmarter p
 - Alex Hoffman
 - Alex Mai
 - Jake Yendell
-
-## References
-
-Albert Einstein photo ref: MPI/Getty Images
-Diagrams by Jasper Paterson and Simon Dransfield
-Background art by Jordan Hartley
