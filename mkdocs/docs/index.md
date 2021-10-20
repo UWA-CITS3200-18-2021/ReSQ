@@ -1,4 +1,6 @@
-# What is this project?
+# Project Description
+
+ResQ is an online live queue tool for use by the staff of the UWA STUDYSmarter program. The purpose of it is to provide a robust and convinient way of managing a queue, as well as saving the data for each entry into the queue to allow for some simple data analytics.
 
 ## Authors
 
