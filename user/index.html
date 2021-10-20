@@ -118,11 +118,6 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../administrator/">
-        Administrator
-      </a>
-</li>
-<li class="md-tabs__item">
 <a class="md-tabs__link" href="../developer/">
         Developer
       </a>
@@ -190,47 +185,23 @@
     How to access the website
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#queue">
-    Queue
-  </a>
-<nav aria-label="Queue" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#staff-management">
-    Staff management
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#add-to-queue">
-    Add to queue
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#managing-a-session">
-    Managing a session
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#finishundo-a-session">
-    Finish/Undo a session
-  </a>
-</li>
 </ul>
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#data-analytics">
-    Data analytics
-  </a>
+<a class="md-nav__link" href="queue/">
+        Queue
+      </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#export-data">
-    Export data
-  </a>
+<a class="md-nav__link" href="data_analytics/">
+        Data Analytics
+      </a>
 </li>
-</ul>
-</nav>
+<li class="md-nav__item">
+<a class="md-nav__link" href="export_data/">
+        Export Data
+      </a>
 </li>
 </ul>
 </nav>
@@ -238,31 +209,11 @@
 <li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3">
-          Administrator
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Administrator" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_3">
-<span class="md-nav__icon md-icon"></span>
-          Administrator
-        </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../administrator/">
-        Oveview
-      </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4">
           Developer
           <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="Developer" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
+<label class="md-nav__title" for="__nav_3">
 <span class="md-nav__icon md-icon"></span>
           Developer
         </label>
@@ -283,7 +234,7 @@
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../frontend_and_backend.md">
+<a class="md-nav__link" href="../developer/frontend_and_backend/">
         Frontend and Backend
       </a>
 </li>
@@ -324,45 +275,6 @@
     How to access the website
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#queue">
-    Queue
-  </a>
-<nav aria-label="Queue" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#staff-management">
-    Staff management
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#add-to-queue">
-    Add to queue
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#managing-a-session">
-    Managing a session
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#finishundo-a-session">
-    Finish/Undo a session
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#data-analytics">
-    Data analytics
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#export-data">
-    Export data
-  </a>
-</li>
 </ul>
 </nav>
 </div>
@@ -377,54 +289,6 @@
 <h2 id="how-to-access-the-website">How to access the website<a class="headerlink" href="#how-to-access-the-website" title="Permanent link">¶</a></h2>
 <p>Click <a href="https://resq.systemhealthlab.com/login?next=%2F">here</a> to redirect to the website. User will need username and password to login. <br/>
 There will be 3 main tabs in the website, which are Queue, Data Analytics and Export Data</p>
-<h2 id="queue">Queue<a class="headerlink" href="#queue" title="Permanent link">¶</a></h2>
-<p>User can manage student sessions in the Queue tab. There are 3 tables, 2 of which are STUDYSmarter queue and Librarian queue. Students will be put into either queue depending on user's choice. <br/></p>
-<h3 id="staff-management">Staff management<a class="headerlink" href="#staff-management" title="Permanent link">¶</a></h3>
-<p>On the right side of the queue home page, you can see 2 small boxes saying "STUDYSmarter Team Available" and "Librarians Available". You can click the "+" and "-" icon to modify the number base on your current available staff. <br/></p>
-<p><img alt="" src="instruction/limit_staff.PNG"/></p>
-<p>If you try to add student to the inSession queue which exceeds your current setup for each staff type, the website will give a warning alert and require you to modify the staff number.</p>
-<p><img alt="" src="instruction/error.PNG"/></p>
-<h3 id="add-to-queue">Add to queue<a class="headerlink" href="#add-to-queue" title="Permanent link">¶</a></h3>
-<p>In order to add a student to a waiting queue, look for the "ADD TO QUEUE" button in the top right corner </p>
-<p><img alt="" src="instruction/addqueue.PNG"/></p>
-<p>A form will show up as below. In this form, you can enter student information and choose the queue type between "STUDYSmarter" and "Librarian" </p>
-<p><img alt="" src="instruction/addtoqueue.PNG"/></p>
-<p>When successfully added, the student information will show up in the corresponding queue. Below is an example</p>
-<p><img alt="" src="instruction/addtoqueue2.PNG"/></p>
-<h3 id="managing-a-session">Managing a session<a class="headerlink" href="#managing-a-session" title="Permanent link">¶</a></h3>
-<p>If you want to move students from either waiting queue to "Current Session" table, click the green button in the "Actions" column <br/></p>
-<p><img alt="" src="instruction/add_remove.PNG"/></p>
-<p>If a student cancel the appointment, you can remove her/him from the waiting queue by clicking the red button in the "Actions" column <br/>
-A message box will show up and ask to confirm your action, click "Yes". <br/></p>
-<h3 id="finishundo-a-session">Finish/Undo a session<a class="headerlink" href="#finishundo-a-session" title="Permanent link">¶</a></h3>
-<p>When a session is done, user can click the green button to finish the session.<br/>
-When user accidentally added a student to this table from waiting queue, undo it by choosing the undo button </p>
-<p><img alt="" src="instruction/finish_undo.PNG"/></p>
-<h2 id="data-analytics">Data analytics<a class="headerlink" href="#data-analytics" title="Permanent link">¶</a></h2>
-<p>This website provide some basic data analytics for "at a glance" view. <br/></p>
-<p>There will be 3 charts generated in the Data analytics tab: <br/></p>
-<ul>
-<li>Students visited per day in the chosen week <br/></li>
-<li>The percentages of popular units in that week <br/></li>
-<li>Comparison between students enter STUDYSmarter and Librarian queue in that week <br/></li>
-</ul>
-<p><img alt="" src="instruction/analyse.PNG"/></p>
-<p>In order to generate data analytics for a chosen week: <br/></p>
-<ul>
-<li>Choose an arbitrary day in the week you want to generate data <br/></li>
-</ul>
-<p><img alt="" src="instruction/analyse2.PNG"/></p>
-<ul>
-<li>Click submit</li>
-</ul>
-<h2 id="export-data">Export data<a class="headerlink" href="#export-data" title="Permanent link">¶</a></h2>
-<p>If user wants to export data to a csv file for further data analysis:<br/></p>
-<ul>
-<li>Step 1: Navigate to the 'Export Data' tab <br/></li>
-<li>Step 2: There are premade options such as "Last week" or "Last Day". You can also choose "Custom" option to export data between a period of your choice<br/></li>
-</ul>
-<p><img alt="" src="instruction/export.PNG"/>
-- Step 3: Click 'Submit', then download the file</p>
 </article>
 </div>
 </div>
@@ -444,13 +308,13 @@ When user accidentally added a student to this table from waiting queue, undo it
               </div>
 </div>
 </a>
-<a class="md-footer__link md-footer__link--next" href="../administrator/" rel="next">
+<a class="md-footer__link md-footer__link--next" href="queue/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                   Next
                 </span>
-                Oveview
+                Queue
               </div>
 </div>
 <div class="md-footer__button md-icon">
